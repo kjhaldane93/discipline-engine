@@ -1,0 +1,2453 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Kevin's Discipline Engine</title>
+  
+  <!-- PWA & Mobile Web App Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Discipline Engine">
+  <meta name="application-name" content="Kevin's Discipline Engine">
+  <meta name="theme-color" content="#09090b">
+  <meta name="description" content="Personal discipline, career, faith, health, and milestone operating system for Kevin.">
+
+  <!-- Dynamic Web App Manifest Injection (Sleek Monochrome / Emerald Icon) -->
+  <script>
+    (function injectPWAManifest() {
+      const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+        <rect width="512" height="512" rx="110" fill="#09090b"/>
+        <rect x="24" y="24" width="464" height="464" rx="90" fill="none" stroke="#27272a" stroke-width="12"/>
+        <path d="M150 265 L225 340 L365 175" fill="none" stroke="#ffffff" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="395" cy="125" r="32" fill="#10b981"/>
+      </svg>`;
+      const iconUri = 'data:image/svg+xml;base64,' + btoa(iconSvg);
+
+      const manifestData = {
+        name: "Kevin's Discipline Engine",
+        short_name: "Discipline Engine",
+        start_url: window.location.href,
+        display: "standalone",
+        background_color: "#09090b",
+        theme_color: "#09090b",
+        description: "Faith • Health • Purity • Career: Daily High-Performance System",
+        icons: [
+          { src: iconUri, sizes: "192x192 512x512", type: "image/svg+xml", purpose: "any maskable" }
+        ]
+      };
+
+      const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
+      const manifestUrl = URL.createObjectURL(manifestBlob);
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = manifestUrl;
+      document.head.appendChild(link);
+
+      const appleIcon = document.createElement('link');
+      appleIcon.rel = 'apple-touch-icon';
+      appleIcon.href = iconUri;
+      document.head.appendChild(appleIcon);
+    })();
+  </script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Typography (Inter + JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Inter"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            obsidian: {
+              DEFAULT: '#09090b',
+              surface: '#121215',
+              elevated: '#18181b',
+              hover: '#202024',
+              border: '#27272a',
+              hairline: '#3f3f46',
+              muted: '#71717a',
+              subtle: '#a1a1aa',
+              light: '#f4f4f5',
+            },
+            career: {
+              DEFAULT: '#10b981', // Sage Emerald
+              light: '#34d399',
+              dark: '#059669',
+              border: 'rgba(16, 185, 129, 0.28)',
+              bg: 'rgba(16, 185, 129, 0.08)'
+            },
+            spiritual: {
+              DEFAULT: '#f4f4f5', // Platinum Silver
+              light: '#ffffff',
+              dark: '#a1a1aa',
+              border: 'rgba(244, 244, 245, 0.25)',
+              bg: 'rgba(244, 244, 245, 0.06)'
+            },
+            health: {
+              DEFAULT: '#f59e0b', // Warm Amber / Bronze
+              light: '#fbbf24',
+              dark: '#d97706',
+              border: 'rgba(245, 158, 11, 0.25)',
+              bg: 'rgba(245, 158, 11, 0.08)'
+            },
+            purity: {
+              DEFAULT: '#ef4444', // Striking Crimson
+              light: '#f87171',
+              dark: '#b91c1c',
+              border: 'rgba(239, 68, 68, 0.25)',
+              bg: 'rgba(239, 68, 68, 0.08)'
+            },
+            discipline: {
+              DEFAULT: '#a1a1aa', // Titanium Slate
+              light: '#e4e4e7',
+              dark: '#52525b',
+              border: 'rgba(161, 161, 170, 0.25)',
+              bg: 'rgba(161, 161, 170, 0.08)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      background-color: #09090b;
+      color: #fafafa;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    input, textarea, select { user-select: text; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #09090b; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    .tactile-press {
+      transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.4, 1), background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+    }
+    .tactile-press:active { transform: scale(0.97); }
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+    .glass-modal {
+      background-color: rgba(9, 9, 11, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+  </style>
+</head>
+<body class="min-h-screen selection:bg-zinc-200 selection:text-black antialiased text-sm pb-24">
+
+  <!-- Subtle Minimal Glow (Emerald & Warm Silver only, no blue) -->
+  <div class="fixed top-0 right-1/4 w-[36rem] h-[28rem] bg-emerald-500/[0.035] rounded-full blur-[140px] pointer-events-none -z-10"></div>
+  <div class="fixed bottom-12 left-1/4 w-[32rem] h-[24rem] bg-amber-500/[0.03] rounded-full blur-[140px] pointer-events-none -z-10"></div>
+
+  <div class="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-5 sm:pt-7 space-y-6">
+
+    <!-- Global Navigation Header -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-obsidian-border">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3.5">
+          <div class="relative group">
+            <div class="w-11 h-11 rounded-xl bg-obsidian-elevated border border-obsidian-hairline flex items-center justify-center shadow-sm">
+              <i data-lucide="crosshair" class="w-5 h-5 text-white"></i>
+            </div>
+            <span class="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5">
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-base sm:text-lg font-bold tracking-tight text-white font-sans flex items-center gap-1.5">
+                <span>Kevin's Discipline Engine</span>
+              </h1>
+              <span class="text-[9px] font-mono tracking-widest uppercase px-2 py-0.5 rounded-md bg-obsidian-elevated border border-obsidian-border text-obsidian-subtle font-semibold">OS 3.5</span>
+            </div>
+            <p class="text-xs text-obsidian-muted flex flex-wrap items-center gap-1.5 font-medium mt-0.5">
+              <span class="text-zinc-300 font-medium">Faith</span> &bull; 
+              <span class="text-emerald-400 font-medium">Career (20 Dials / 90m)</span> &bull; 
+              <span class="text-amber-400 font-medium">Health</span> &bull; 
+              <span class="text-red-400 font-medium">Purity</span> &bull; 
+              <span class="text-zinc-400 font-medium">Focus</span>
+              <span class="hidden sm:inline text-obsidian-muted text-[11px] ml-2 font-mono" id="header-date">Initializing...</span>
+            </p>
+          </div>
+        </div>
+
+        <button id="btn-mobile-install" class="md:hidden px-3 py-1.5 bg-white text-black text-xs font-semibold rounded-lg flex items-center gap-1.5 tactile-press shadow-sm">
+          <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+          <span>App</span>
+        </button>
+      </div>
+
+      <!-- Action & View Controls -->
+      <div class="flex flex-wrap items-center justify-between md:justify-end gap-2">
+        <div class="flex bg-obsidian-surface border border-obsidian-border rounded-lg p-0.5 text-xs font-medium">
+          <button id="nav-btn-agenda" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white text-black font-semibold transition shadow-sm">
+            <i data-lucide="swords" class="w-3.5 h-3.5"></i>
+            <span>Today's Battle</span>
+          </button>
+          <button id="nav-btn-matrix" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-obsidian-muted hover:text-white transition">
+            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+            <span>7-Day Matrix</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button id="btn-install-app" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-zinc-200 text-black text-xs font-semibold rounded-lg tactile-press shadow-sm">
+            <i data-lucide="arrow-down-circle" class="w-3.5 h-3.5"></i>
+            <span>Install App</span>
+          </button>
+
+          <button onclick="openInstallInstructions()" title="Install Instructions" class="p-2 bg-obsidian-surface hover:bg-obsidian-elevated border border-obsidian-border hover:border-obsidian-hairline rounded-lg text-obsidian-subtle hover:text-white transition">
+            <i data-lucide="smartphone" class="w-4 h-4"></i>
+          </button>
+
+          <button onclick="openWeighInModal()" title="Log Scale Weight" class="p-2 bg-amber-500/10 hover:bg-amber-500/15 border border-amber-500/30 rounded-lg text-amber-400 hover:text-amber-300 transition tactile-press">
+            <i data-lucide="scale" class="w-4 h-4"></i>
+          </button>
+
+          <button onclick="openHabitModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-obsidian-surface hover:bg-obsidian-elevated border border-obsidian-border hover:border-obsidian-hairline text-white text-xs font-semibold rounded-lg tactile-press">
+            <i data-lucide="plus" class="w-3.5 h-3.5 text-white"></i>
+            <span>Add Habit</span>
+          </button>
+
+          <div class="flex items-center gap-1 border-l border-obsidian-border pl-1.5">
+            <button id="btn-export-backup" title="Export Backup JSON" class="p-2 bg-obsidian-surface hover:bg-obsidian-elevated border border-obsidian-border rounded-lg text-obsidian-muted hover:text-white transition">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            </button>
+            <label for="input-import-file" title="Import Backup JSON" class="p-2 bg-obsidian-surface hover:bg-obsidian-elevated border border-obsidian-border rounded-lg text-obsidian-muted hover:text-white transition cursor-pointer">
+              <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+              <input type="file" id="input-import-file" accept=".json" class="hidden">
+            </label>
+            <button id="btn-reset-storage" title="Reset to Defaults" class="p-2 bg-obsidian-surface hover:bg-obsidian-elevated border border-obsidian-border rounded-lg text-obsidian-muted hover:text-red-400 transition">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5">
+      
+      <!-- Primary Daily Execution Card -->
+      <div class="md:col-span-5 bg-obsidian-surface border border-obsidian-border rounded-xl p-5 flex flex-col justify-between relative overflow-hidden">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] font-mono tracking-widest text-obsidian-subtle font-bold uppercase flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>DAILY INTEGRITY INDEX</span>
+            </span>
+            <span id="metric-completion-ratio" class="text-xs font-mono font-bold text-white bg-obsidian-elevated px-2.5 py-0.5 rounded border border-obsidian-border">0 / 11 completed</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-white font-sans" id="progress-status-headline">Execution Starts Now</h2>
+          <p class="text-xs text-obsidian-subtle mt-0.5" id="progress-status-sub">20 dials, 90m focus, scripture, purity, and clean nutrition.</p>
+        </div>
+
+        <div class="mt-5 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-obsidian-muted text-[11px] font-mono tracking-wide uppercase">Today's Fulfillment</span>
+            <span id="metric-percentage" class="text-sm font-bold text-white font-mono">0%</span>
+          </div>
+          <div class="w-full h-2 bg-obsidian-DEFAULT rounded-full border border-obsidian-border overflow-hidden">
+            <div id="metric-progress-fill" class="h-full bg-white transition-all duration-300 rounded-full" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Summary Quad -->
+      <div class="md:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <!-- Dials Target KPI -->
+        <div class="bg-obsidian-surface border border-obsidian-border hover:border-obsidian-hairline rounded-xl p-4 flex flex-col justify-between transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider font-semibold">Dials Goal</span>
+            <i data-lucide="phone-call" class="w-3.5 h-3.5 text-emerald-400"></i>
+          </div>
+          <div class="mt-2">
+            <div id="kpi-dials-display" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono">0<span class="text-xs text-obsidian-muted font-sans">/20</span></div>
+            <p id="kpi-dials-status" class="text-[10px] text-obsidian-subtle font-mono mt-0.5">Target: 20 dials</p>
+          </div>
+        </div>
+
+        <!-- Focus Time KPI -->
+        <div class="bg-obsidian-surface border border-obsidian-border hover:border-obsidian-hairline rounded-xl p-4 flex flex-col justify-between transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider font-semibold">Focus Time</span>
+            <i data-lucide="timer" class="w-3.5 h-3.5 text-emerald-400"></i>
+          </div>
+          <div class="mt-2">
+            <div id="kpi-focus-display" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono">0<span class="text-xs text-obsidian-muted font-sans">/90m</span></div>
+            <p id="kpi-focus-status" class="text-[10px] text-obsidian-subtle font-mono mt-0.5">Deep execution</p>
+          </div>
+        </div>
+
+        <!-- Bible KPI -->
+        <div class="bg-obsidian-surface border border-obsidian-border hover:border-obsidian-hairline rounded-xl p-4 flex flex-col justify-between transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono text-zinc-300 uppercase tracking-wider font-semibold">Bible Left</span>
+            <i data-lucide="book-open" class="w-3.5 h-3.5 text-zinc-300"></i>
+          </div>
+          <div class="mt-2">
+            <div id="kpi-bible-remaining" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono">888</div>
+            <p id="kpi-bible-pace" class="text-[10px] text-obsidian-subtle font-mono mt-0.5">~9.5 ch/day</p>
+          </div>
+        </div>
+
+        <!-- Purity Shield KPI -->
+        <div class="bg-obsidian-surface border border-obsidian-border hover:border-obsidian-hairline rounded-xl p-4 flex flex-col justify-between transition group">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono text-red-400 uppercase tracking-wider font-semibold">Purity Shield</span>
+            <i data-lucide="shield-check" class="w-4 h-4 text-red-400"></i>
+          </div>
+          <div class="mt-2">
+            <div id="kpi-purity-streak" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono flex items-baseline gap-1">
+              <span>0</span><span class="text-xs text-red-400 font-sans">days</span>
+            </div>
+            <p class="text-[10px] text-obsidian-subtle font-mono mt-0.5 truncate">Clean & Steadfast</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: CAREER & DAILY PLAN ENGINE -->
+    <section class="space-y-3.5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <h2 class="text-xs font-bold font-mono tracking-wider text-emerald-400 uppercase flex items-center gap-2">
+          <i data-lucide="briefcase" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>CAREER EXECUTION ENGINE (MON-FRI PROTOCOL)</span>
+        </h2>
+
+        <!-- Monday to Friday Indicator + Holiday/Off-Day Override Selector -->
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <div id="badge-weekday-status" class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border flex items-center gap-1.5 bg-emerald-500/10 border-emerald-500/30 text-emerald-300">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span id="label-weekday-state">Weekday Plan Active</span>
+          </div>
+
+          <!-- Manual Override Selector -->
+          <select id="select-workday-override" onchange="handleWorkdayOverrideChange()" class="bg-obsidian-surface border border-obsidian-border hover:border-obsidian-hairline text-white text-xs font-mono font-medium rounded-lg px-2.5 py-1 focus:outline-none focus:border-white transition cursor-pointer">
+            <option value="normal">Normal Workday</option>
+            <option value="holiday">Holiday Override</option>
+            <option value="offday">Off-Day / Leave</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
+        
+        <!-- COLUMN 1: CAREER EXECUTION KPIS (DIALS + FOCUS TIME) -->
+        <div class="lg:col-span-5 space-y-3.5">
+          
+          <!-- DIALS KPI CARD (TARGET 20) -->
+          <div class="bg-obsidian-surface border border-obsidian-border rounded-xl p-5 space-y-4 relative">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <h3 class="text-sm font-bold text-white font-sans">Dials KPI Engine</h3>
+                </div>
+                <p class="text-xs text-obsidian-subtle mt-0.5 font-mono">Daily target: 20 dials &bull; Outbound momentum</p>
+              </div>
+              <span id="badge-dials-complete" class="text-[10px] font-mono px-2 py-0.5 rounded border border-obsidian-border bg-obsidian-elevated text-emerald-400 font-bold">
+                0%
+              </span>
+            </div>
+
+            <!-- Big Counter Display & Steppers -->
+            <div class="p-3 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-mono text-obsidian-muted block uppercase">Today's Total</span>
+                <div class="flex items-baseline gap-1 mt-0.5">
+                  <span id="counter-dials-val" class="text-3xl font-extrabold font-mono text-white">0</span>
+                  <span class="text-xs font-mono text-obsidian-muted font-bold">/ 20</span>
+                </div>
+              </div>
+
+              <!-- Quick Stepper Actions -->
+              <div class="flex items-center gap-1.5">
+                <button onclick="adjustDials(-1)" class="w-8 h-8 rounded-lg bg-obsidian-elevated hover:bg-obsidian-hover border border-obsidian-border text-obsidian-subtle hover:text-white flex items-center justify-center font-mono font-bold transition tactile-press">-1</button>
+                <button onclick="adjustDials(1)" class="px-2.5 h-8 rounded-lg bg-obsidian-elevated hover:bg-obsidian-hover border border-emerald-500/30 text-emerald-300 flex items-center justify-center font-mono font-bold transition tactile-press">+1</button>
+                <button onclick="adjustDials(5)" class="px-3 h-8 rounded-lg bg-white hover:bg-zinc-200 text-black flex items-center justify-center font-mono font-bold transition tactile-press shadow-sm">+5</button>
+              </div>
+            </div>
+
+            <!-- Dials Progress bar -->
+            <div class="space-y-1.5">
+              <div class="w-full h-1.5 bg-obsidian-DEFAULT rounded-full border border-obsidian-border overflow-hidden">
+                <div id="bar-dials-fill" class="h-full bg-emerald-400 transition-all duration-300 rounded-full" style="width: 0%"></div>
+              </div>
+              <p id="label-dials-remaining" class="text-[11px] font-mono text-obsidian-muted text-right">20 dials remaining to victory</p>
+            </div>
+          </div>
+
+          <!-- 90 MINS FOCUS TIME CARD -->
+          <div class="bg-obsidian-surface border border-obsidian-border rounded-xl p-5 space-y-4 relative">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <h3 class="text-sm font-bold text-white font-sans">90 Mins Focus Time</h3>
+                </div>
+                <p class="text-xs text-obsidian-subtle mt-0.5 font-mono">Deep work block &bull; Zero interruptions</p>
+              </div>
+              <span id="badge-focus-complete" class="text-[10px] font-mono px-2 py-0.5 rounded border border-obsidian-border bg-obsidian-elevated text-emerald-400 font-bold">
+                0 / 90m
+              </span>
+            </div>
+
+            <!-- Focus Timer & Quick Add Controls -->
+            <div class="p-3 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div class="flex items-center gap-3 w-full sm:w-auto">
+                <div class="p-2 rounded-lg bg-obsidian-elevated text-white border border-obsidian-border">
+                  <i data-lucide="clock" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <span id="label-focus-timer-text" class="text-2xl font-bold font-mono text-white">00:00</span>
+                  <span class="text-[10px] block font-mono text-obsidian-muted">Stopwatch session</span>
+                </div>
+              </div>
+
+              <!-- Timer Start/Pause + Quick +15/+30m -->
+              <div class="flex items-center gap-1.5 w-full sm:w-auto justify-end">
+                <button id="btn-toggle-focus-timer" onclick="toggleFocusTimer()" class="px-3 h-8 rounded-lg bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs flex items-center gap-1.5 transition tactile-press shadow-sm">
+                  <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                  <span id="btn-focus-timer-label">Start</span>
+                </button>
+                <button onclick="addFocusMinutes(15)" class="px-2.5 h-8 rounded-lg bg-obsidian-elevated hover:bg-obsidian-hover border border-obsidian-border text-zinc-300 font-mono font-bold text-xs transition tactile-press">+15m</button>
+                <button onclick="addFocusMinutes(30)" class="px-2.5 h-8 rounded-lg bg-obsidian-elevated hover:bg-obsidian-hover border border-obsidian-border text-zinc-300 font-mono font-bold text-xs transition tactile-press">+30m</button>
+              </div>
+            </div>
+
+            <!-- Focus Progress Bar -->
+            <div class="space-y-1.5">
+              <div class="w-full h-1.5 bg-obsidian-DEFAULT rounded-full border border-obsidian-border overflow-hidden">
+                <div id="bar-focus-fill" class="h-full bg-emerald-400 transition-all duration-300 rounded-full" style="width: 0%"></div>
+              </div>
+              <div class="flex items-center justify-between text-[11px] font-mono text-obsidian-muted">
+                <span id="label-focus-logged">Logged: 0 mins</span>
+                <span id="label-focus-remaining">90 mins remaining</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUMN 2: 3 DAILY COMMITMENTS & MON-FRI DAILY PLAN FORM -->
+        <div class="lg:col-span-7 bg-obsidian-surface border border-obsidian-border rounded-xl p-5 space-y-4 relative flex flex-col justify-between">
+          
+          <div>
+            <div class="flex items-start justify-between gap-2 pb-3 border-b border-obsidian-border">
+              <div>
+                <h3 class="text-sm font-bold text-white font-sans flex items-center gap-2">
+                  <i data-lucide="target" class="w-4 h-4 text-emerald-400"></i>
+                  <span>Today's 3 Non-Negotiable Commitments</span>
+                </h3>
+                <p class="text-xs text-obsidian-subtle mt-0.5">Top 3 strategic priorities for today. Check each off upon completion.</p>
+              </div>
+              <span id="badge-commitments-ratio" class="text-[10px] font-mono px-2.5 py-0.5 rounded border border-obsidian-border bg-obsidian-elevated text-white font-bold whitespace-nowrap">
+                0 / 3 Done
+              </span>
+            </div>
+
+            <!-- 3 COMMITMENTS CHECKLIST -->
+            <div class="mt-3.5 space-y-2" id="commitments-container">
+              <!-- Commitment 1 -->
+              <div class="flex items-center gap-2.5 p-2 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg">
+                <button onclick="toggleCommitmentCheck(0)" id="btn-commit-chk-0" class="w-5 h-5 rounded border border-obsidian-border flex items-center justify-center transition tactile-press bg-obsidian-surface text-transparent">
+                  <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                </button>
+                <input type="text" id="input-commit-text-0" oninput="saveCommitmentText(0)" placeholder="Priority 1: Key client call or project deliverable..." 
+                  class="bg-transparent border-none w-full text-xs text-white placeholder-obsidian-muted focus:outline-none font-sans">
+              </div>
+
+              <!-- Commitment 2 -->
+              <div class="flex items-center gap-2.5 p-2 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg">
+                <button onclick="toggleCommitmentCheck(1)" id="btn-commit-chk-1" class="w-5 h-5 rounded border border-obsidian-border flex items-center justify-center transition tactile-press bg-obsidian-surface text-transparent">
+                  <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                </button>
+                <input type="text" id="input-commit-text-1" oninput="saveCommitmentText(1)" placeholder="Priority 2: Pipeline development or strategic outreach..." 
+                  class="bg-transparent border-none w-full text-xs text-white placeholder-obsidian-muted focus:outline-none font-sans">
+              </div>
+
+              <!-- Commitment 3 -->
+              <div class="flex items-center gap-2.5 p-2 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg">
+                <button onclick="toggleCommitmentCheck(2)" id="btn-commit-chk-2" class="w-5 h-5 rounded border border-obsidian-border flex items-center justify-center transition tactile-press bg-obsidian-surface text-transparent">
+                  <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+                </button>
+                <input type="text" id="input-commit-text-2" oninput="saveCommitmentText(2)" placeholder="Priority 3: Operational closeout or prep for tomorrow..." 
+                  class="bg-transparent border-none w-full text-xs text-white placeholder-obsidian-muted focus:outline-none font-sans">
+              </div>
+            </div>
+
+            <!-- DAILY PLAN MON-FRI PROTOCOL FORM -->
+            <div class="mt-4 pt-3 border-t border-obsidian-border space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-mono text-zinc-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <i data-lucide="clipboard-list" class="w-3.5 h-3.5 text-white"></i>
+                  <span>Mon-Fri Execution Plan</span>
+                </span>
+                <span id="badge-plan-saved-status" class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Saved to Engine</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                <div>
+                  <label class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">Target Dial Strategy (20 Dials)</label>
+                  <input type="text" id="plan-input-strategy" oninput="saveDailyPlanField('strategy', this.value)" placeholder="e.g. 10 warm follow-ups, 10 new prospect dials"
+                    class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-xs text-white placeholder-obsidian-muted focus:outline-none focus:border-obsidian-hairline transition">
+                </div>
+                <div>
+                  <label class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">90m Focus Block Window</label>
+                  <input type="text" id="plan-input-focus-window" oninput="saveDailyPlanField('focusWindow', this.value)" placeholder="e.g. 9:30 AM - 11:00 AM (Do Not Disturb)"
+                    class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-xs text-white placeholder-obsidian-muted focus:outline-none focus:border-obsidian-hairline transition">
+                </div>
+              </div>
+
+              <div>
+                <label class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">End-of-Day Review / Wins / Pipeline Notes</label>
+                <textarea id="plan-input-notes" oninput="saveDailyPlanField('notes', this.value)" rows="2" placeholder="Record closing wins, pipeline conversations, and lessons learned..."
+                  class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-xs text-white placeholder-obsidian-muted focus:outline-none focus:border-obsidian-hairline transition resize-none"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Daily Plan Completion Check-in Button -->
+          <div class="pt-3 border-t border-obsidian-border flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[11px] font-mono text-obsidian-muted" id="label-plan-requirement-notice">
+              Required Monday through Friday
+            </span>
+            <button id="btn-submit-daily-plan" onclick="toggleDailyPlanSubmission()" class="px-4 py-1.5 bg-white hover:bg-zinc-200 text-black font-semibold text-xs rounded-lg transition tactile-press flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span id="label-submit-plan-text">Submit Today's Plan</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: STRATEGIC MILESTONES (FAITH & HEALTH) -->
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xs font-bold font-mono tracking-wider text-obsidian-subtle uppercase flex items-center gap-2">
+          <i data-lucide="target" class="w-3.5 h-3.5 text-white"></i>
+          <span>STRATEGIC MILESTONES (DEC 31, 2026)</span>
+        </h2>
+        <span class="text-[10px] font-mono text-obsidian-subtle bg-obsidian-elevated px-2 py-0.5 rounded border border-obsidian-border">Pace Engine Active</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        
+        <!-- CARD 1: BIBLE SCRIPTURE PACE ENGINE (Pure Silver / Platinum) -->
+        <div class="bg-obsidian-surface border border-obsidian-border rounded-xl p-5 flex flex-col justify-between space-y-4 relative">
+          <div>
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-white"></span>
+                  <h3 class="text-sm font-bold text-white font-sans tracking-tight" id="bible-title">Read Bible in 365 Days</h3>
+                </div>
+                <p class="text-xs text-obsidian-subtle mt-1 font-mono" id="bible-progress-summary">
+                  301 of 1,189 chapters read (888 left)
+                </p>
+              </div>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-obsidian-hairline bg-obsidian-elevated text-white font-bold" id="bible-status-badge">
+                ON TRACK
+              </span>
+            </div>
+
+            <!-- Dynamic Scripture Pace Box -->
+            <div class="mt-3.5 p-3 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="p-2 rounded-lg bg-obsidian-elevated text-white border border-obsidian-border">
+                  <i data-lucide="book-open" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <span class="text-[10px] font-mono text-obsidian-muted block uppercase">Required Pace</span>
+                  <span class="text-xs font-mono text-obsidian-subtle" id="bible-days-left">94 days left</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-bold font-mono text-white" id="bible-pace-label">~9.5 ch / day</span>
+                <span class="text-[10px] block font-mono text-obsidian-muted mt-0.5">Target: Dec 31, 2026</span>
+              </div>
+            </div>
+
+            <!-- Visual Progress Bar -->
+            <div class="mt-3.5 space-y-1.5">
+              <div class="flex justify-between items-center text-[11px] font-mono">
+                <span class="text-obsidian-muted uppercase">Scripture Volume</span>
+                <span class="font-bold text-white" id="bible-percentage">25.3%</span>
+              </div>
+              <div class="w-full h-1.5 bg-obsidian-DEFAULT rounded-full border border-obsidian-border overflow-hidden">
+                <div class="h-full bg-white transition-all duration-300" id="bible-progress-fill" style="width: 25.3%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="pt-3 border-t border-obsidian-border flex flex-wrap items-center justify-between gap-1.5">
+            <span class="text-[11px] font-mono text-obsidian-muted">Quick Log:</span>
+            <div class="flex items-center gap-1.5">
+              <button onclick="adjustBibleChapters(-1)" class="px-2 py-1 text-xs font-mono bg-obsidian-elevated hover:bg-obsidian-hover border border-obsidian-border text-obsidian-subtle hover:text-white rounded-lg transition">-1</button>
+              <button onclick="adjustBibleChapters(1)" class="px-2.5 py-1 text-xs font-mono bg-obsidian-elevated hover:bg-obsidian-hover border border-obsidian-border text-white rounded-lg transition font-medium">+1</button>
+              <button onclick="adjustBibleChapters(5)" class="px-2.5 py-1 text-xs font-mono bg-obsidian-elevated hover:bg-obsidian-hover border border-obsidian-border text-white rounded-lg transition font-medium">+5</button>
+              <button onclick="adjustBibleChapters(10)" class="px-3 py-1 text-xs font-mono bg-white hover:bg-zinc-200 text-black rounded-lg transition font-bold shadow-sm tactile-press">+10 Ch</button>
+              <button onclick="customBiblePrompt()" class="px-2.5 py-1 text-xs font-mono bg-obsidian-elevated hover:bg-obsidian-hover border border-obsidian-border text-obsidian-subtle hover:text-white rounded-lg transition">Edit</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: WEIGHT LOSS ENGINE (Warm Amber / Bronze) -->
+        <div class="bg-obsidian-surface border border-obsidian-border rounded-xl p-5 flex flex-col justify-between space-y-4 relative">
+          <div>
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                  <h3 class="text-sm font-bold text-white font-sans tracking-tight">Weight Loss to 190.0 lbs</h3>
+                </div>
+                <p class="text-xs text-obsidian-subtle mt-1 font-mono" id="weight-progress-summary">
+                  Current: 229.0 lbs &rarr; Goal: 190.0 lbs (39.0 lbs left)
+                </p>
+              </div>
+              <button onclick="openWeighInModal()" class="inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 transition font-medium tactile-press">
+                <i data-lucide="scale" class="w-3.5 h-3.5"></i>
+                <span>Log Scale</span>
+              </button>
+            </div>
+
+            <!-- Dynamic Pace Highlight -->
+            <div class="mt-3.5 p-3 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  <i data-lucide="trending-down" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <span class="text-[10px] font-mono text-amber-300 block uppercase">Required Pace</span>
+                  <span class="text-xs font-mono text-obsidian-subtle" id="weight-weeks-left">13.4 wks left</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-bold font-mono text-amber-400" id="weight-pace-label">~2.9 lbs / wk</span>
+                <span class="text-[10px] block font-mono text-obsidian-muted mt-0.5">Target: Dec 31, 2026</span>
+              </div>
+            </div>
+
+            <!-- SVG Sparkline Trend Graph (Amber Monochrome Accent) -->
+            <div class="mt-3.5 space-y-1.5">
+              <div class="flex items-center justify-between text-[11px] font-mono text-obsidian-subtle">
+                <span class="flex items-center gap-1">
+                  <i data-lucide="activity" class="w-3 h-3 text-amber-400"></i>
+                  <span>WEIGH-IN SPARKLINE</span>
+                </span>
+                <span id="weight-trend-stat" class="text-amber-300 font-medium">Start: 229.0 • Target: 190.0</span>
+              </div>
+              <div class="w-full h-14 bg-obsidian-DEFAULT rounded-lg border border-obsidian-border p-1 relative flex items-center justify-center overflow-hidden">
+                <svg id="weight-trend-svg" class="w-full h-full" preserveAspectRatio="none"></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- History & Log Controls -->
+          <div class="pt-3 border-t border-obsidian-border flex items-center justify-between text-xs font-mono">
+            <span class="text-obsidian-muted text-[11px]">Latest Scale: <strong id="label-latest-weighin" class="text-white font-bold">229.0 lbs</strong></span>
+            <div class="flex items-center gap-2">
+              <button onclick="viewWeighInHistory()" class="text-amber-400 hover:text-amber-300 underline text-xs transition">History</button>
+              <button onclick="openWeighInModal()" class="px-3 py-1 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 font-medium rounded-lg text-xs transition tactile-press">+ Log Entry</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: HABITS & DAILY EXECUTION -->
+    <section class="space-y-3 pt-1">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <!-- Category Filter Pills (No Blue) -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1" id="category-filter-bar">
+          <button data-cat="all" class="cat-pill px-3 py-1 text-xs font-semibold rounded-lg bg-white text-black transition shadow-sm">
+            ALL
+          </button>
+          <button data-cat="Career" class="cat-pill px-3 py-1 text-xs font-semibold rounded-lg bg-obsidian-surface border border-obsidian-border text-emerald-400 hover:border-obsidian-hairline transition">
+            CAREER
+          </button>
+          <button data-cat="Spiritual" class="cat-pill px-3 py-1 text-xs font-semibold rounded-lg bg-obsidian-surface border border-obsidian-border text-zinc-300 hover:border-obsidian-hairline transition">
+            SPIRITUAL
+          </button>
+          <button data-cat="Discipline" class="cat-pill px-3 py-1 text-xs font-semibold rounded-lg bg-obsidian-surface border border-obsidian-border text-zinc-400 hover:border-obsidian-hairline transition">
+            DISCIPLINE
+          </button>
+          <button data-cat="Purity" class="cat-pill px-3 py-1 text-xs font-semibold rounded-lg bg-obsidian-surface border border-obsidian-border text-red-400 hover:border-obsidian-hairline transition">
+            PURITY
+          </button>
+          <button data-cat="Health" class="cat-pill px-3 py-1 text-xs font-semibold rounded-lg bg-obsidian-surface border border-obsidian-border text-amber-400 hover:border-obsidian-hairline transition">
+            HEALTH & FITNESS
+          </button>
+        </div>
+
+        <!-- Matrix Week Navigator (Only shown in Matrix mode) -->
+        <div id="week-nav-controls" class="hidden flex items-center bg-obsidian-surface border border-obsidian-border rounded-lg px-2 py-0.5 text-xs self-start sm:self-auto shadow-sm">
+          <button id="btn-prev-week" class="p-1 hover:text-white text-obsidian-muted transition" title="Previous 7 Days">
+            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+          </button>
+          <span id="label-week-range" class="px-2 font-mono text-[11px] text-obsidian-subtle font-medium">Current Week</span>
+          <button id="btn-next-week" class="p-1 hover:text-white text-obsidian-muted transition" title="Next 7 Days">
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW 1: TODAY'S BATTLE (Default Primary View) -->
+      <div id="container-agenda-view" class="space-y-3">
+        <div class="p-3.5 bg-obsidian-surface border border-obsidian-border rounded-xl flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 rounded-lg bg-obsidian-elevated text-white border border-obsidian-border">
+              <i data-lucide="swords" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-xs font-bold text-white uppercase tracking-wider font-mono">Today's Battle Arena</h3>
+              <p class="text-xs text-obsidian-muted">Tap to toggle completion. Dials, commitments, and habits automatically align.</p>
+            </div>
+          </div>
+          <span id="agenda-remaining-tag" class="text-xs font-mono bg-obsidian-DEFAULT border border-obsidian-border px-3 py-1 rounded-md text-white font-bold">0 remaining</span>
+        </div>
+
+        <div id="agenda-items-container" class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+          <!-- Rendered via JavaScript -->
+        </div>
+      </div>
+
+      <!-- VIEW 2: 7-DAY MATRIX TABLE -->
+      <div id="container-weekly-view" class="hidden bg-obsidian-surface border border-obsidian-border rounded-xl overflow-hidden shadow-lg">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse min-w-[760px]">
+            <thead>
+              <tr class="border-b border-obsidian-border bg-obsidian-DEFAULT font-mono text-[10px] text-obsidian-muted uppercase">
+                <th class="py-3 px-4 w-72">Habit & Pillar</th>
+                <th class="py-3 px-2 text-center">Category</th>
+                <th class="py-3 px-2 text-center">Streak</th>
+                <!-- 7 Day Columns -->
+                <th id="th-day-0" class="py-3 px-1.5 text-center w-11">Mon</th>
+                <th id="th-day-1" class="py-3 px-1.5 text-center w-11">Tue</th>
+                <th id="th-day-2" class="py-3 px-1.5 text-center w-11">Wed</th>
+                <th id="th-day-3" class="py-3 px-1.5 text-center w-11">Thu</th>
+                <th id="th-day-4" class="py-3 px-1.5 text-center w-11">Fri</th>
+                <th id="th-day-5" class="py-3 px-1.5 text-center w-11">Sat</th>
+                <th id="th-day-6" class="py-3 px-1.5 text-center w-11">Sun</th>
+                <th class="py-3 px-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="habits-matrix-body" class="divide-y divide-obsidian-border text-xs">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="matrix-empty-state" class="hidden p-10 text-center">
+          <div class="w-10 h-10 rounded-full border border-obsidian-border bg-obsidian-DEFAULT flex items-center justify-center mx-auto mb-2 text-obsidian-muted">
+            <i data-lucide="slash" class="w-5 h-5"></i>
+          </div>
+          <p class="font-mono text-xs text-white font-semibold">NO HABITS FOUND</p>
+          <p class="text-xs text-obsidian-muted mt-0.5">Select 'ALL' or add a new habit above.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: 30-DAY ACTIVITY HEATMAP -->
+    <section class="bg-obsidian-surface border border-obsidian-border rounded-xl p-5 space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h3 class="text-xs font-bold text-white font-mono uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="grid" class="w-3.5 h-3.5 text-white"></i>
+            <span>30-DAY CONSISTENCY HEATMAP</span>
+          </h3>
+          <p class="text-xs text-obsidian-muted">Daily discipline density across career, faith, fitness, and purity pillars</p>
+        </div>
+
+        <div class="flex items-center gap-1.5 font-mono text-[10px] text-obsidian-muted">
+          <span>0%</span>
+          <span class="w-3 h-3 rounded bg-obsidian-DEFAULT border border-obsidian-border" title="0%"></span>
+          <span class="w-3 h-3 rounded bg-zinc-800 border border-zinc-700" title="25%"></span>
+          <span class="w-3 h-3 rounded bg-zinc-600 border border-zinc-500" title="50%"></span>
+          <span class="w-3 h-3 rounded bg-zinc-400 border border-zinc-300" title="75%"></span>
+          <span class="w-3 h-3 rounded bg-white border border-white" title="100%"></span>
+          <span>100%</span>
+        </div>
+      </div>
+
+      <div id="heatmap-cells" class="grid grid-cols-10 sm:grid-cols-15 md:grid-cols-30 gap-1.5 pt-1">
+        <!-- Rendered via JavaScript -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MODAL: ADD / EDIT HABIT -->
+  <div id="modal-habit" class="fixed inset-0 z-50 glass-modal hidden flex items-center justify-center p-4">
+    <div class="bg-obsidian-surface border border-obsidian-hairline rounded-xl w-full max-w-md p-5 relative shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-obsidian-border">
+        <h3 id="modal-habit-heading" class="text-xs font-bold font-mono tracking-wider text-white uppercase flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-white"></i>
+          <span>ADD NEW HABIT</span>
+        </h3>
+        <button onclick="closeHabitModal()" class="text-obsidian-muted hover:text-white p-1 rounded-lg transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form id="form-habit" class="mt-4 space-y-3.5">
+        <input type="hidden" id="field-habit-id" value="">
+
+        <div>
+          <label for="field-habit-name" class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">Habit Title</label>
+          <input type="text" id="field-habit-name" required placeholder="e.g. Cold Outreach Block"
+            class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-xs text-white placeholder-obsidian-muted focus:outline-none focus:border-white transition">
+        </div>
+
+        <div>
+          <label for="field-habit-goal-link" class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">Link to Strategic Goal</label>
+          <select id="field-habit-goal-link" class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-white transition font-mono">
+            <option value="none">-- Standalone Habit --</option>
+            <option value="bible">Bible Engine (Auto-increments 1,189 target)</option>
+            <option value="weight">Weight Engine (Caloric, Nutrition & Steps)</option>
+            <option value="career">Career Engine (Dials, Commitments & Focus)</option>
+          </select>
+        </div>
+
+        <div id="box-linked-increment" class="hidden">
+          <label for="field-habit-increment" class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">Bible Chapters Logged per Check</label>
+          <input type="number" id="field-habit-increment" step="1" min="1" value="10"
+            class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-white transition font-mono">
+        </div>
+
+        <div>
+          <label class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">Category & Pillar</label>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="category-radio-group">
+            <label class="flex items-center gap-2 p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 cursor-pointer hover:border-emerald-500">
+              <input type="radio" name="habit-category" value="Career" checked class="accent-emerald-500">
+              <span class="text-xs font-medium text-emerald-300">Career</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg border border-obsidian-hairline bg-obsidian-elevated cursor-pointer hover:border-white">
+              <input type="radio" name="habit-category" value="Spiritual" class="accent-white">
+              <span class="text-xs font-medium text-zinc-200">Spiritual</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg border border-obsidian-border bg-obsidian-DEFAULT cursor-pointer hover:border-zinc-400">
+              <input type="radio" name="habit-category" value="Discipline" class="accent-zinc-400">
+              <span class="text-xs font-medium text-zinc-300">Discipline</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg border border-red-500/30 bg-red-500/10 cursor-pointer hover:border-red-500">
+              <input type="radio" name="habit-category" value="Purity" class="accent-red-500">
+              <span class="text-xs font-medium text-red-300">Purity</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg border border-amber-500/30 bg-amber-500/10 cursor-pointer hover:border-amber-500 col-span-2 sm:col-span-1">
+              <input type="radio" name="habit-category" value="Health" class="accent-amber-500">
+              <span class="text-xs font-medium text-amber-300">Health</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label for="field-habit-target" class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">Weekly Target Frequency</label>
+          <select id="field-habit-target" class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-white transition font-mono">
+            <option value="7">Every day (7 days / week)</option>
+            <option value="5">Monday - Friday (5 days / week)</option>
+            <option value="6">6 days a week</option>
+            <option value="4">4 times a week</option>
+            <option value="3">3 times a week</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-obsidian-border">
+          <button type="button" onclick="closeHabitModal()" class="px-3.5 py-1.5 text-xs font-medium text-obsidian-muted hover:text-white transition">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 bg-white hover:bg-zinc-200 text-black text-xs font-semibold rounded-lg tactile-press shadow-sm">Save Habit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: LOG WEIGH-IN -->
+  <div id="modal-weighin" class="fixed inset-0 z-50 glass-modal hidden flex items-center justify-center p-4">
+    <div class="bg-obsidian-surface border border-amber-500/30 rounded-xl w-full max-w-sm p-5 relative shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-obsidian-border">
+        <h3 class="text-xs font-bold font-mono tracking-wider text-amber-400 uppercase flex items-center gap-2">
+          <i data-lucide="scale" class="w-4 h-4"></i>
+          <span>LOG SCALE WEIGH-IN</span>
+        </h3>
+        <button onclick="closeWeighInModal()" class="text-obsidian-muted hover:text-white p-1 rounded-lg transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form id="form-weighin" class="mt-4 space-y-3.5">
+        <div>
+          <label for="field-weighin-val" class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">Weight (lbs)</label>
+          <input type="number" id="field-weighin-val" step="0.1" min="90" max="500" required placeholder="e.g. 228.4"
+            class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-400 transition font-mono">
+        </div>
+
+        <div>
+          <label for="field-weighin-date" class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">Date</label>
+          <input type="date" id="field-weighin-date" required
+            class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 transition font-mono">
+        </div>
+
+        <div>
+          <label for="field-weighin-notes" class="block font-mono text-[10px] text-obsidian-subtle uppercase mb-1">Notes (Optional)</label>
+          <input type="text" id="field-weighin-notes" placeholder="e.g. Morning fasted, post-workout"
+            class="w-full bg-obsidian-DEFAULT border border-obsidian-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 transition">
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-obsidian-border">
+          <button type="button" onclick="closeWeighInModal()" class="px-3.5 py-1.5 text-xs text-obsidian-muted hover:text-white transition">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black text-xs font-semibold rounded-lg tactile-press shadow-sm">Record Weigh-in</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: WEIGH-IN HISTORY -->
+  <div id="modal-history" class="fixed inset-0 z-50 glass-modal hidden flex items-center justify-center p-4">
+    <div class="bg-obsidian-surface border border-obsidian-border rounded-xl w-full max-w-md p-5 relative max-h-[85vh] flex flex-col shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-obsidian-border">
+        <h3 class="text-xs font-bold font-mono tracking-wider text-amber-400 uppercase flex items-center gap-2">
+          <i data-lucide="history" class="w-4 h-4"></i>
+          <span>WEIGH-IN LOG HISTORY</span>
+        </h3>
+        <button onclick="document.getElementById('modal-history').classList.add('hidden')" class="text-obsidian-muted hover:text-white p-1 rounded-lg transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="overflow-y-auto mt-3 space-y-2 pr-1 flex-1" id="weighin-history-container">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+      <div class="pt-3 border-t border-obsidian-border text-right">
+        <button onclick="document.getElementById('modal-history').classList.add('hidden')" class="px-4 py-1.5 bg-obsidian-elevated border border-obsidian-border text-xs font-mono text-white rounded-lg hover:bg-obsidian-hover transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: INSTALL APP INSTRUCTIONS -->
+  <div id="modal-install" class="fixed inset-0 z-50 glass-modal hidden flex items-center justify-center p-4">
+    <div class="bg-obsidian-surface border border-obsidian-hairline rounded-xl w-full max-w-md p-6 relative shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-obsidian-border">
+        <div class="flex items-center gap-2">
+          <div class="p-1.5 rounded-lg bg-obsidian-elevated text-white">
+            <i data-lucide="download-cloud" class="w-4 h-4"></i>
+          </div>
+          <h3 class="text-xs font-bold font-mono tracking-wider text-white uppercase">INSTALL KEVIN'S ENGINE</h3>
+        </div>
+        <button onclick="document.getElementById('modal-install').classList.add('hidden')" class="text-obsidian-muted hover:text-white p-1 rounded-lg transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-obsidian-subtle leading-relaxed">
+        Kevin's Discipline Engine works 100% offline with zero latency. Install directly to your phone or desktop:
+      </p>
+
+      <div class="space-y-2 font-mono text-xs">
+        <div class="p-3 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg">
+          <div class="flex items-center gap-2 text-white font-bold mb-1">
+            <i data-lucide="apple" class="w-4 h-4"></i>
+            <span>iPhone & iPad (Safari)</span>
+          </div>
+          <p class="text-[11px] text-obsidian-subtle font-sans">Tap the <strong>Share</strong> icon &rarr; scroll down &rarr; tap <strong>'Add to Home Screen'</strong>.</p>
+        </div>
+
+        <div class="p-3 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg">
+          <div class="flex items-center gap-2 text-emerald-400 font-bold mb-1">
+            <i data-lucide="smartphone" class="w-4 h-4"></i>
+            <span>Android (Chrome / Samsung)</span>
+          </div>
+          <p class="text-[11px] text-obsidian-subtle font-sans">Tap the <strong>three dots (&vellip;)</strong> menu &rarr; select <strong>'Install app'</strong> or <strong>'Add to Home screen'</strong>.</p>
+        </div>
+
+        <div class="p-3 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg">
+          <div class="flex items-center gap-2 text-amber-400 font-bold mb-1">
+            <i data-lucide="monitor" class="w-4 h-4"></i>
+            <span>Mac & Windows (Chrome / Edge / Brave)</span>
+          </div>
+          <p class="text-[11px] text-obsidian-subtle font-sans">Click the <strong>Install</strong> icon in the address bar (far right), or use the top button.</p>
+        </div>
+      </div>
+
+      <div class="pt-2 text-right">
+        <button onclick="document.getElementById('modal-install').classList.add('hidden')" class="w-full py-2 bg-white hover:bg-zinc-200 text-black font-semibold text-xs rounded-lg transition shadow-sm">
+          Got It
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY_ENGINE = 'kevins_discipline_engine_v3_sleek';
+
+    // Web Audio Synthesizer (Zero UI footprint, crisp audio feedback)
+    const audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext || window.webkitAudioContext)() : null;
+    
+    function playVictoryChime(isCompleted) {
+      if (!audioCtx) return;
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+
+        if (isCompleted) {
+          const osc1 = audioCtx.createOscillator();
+          const osc2 = audioCtx.createOscillator();
+          const gainNode = audioCtx.createGain();
+
+          osc1.type = 'sine';
+          osc2.type = 'triangle';
+
+          osc1.frequency.setValueAtTime(587.33, now); // D5
+          osc1.frequency.exponentialRampToValueAtTime(880.00, now + 0.12); // A5
+
+          osc2.frequency.setValueAtTime(739.99, now); // F#5
+          osc2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.15); // D6
+
+          gainNode.gain.setValueAtTime(0.08, now);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+          osc1.connect(gainNode);
+          osc2.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.22);
+          osc2.stop(now + 0.22);
+        } else {
+          const osc = audioCtx.createOscillator();
+          const gainNode = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(349.23, now);
+          osc.frequency.exponentialRampToValueAtTime(220.00, now + 0.09);
+
+          gainNode.gain.setValueAtTime(0.06, now);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+          osc.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.12);
+        }
+      } catch (e) {}
+    }
+
+    function formatKey(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function getDefaultState() {
+      const today = new Date();
+      const getPastKey = (daysBack) => {
+        const d = new Date();
+        d.setDate(today.getDate() - daysBack);
+        return formatKey(d);
+      };
+
+      const todayKey = formatKey(today);
+
+      return {
+        careerDayData: {
+          [todayKey]: {
+            override: 'normal',
+            dials: 0,
+            focusMinutes: 0,
+            commitments: [
+              { text: '', done: false },
+              { text: '', done: false },
+              { text: '', done: false }
+            ],
+            dailyPlan: {
+              strategy: '',
+              focusWindow: '',
+              notes: '',
+              submitted: false
+            }
+          }
+        },
+        bibleGoal: {
+          title: 'Read Bible in 365 Days',
+          target: 1189,
+          current: 301,
+          deadline: '2026-12-31'
+        },
+        weightGoal: {
+          startingWeight: 229.0,
+          currentWeight: 229.0,
+          targetWeight: 190.0,
+          deadline: '2026-12-31',
+          history: [
+            { date: getPastKey(14), weight: 231.8, notes: 'Baseline start' },
+            { date: getPastKey(7), weight: 230.2, notes: 'Fasted weigh-in' },
+            { date: getPastKey(0), weight: 229.0, notes: 'Engine active' }
+          ]
+        },
+        habits: [
+          // CAREER PILLAR HABITS
+          {
+            id: 'hab_career_commitments',
+            name: 'Complete 3 Daily Commitments',
+            category: 'Career',
+            linkedGoal: 'career',
+            unitsPerCheck: 0,
+            targetDays: 5,
+            logs: { [getPastKey(0)]: false }
+          },
+          {
+            id: 'hab_career_dials_20',
+            name: 'Hit 20 Dials KPI Target',
+            category: 'Career',
+            linkedGoal: 'career',
+            unitsPerCheck: 0,
+            targetDays: 5,
+            logs: { [getPastKey(0)]: false }
+          },
+          {
+            id: 'hab_career_focus_90m',
+            name: 'Execute 90 Mins Focus Time',
+            category: 'Career',
+            linkedGoal: 'career',
+            unitsPerCheck: 0,
+            targetDays: 5,
+            logs: { [getPastKey(0)]: false }
+          },
+          {
+            id: 'hab_career_daily_plan',
+            name: 'Submit Mon-Fri Daily Execution Plan',
+            category: 'Career',
+            linkedGoal: 'career',
+            unitsPerCheck: 0,
+            targetDays: 5,
+            logs: { [getPastKey(0)]: false }
+          },
+
+          // SPIRITUAL PILLAR
+          {
+            id: 'hab_bible_10',
+            name: 'Read 10 Bible Chapters',
+            category: 'Spiritual',
+            linkedGoal: 'bible',
+            unitsPerCheck: 10,
+            targetDays: 7,
+            logs: {
+              [getPastKey(0)]: true,
+              [getPastKey(1)]: true,
+              [getPastKey(2)]: true
+            }
+          },
+          {
+            id: 'hab_ministry',
+            name: 'Read 15 min of Ministry',
+            category: 'Spiritual',
+            linkedGoal: 'none',
+            unitsPerCheck: 0,
+            targetDays: 7,
+            logs: {
+              [getPastKey(0)]: true,
+              [getPastKey(1)]: true
+            }
+          },
+
+          // PURITY PILLAR
+          {
+            id: 'hab_no_porn',
+            name: 'No Porn',
+            category: 'Purity',
+            linkedGoal: 'none',
+            unitsPerCheck: 0,
+            targetDays: 7,
+            logs: {
+              [getPastKey(0)]: true,
+              [getPastKey(1)]: true,
+              [getPastKey(2)]: true,
+              [getPastKey(3)]: true,
+              [getPastKey(4)]: true
+            }
+          },
+
+          // PERSONAL DISCIPLINE
+          {
+            id: 'hab_make_bed',
+            name: 'Make My Bed',
+            category: 'Discipline',
+            linkedGoal: 'none',
+            unitsPerCheck: 0,
+            targetDays: 7,
+            logs: {
+              [getPastKey(0)]: true,
+              [getPastKey(1)]: true,
+              [getPastKey(2)]: true
+            }
+          },
+
+          // HEALTH & FITNESS PILLAR
+          {
+            id: 'hab_no_fast_food',
+            name: 'No Fast Food',
+            category: 'Health',
+            linkedGoal: 'weight',
+            unitsPerCheck: 0,
+            targetDays: 7,
+            logs: {
+              [getPastKey(0)]: true,
+              [getPastKey(1)]: true
+            }
+          },
+          {
+            id: 'hab_caloric_deficit',
+            name: 'Track Nutrition / Caloric Deficit',
+            category: 'Health',
+            linkedGoal: 'weight',
+            unitsPerCheck: 0,
+            targetDays: 7,
+            logs: {
+              [getPastKey(0)]: true,
+              [getPastKey(1)]: true
+            }
+          },
+          {
+            id: 'hab_daily_steps',
+            name: 'Daily Physical Activity / Steps',
+            category: 'Health',
+            linkedGoal: 'weight',
+            unitsPerCheck: 0,
+            targetDays: 7,
+            logs: {
+              [getPastKey(0)]: true,
+              [getPastKey(1)]: true,
+              [getPastKey(2)]: true
+            }
+          }
+        ]
+      };
+    }
+
+    let appData = null;
+    let activeCategory = 'all';
+    let currentWeekOffset = 0;
+    let currentViewMode = 'agenda';
+    let deferredPrompt = null;
+
+    let focusTimerInterval = null;
+    let focusTimerSeconds = 0;
+
+    function loadStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_ENGINE);
+        if (raw) {
+          appData = JSON.parse(raw);
+          if (!appData.careerDayData || !appData.weightGoal || !appData.bibleGoal || !Array.isArray(appData.habits)) {
+            appData = getDefaultState();
+            saveStorage();
+          }
+        } else {
+          appData = getDefaultState();
+          saveStorage();
+        }
+      } catch (e) {
+        appData = getDefaultState();
+      }
+      ensureTodayCareerState();
+    }
+
+    function saveStorage() {
+      localStorage.setItem(STORAGE_KEY_ENGINE, JSON.stringify(appData));
+    }
+
+    function ensureTodayCareerState() {
+      const todayKey = formatKey(new Date());
+      if (!appData.careerDayData) appData.careerDayData = {};
+      if (!appData.careerDayData[todayKey]) {
+        appData.careerDayData[todayKey] = {
+          override: 'normal',
+          dials: 0,
+          focusMinutes: 0,
+          commitments: [
+            { text: '', done: false },
+            { text: '', done: false },
+            { text: '', done: false }
+          ],
+          dailyPlan: {
+            strategy: '',
+            focusWindow: '',
+            notes: '',
+            submitted: false
+          }
+        };
+      }
+    }
+
+    function getTodayCareer() {
+      ensureTodayCareerState();
+      return appData.careerDayData[formatKey(new Date())];
+    }
+
+    function calculateDaysUntil(deadlineStr) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const dl = new Date(deadlineStr + 'T00:00:00');
+      const diffMs = dl - today;
+      return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+    }
+
+    function calculateBiblePacing() {
+      const g = appData.bibleGoal;
+      const daysLeft = calculateDaysUntil(g.deadline);
+      const remainingChapters = Math.max(0, g.target - g.current);
+      const dailyPaceExact = remainingChapters / daysLeft;
+      const dailyPaceRecommended = Math.ceil(dailyPaceExact * 10) / 10;
+      const progressPercent = Math.min(100, Math.round((g.current / g.target) * 1000) / 10);
+
+      return {
+        daysLeft,
+        remainingChapters,
+        dailyPaceRecommended,
+        progressPercent,
+        status: progressPercent >= 100 ? 'COMPLETED' : (dailyPaceExact <= 11 ? 'ON TRACK' : 'CATCH-UP')
+      };
+    }
+
+    function calculateWeightPacing() {
+      const w = appData.weightGoal;
+      const daysLeft = calculateDaysUntil(w.deadline);
+      const weeksLeft = Math.max(0.1, daysLeft / 7);
+      
+      const lbsToLose = Math.max(0, w.currentWeight - w.targetWeight);
+      const weeklyLossRequired = Math.round((lbsToLose / weeksLeft) * 10) / 10;
+      const dailyLossRequired = Math.round((lbsToLose / daysLeft) * 100) / 100;
+
+      const totalJourney = Math.max(0.1, w.startingWeight - w.targetWeight);
+      const lostSoFar = Math.max(0, w.startingWeight - w.currentWeight);
+      const progressPercent = Math.min(100, Math.max(0, Math.round((lostSoFar / totalJourney) * 100)));
+
+      return {
+        daysLeft,
+        weeksLeft: Math.round(weeksLeft * 10) / 10,
+        lbsToLose: Math.round(lbsToLose * 10) / 10,
+        weeklyLossRequired,
+        dailyLossRequired,
+        progressPercent
+      };
+    }
+
+    function isWeekday(dateObj) {
+      const d = dateObj.getDay();
+      return d >= 1 && d <= 5;
+    }
+
+    function calculateHabitStreak(habit) {
+      const logs = habit.logs || {};
+      const today = new Date();
+      const todayKey = formatKey(today);
+
+      let current = 0;
+      let walker = new Date(today);
+
+      if (logs[todayKey]) {
+        current = 1;
+        walker.setDate(walker.getDate() - 1);
+      } else {
+        walker.setDate(walker.getDate() - 1);
+        if (logs[formatKey(walker)]) {
+          current = 1;
+          walker.setDate(walker.getDate() - 1);
+        }
+      }
+
+      if (current > 0) {
+        while (true) {
+          const k = formatKey(walker);
+          if (logs[k]) {
+            current++;
+            walker.setDate(walker.getDate() - 1);
+          } else {
+            break;
+          }
+        }
+      }
+
+      return current;
+    }
+
+    function getWeekDates(offset) {
+      const now = new Date();
+      const dayOfWeek = now.getDay();
+      const diffToMon = (dayOfWeek === 0 ? -6 : 1) - dayOfWeek;
+      
+      const mon = new Date(now);
+      mon.setDate(now.getDate() + diffToMon + (offset * 7));
+      mon.setHours(0, 0, 0, 0);
+
+      const days = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(mon);
+        d.setDate(mon.getDate() + i);
+        days.push(d);
+      }
+      return days;
+    }
+
+    function renderCareerEngine() {
+      const career = getTodayCareer();
+      const now = new Date();
+      const isMonToFri = isWeekday(now);
+      const override = career.override || 'normal';
+
+      document.getElementById('select-workday-override').value = override;
+
+      const badge = document.getElementById('badge-weekday-status');
+      const label = document.getElementById('label-weekday-state');
+
+      if (override === 'holiday') {
+        badge.className = 'px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border flex items-center gap-1.5 bg-amber-500/10 border-amber-500/30 text-amber-300';
+        label.textContent = 'Holiday Override Active';
+      } else if (override === 'offday') {
+        badge.className = 'px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border flex items-center gap-1.5 bg-zinc-700/20 border-zinc-600 text-zinc-300';
+        label.textContent = 'Off-Day / Leave Active';
+      } else if (isMonToFri) {
+        badge.className = 'px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border flex items-center gap-1.5 bg-emerald-500/10 border-emerald-500/30 text-emerald-300';
+        label.textContent = 'Weekday Plan Active';
+      } else {
+        badge.className = 'px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border flex items-center gap-1.5 bg-obsidian-DEFAULT border-obsidian-border text-obsidian-muted';
+        label.textContent = 'Weekend Off (Optional)';
+      }
+
+      // Dials UI
+      const dials = career.dials || 0;
+      document.getElementById('counter-dials-val').textContent = dials;
+      document.getElementById('kpi-dials-display').innerHTML = `${dials}<span class="text-xs text-obsidian-muted font-sans">/20</span>`;
+      const dialsPercent = Math.min(100, Math.round((dials / 20) * 100));
+      document.getElementById('bar-dials-fill').style.width = `${dialsPercent}%`;
+      document.getElementById('badge-dials-complete').textContent = `${dialsPercent}%`;
+
+      const remainingDials = Math.max(0, 20 - dials);
+      document.getElementById('label-dials-remaining').textContent = 
+        remainingDials === 0 ? 'Target of 20 Dials Conquered! 🔥' : `${remainingDials} dials remaining to 20 target`;
+      document.getElementById('kpi-dials-status').textContent = 
+        remainingDials === 0 ? '20 Dials Complete!' : `${remainingDials} to goal`;
+
+      syncHabitCompletion('hab_career_dials_20', dials >= 20);
+
+      // Focus Time UI
+      const focusMins = career.focusMinutes || 0;
+      document.getElementById('kpi-focus-display').innerHTML = `${focusMins}<span class="text-xs text-obsidian-muted font-sans">/90m</span>`;
+      document.getElementById('badge-focus-complete').textContent = `${focusMins} / 90m`;
+      const focusPercent = Math.min(100, Math.round((focusMins / 90) * 100));
+      document.getElementById('bar-focus-fill').style.width = `${focusPercent}%`;
+      document.getElementById('label-focus-logged').textContent = `Logged: ${focusMins} mins`;
+      const remainingFocus = Math.max(0, 90 - focusMins);
+      document.getElementById('label-focus-remaining').textContent = 
+        remainingFocus === 0 ? '90 Mins Deep Focus Complete! 🚀' : `${remainingFocus} mins remaining`;
+      document.getElementById('kpi-focus-status').textContent = 
+        remainingFocus === 0 ? '90m Target Hit!' : `${remainingFocus}m remaining`;
+
+      syncHabitCompletion('hab_career_focus_90m', focusMins >= 90);
+
+      // 3 Commitments UI
+      const commitments = career.commitments || [];
+      let completedCommitments = 0;
+
+      for (let i = 0; i < 3; i++) {
+        const item = commitments[i] || { text: '', done: false };
+        const input = document.getElementById(`input-commit-text-${i}`);
+        const btn = document.getElementById(`btn-commit-chk-${i}`);
+
+        if (document.activeElement !== input) {
+          input.value = item.text || '';
+        }
+
+        if (item.done) {
+          completedCommitments++;
+          btn.className = 'w-5 h-5 rounded border border-white bg-white text-black flex items-center justify-center transition tactile-press shadow-sm';
+          input.classList.add('line-through', 'text-obsidian-muted');
+        } else {
+          btn.className = 'w-5 h-5 rounded border border-obsidian-border bg-obsidian-surface text-transparent hover:border-obsidian-hairline flex items-center justify-center transition tactile-press';
+          input.classList.remove('line-through', 'text-obsidian-muted');
+        }
+      }
+
+      document.getElementById('badge-commitments-ratio').textContent = `${completedCommitments} / 3 Done`;
+      syncHabitCompletion('hab_career_commitments', completedCommitments === 3);
+
+      // Daily Plan Form UI
+      const plan = career.dailyPlan || { strategy: '', focusWindow: '', notes: '', submitted: false };
+      const stratInput = document.getElementById('plan-input-strategy');
+      const focusWinInput = document.getElementById('plan-input-focus-window');
+      const notesInput = document.getElementById('plan-input-notes');
+
+      if (document.activeElement !== stratInput) stratInput.value = plan.strategy || '';
+      if (document.activeElement !== focusWinInput) focusWinInput.value = plan.focusWindow || '';
+      if (document.activeElement !== notesInput) notesInput.value = plan.notes || '';
+
+      const submitBtn = document.getElementById('btn-submit-daily-plan');
+      const submitText = document.getElementById('label-submit-plan-text');
+      const notice = document.getElementById('label-plan-requirement-notice');
+
+      if (override === 'holiday' || override === 'offday') {
+        notice.textContent = `Daily Plan bypassed (${override === 'holiday' ? 'Holiday' : 'Off-Day'} override active)`;
+      } else if (isMonToFri) {
+        notice.textContent = 'Required Monday through Friday &bull; Strategic clarity before execution';
+      } else {
+        notice.textContent = 'Weekend: Daily Plan is optional';
+      }
+
+      if (plan.submitted) {
+        submitBtn.className = 'px-4 py-1.5 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-semibold text-xs rounded-lg transition tactile-press flex items-center gap-1.5';
+        submitText.textContent = "Plan Active & Submitted ✓";
+      } else {
+        submitBtn.className = 'px-4 py-1.5 bg-white hover:bg-zinc-200 text-black font-semibold text-xs rounded-lg transition tactile-press flex items-center gap-1.5 shadow-sm';
+        submitText.textContent = "Submit Today's Plan";
+      }
+
+      syncHabitCompletion('hab_career_daily_plan', plan.submitted || override === 'holiday' || override === 'offday');
+      lucide.createIcons();
+    }
+
+    function syncHabitCompletion(habitId, isDone) {
+      const todayKey = formatKey(new Date());
+      const habit = appData.habits.find(h => h.id === habitId);
+      if (habit) {
+        if (!habit.logs) habit.logs = {};
+        habit.logs[todayKey] = isDone;
+      }
+    }
+
+    window.handleWorkdayOverrideChange = function() {
+      const career = getTodayCareer();
+      career.override = document.getElementById('select-workday-override').value;
+      saveStorage();
+      renderCareerEngine();
+      renderMatrix();
+    };
+
+    window.adjustDials = function(amount) {
+      const career = getTodayCareer();
+      career.dials = Math.max(0, (career.dials || 0) + amount);
+      playVictoryChime(amount > 0);
+      if (career.dials >= 20 && career.dials - amount < 20 && typeof confetti === 'function') {
+        confetti({
+          particleCount: 60,
+          spread: 50,
+          origin: { y: 0.75 },
+          colors: ['#ffffff', '#10b981', '#f59e0b']
+        });
+      }
+      saveStorage();
+      renderCareerEngine();
+      renderMatrix();
+    };
+
+    window.addFocusMinutes = function(mins) {
+      const career = getTodayCareer();
+      career.focusMinutes = Math.max(0, (career.focusMinutes || 0) + mins);
+      playVictoryChime(mins > 0);
+      if (career.focusMinutes >= 90 && career.focusMinutes - mins < 90 && typeof confetti === 'function') {
+        confetti({
+          particleCount: 60,
+          spread: 50,
+          origin: { y: 0.75 },
+          colors: ['#ffffff', '#10b981', '#f59e0b']
+        });
+      }
+      saveStorage();
+      renderCareerEngine();
+      renderMatrix();
+    };
+
+    window.toggleFocusTimer = function() {
+      const btn = document.getElementById('btn-toggle-focus-timer');
+      const label = document.getElementById('btn-focus-timer-label');
+
+      if (focusTimerInterval) {
+        clearInterval(focusTimerInterval);
+        focusTimerInterval = null;
+        label.textContent = "Start";
+        btn.className = "px-3 h-8 rounded-lg bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs flex items-center gap-1.5 transition tactile-press shadow-sm";
+
+        const minutesElapsed = Math.floor(focusTimerSeconds / 60);
+        if (minutesElapsed > 0) {
+          addFocusMinutes(minutesElapsed);
+          focusTimerSeconds = focusTimerSeconds % 60;
+        }
+      } else {
+        label.textContent = "Pause";
+        btn.className = "px-3 h-8 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-mono font-bold text-xs flex items-center gap-1.5 transition tactile-press shadow-sm";
+
+        focusTimerInterval = setInterval(() => {
+          focusTimerSeconds++;
+          const mins = Math.floor(focusTimerSeconds / 60);
+          const secs = focusTimerSeconds % 60;
+          document.getElementById('label-focus-timer-text').textContent = 
+            `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+          if (focusTimerSeconds > 0 && focusTimerSeconds % 300 === 0) {
+            addFocusMinutes(5);
+            focusTimerSeconds = 0;
+          }
+        }, 1000);
+      }
+      lucide.createIcons();
+    };
+
+    window.toggleCommitmentCheck = function(index) {
+      const career = getTodayCareer();
+      if (!career.commitments[index]) career.commitments[index] = { text: '', done: false };
+      const current = career.commitments[index].done;
+      career.commitments[index].done = !current;
+      playVictoryChime(!current);
+      saveStorage();
+      renderCareerEngine();
+      renderMatrix();
+    };
+
+    window.saveCommitmentText = function(index) {
+      const career = getTodayCareer();
+      const val = document.getElementById(`input-commit-text-${index}`).value;
+      if (!career.commitments[index]) career.commitments[index] = { text: '', done: false };
+      career.commitments[index].text = val;
+      saveStorage();
+    };
+
+    window.saveDailyPlanField = function(field, val) {
+      const career = getTodayCareer();
+      if (!career.dailyPlan) career.dailyPlan = { strategy: '', focusWindow: '', notes: '', submitted: false };
+      career.dailyPlan[field] = val;
+      saveStorage();
+    };
+
+    window.toggleDailyPlanSubmission = function() {
+      const career = getTodayCareer();
+      if (!career.dailyPlan) career.dailyPlan = { strategy: '', focusWindow: '', notes: '', submitted: false };
+      career.dailyPlan.submitted = !career.dailyPlan.submitted;
+      playVictoryChime(career.dailyPlan.submitted);
+
+      if (career.dailyPlan.submitted && typeof confetti === 'function') {
+        confetti({
+          particleCount: 50,
+          spread: 45,
+          origin: { y: 0.75 },
+          colors: ['#ffffff', '#10b981', '#f59e0b']
+        });
+      }
+
+      saveStorage();
+      renderCareerEngine();
+      renderMatrix();
+    };
+
+    function renderGoalsUI() {
+      // Bible Milestone Engine
+      const bg = appData.bibleGoal;
+      const bPace = calculateBiblePacing();
+
+      document.getElementById('bible-title').textContent = bg.title;
+      document.getElementById('bible-progress-summary').textContent = `${bg.current} of ${bg.target} chapters read (${bPace.remainingChapters} remaining)`;
+      document.getElementById('bible-status-badge').textContent = bPace.status;
+      document.getElementById('bible-days-left').textContent = `${bPace.daysLeft} days remaining`;
+      document.getElementById('bible-pace-label').textContent = `~${bPace.dailyPaceRecommended} ch / day`;
+      document.getElementById('bible-percentage').textContent = `${bPace.progressPercent}%`;
+      document.getElementById('bible-progress-fill').style.width = `${bPace.progressPercent}%`;
+
+      document.getElementById('kpi-bible-remaining').textContent = bPace.remainingChapters;
+      document.getElementById('kpi-bible-pace').textContent = `~${bPace.dailyPaceRecommended} ch/day`;
+
+      // Weight Milestone Engine
+      const wg = appData.weightGoal;
+      const wPace = calculateWeightPacing();
+
+      document.getElementById('weight-progress-summary').textContent = 
+        `Current: ${wg.currentWeight.toFixed(1)} lbs &rarr; Goal: ${wg.targetWeight.toFixed(1)} lbs (${wPace.lbsToLose.toFixed(1)} lbs left)`;
+      document.getElementById('weight-weeks-left').textContent = `${wPace.weeksLeft} wks left (${wPace.daysLeft} days)`;
+      document.getElementById('weight-pace-label').textContent = `~${wPace.weeklyLossRequired} lbs / wk`;
+      document.getElementById('weight-trend-stat').textContent = `Start: ${wg.startingWeight.toFixed(1)} • Target: ${wg.targetWeight.toFixed(1)}`;
+      document.getElementById('label-latest-weighin').textContent = `${wg.currentWeight.toFixed(1)} lbs`;
+
+      renderWeightChart();
+    }
+
+    function renderWeightChart() {
+      const svg = document.getElementById('weight-trend-svg');
+      const history = [...appData.weightGoal.history].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      if (history.length === 0) {
+        svg.innerHTML = '<text x="50%" y="50%" fill="#71717a" text-anchor="middle" font-size="10" font-family="monospace">NO ENTRIES</text>';
+        return;
+      }
+
+      const weights = history.map(h => h.weight);
+      const minW = Math.min(...weights, appData.weightGoal.targetWeight) - 2;
+      const maxW = Math.max(...weights, appData.weightGoal.startingWeight) + 2;
+      const range = maxW - minW || 1;
+
+      const width = svg.clientWidth || 300;
+      const height = svg.clientHeight || 56;
+      const pad = 10;
+
+      const pts = history.map((h, i) => {
+        const x = history.length === 1 ? width / 2 : pad + (i / (history.length - 1)) * (width - (pad * 2));
+        const y = height - (pad + ((h.weight - minW) / range) * (height - (pad * 2)));
+        return { x, y, weight: h.weight, date: h.date };
+      });
+
+      let pathD = `M ${pts[0].x} ${pts[0].y}`;
+      pts.forEach(p => { pathD += ` L ${p.x} ${p.y}`; });
+
+      const targetY = height - (pad + ((appData.weightGoal.targetWeight - minW) / range) * (height - (pad * 2)));
+
+      let dotsHtml = pts.map(p => `
+        <circle cx="${p.x}" cy="${p.y}" r="2.5" fill="#f59e0b" stroke="#09090b" stroke-width="1.5">
+          <title>${p.date}: ${p.weight.toFixed(1)} lbs</title>
+        </circle>
+      `).join('');
+
+      svg.innerHTML = `
+        <line x1="${pad}" y1="${targetY}" x2="${width - pad}" y2="${targetY}" stroke="#f59e0b" stroke-dasharray="3,3" stroke-width="1" opacity="0.35" />
+        <path d="${pathD}" fill="none" stroke="#f59e0b" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+        ${dotsHtml}
+      `;
+    }
+
+    function getCategoryColorMeta(category) {
+      switch ((category || '').toLowerCase()) {
+        case 'career':
+          return {
+            border: 'border-emerald-500/25',
+            bg: 'bg-emerald-500/10',
+            text: 'text-emerald-400',
+            accent: 'bg-emerald-500',
+            badgeBg: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+          };
+        case 'spiritual':
+          return {
+            border: 'border-zinc-500/25',
+            bg: 'bg-zinc-500/10',
+            text: 'text-zinc-200',
+            accent: 'bg-white',
+            badgeBg: 'bg-zinc-500/15 text-zinc-200 border-zinc-500/30'
+          };
+        case 'purity':
+          return {
+            border: 'border-red-500/25',
+            bg: 'bg-red-500/10',
+            text: 'text-red-400',
+            accent: 'bg-red-500',
+            badgeBg: 'bg-red-500/15 text-red-300 border-red-500/30'
+          };
+        case 'discipline':
+          return {
+            border: 'border-zinc-600/30',
+            bg: 'bg-zinc-600/10',
+            text: 'text-zinc-300',
+            accent: 'bg-zinc-300',
+            badgeBg: 'bg-zinc-700/20 text-zinc-300 border-zinc-600/30'
+          };
+        case 'health':
+        default:
+          return {
+            border: 'border-amber-500/25',
+            bg: 'bg-amber-500/10',
+            text: 'text-amber-400',
+            accent: 'bg-amber-500',
+            badgeBg: 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+          };
+      }
+    }
+
+    function renderWeekHeaders(weekDays) {
+      const todayKey = formatKey(new Date());
+      const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+      weekDays.forEach((date, i) => {
+        const th = document.getElementById(`th-day-${i}`);
+        const dateKey = formatKey(date);
+        const isToday = dateKey === todayKey;
+
+        th.innerHTML = `
+          <div class="flex flex-col items-center">
+            <span class="text-[9px] ${isToday ? 'text-white font-bold' : 'text-obsidian-muted'}">${dayNames[i]}</span>
+            <span class="w-5 h-5 flex items-center justify-center rounded font-mono text-[10px] mt-0.5 ${
+              isToday 
+                ? 'bg-white text-black font-bold shadow-sm' 
+                : 'text-obsidian-subtle'
+            }">
+              ${date.getDate()}
+            </span>
+          </div>
+        `;
+      });
+
+      const start = weekDays[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const end = weekDays[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      document.getElementById('label-week-range').textContent = currentWeekOffset === 0 ? `This Week` : `${start} - ${end}`;
+    }
+
+    function renderMatrix() {
+      const tbody = document.getElementById('habits-matrix-body');
+      const emptyState = document.getElementById('matrix-empty-state');
+      tbody.innerHTML = '';
+
+      const weekDays = getWeekDates(currentWeekOffset);
+      renderWeekHeaders(weekDays);
+
+      const filtered = appData.habits.filter(h => activeCategory === 'all' || h.category === activeCategory);
+
+      if (filtered.length === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+      }
+
+      const todayKey = formatKey(new Date());
+
+      filtered.forEach(habit => {
+        const streak = calculateHabitStreak(habit);
+        const meta = getCategoryColorMeta(habit.category);
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-obsidian-elevated transition group';
+
+        let badgeLabel = '';
+        if (habit.linkedGoal === 'career') {
+          badgeLabel = `<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Career KPI</span>`;
+        } else if (habit.linkedGoal === 'bible') {
+          badgeLabel = `<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">+${habit.unitsPerCheck || 10} ch</span>`;
+        } else if (habit.linkedGoal === 'weight') {
+          badgeLabel = `<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">Weight</span>`;
+        }
+
+        let rowHtml = `
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2 h-2 rounded-full ${meta.accent} shrink-0"></span>
+              <div>
+                <p class="font-medium text-white">${escapeHtml(habit.name)}</p>
+                <div class="flex items-center gap-1.5 mt-0.5">
+                  <span class="text-[10px] font-mono text-obsidian-muted">${habit.targetDays || 7}d/wk</span>
+                  ${badgeLabel}
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-2 text-center">
+            <span class="inline-block px-2 py-0.5 font-mono text-[9px] tracking-wide rounded border ${meta.badgeBg} uppercase font-semibold">
+              ${habit.category}
+            </span>
+          </td>
+          <td class="py-3 px-2 text-center">
+            <span class="font-mono text-xs font-bold text-white px-2 py-0.5 rounded bg-obsidian-DEFAULT border border-obsidian-border">
+              ${streak}d
+            </span>
+          </td>
+        `;
+
+        weekDays.forEach(day => {
+          const key = formatKey(day);
+          const isDone = Boolean(habit.logs && habit.logs[key]);
+          const isToday = key === todayKey;
+
+          rowHtml += `
+            <td class="py-3 px-1.5 text-center">
+              <button 
+                onclick="toggleHabitDay('${habit.id}', '${key}')"
+                class="tactile-press w-6 h-6 mx-auto rounded flex items-center justify-center transition border ${
+                  isDone
+                    ? `${meta.accent} ${habit.category === 'Spiritual' ? 'text-black' : 'text-white'} border-transparent shadow-sm`
+                    : 'bg-obsidian-DEFAULT border-obsidian-border text-transparent hover:border-obsidian-hairline'
+                } ${isToday && !isDone ? 'ring-1 ring-white/50' : ''}"
+                title="${key}: ${isDone ? 'Victory' : 'Pending'}"
+              >
+                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3] ${isDone ? 'opacity-100' : 'opacity-0'}"></i>
+              </button>
+            </td>
+          `;
+        });
+
+        rowHtml += `
+          <td class="py-3 px-3 text-right">
+            <div class="flex items-center justify-end gap-1 opacity-70 group-hover:opacity-100">
+              <button onclick="editHabit('${habit.id}')" class="p-1 text-obsidian-muted hover:text-white rounded hover:bg-obsidian-DEFAULT transition" title="Edit">
+                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+              </button>
+              <button onclick="removeHabit('${habit.id}')" class="p-1 text-obsidian-muted hover:text-red-400 rounded hover:bg-obsidian-DEFAULT transition" title="Delete">
+                <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </td>
+        `;
+
+        tr.innerHTML = rowHtml;
+        tbody.appendChild(tr);
+      });
+
+      lucide.createIcons();
+      updateAnalytics();
+      renderHeatmap();
+      renderTodayAgenda();
+    }
+
+    function renderTodayAgenda() {
+      const container = document.getElementById('agenda-items-container');
+      const tag = document.getElementById('agenda-remaining-tag');
+      container.innerHTML = '';
+
+      const todayKey = formatKey(new Date());
+      const filtered = appData.habits.filter(h => activeCategory === 'all' || h.category === activeCategory);
+
+      let pending = 0;
+
+      filtered.forEach(h => {
+        const isDone = Boolean(h.logs && h.logs[todayKey]);
+        if (!isDone) pending++;
+        const meta = getCategoryColorMeta(h.category);
+
+        const card = document.createElement('div');
+        card.className = `p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition select-none tactile-press ${
+          isDone 
+            ? 'bg-obsidian-DEFAULT border-obsidian-border opacity-60' 
+            : `bg-obsidian-surface ${meta.border} hover:border-obsidian-hairline`
+        }`;
+
+        card.onclick = () => toggleHabitDay(h.id, todayKey);
+
+        card.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-6 h-6 rounded flex items-center justify-center border transition ${
+              isDone 
+                ? `${meta.accent} ${h.category === 'Spiritual' ? 'text-black' : 'text-white'} border-transparent shadow-sm` 
+                : 'border-obsidian-border bg-obsidian-DEFAULT text-transparent'
+            }">
+              <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3] ${isDone ? 'opacity-100' : 'opacity-0'}"></i>
+            </div>
+            <div>
+              <p class="font-medium text-xs sm:text-sm ${isDone ? 'line-through text-obsidian-muted' : 'text-white'}">${escapeHtml(h.name)}</p>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border ${meta.badgeBg} font-semibold uppercase">${h.category}</span>
+                ${h.linkedGoal === 'career' ? '<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-semibold">Career</span>' : ''}
+                ${h.linkedGoal === 'bible' ? '<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-zinc-300 font-semibold">+10 Ch</span>' : ''}
+                ${h.linkedGoal === 'weight' ? '<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 text-amber-300 font-semibold">Weight</span>' : ''}
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] font-mono font-bold ${isDone ? 'text-emerald-400' : 'text-obsidian-muted'}">
+              ${isDone ? 'DONE' : 'PENDING'}
+            </span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      tag.textContent = `${pending} remaining today`;
+      lucide.createIcons();
+    }
+
+    function updateAnalytics() {
+      const todayKey = formatKey(new Date());
+      const total = appData.habits.length;
+
+      let completedToday = 0;
+      appData.habits.forEach(h => {
+        if (h.logs && h.logs[todayKey]) completedToday++;
+      });
+
+      const noPorn = appData.habits.find(h => h.id === 'hab_no_porn' || h.name.toLowerCase().includes('no porn'));
+      const purityStreak = noPorn ? calculateHabitStreak(noPorn) : 0;
+      document.getElementById('kpi-purity-streak').innerHTML = `<span>${purityStreak}</span><span class="text-xs text-red-400 font-sans ml-1">days</span>`;
+
+      const ratio = total > 0 ? Math.round((completedToday / total) * 100) : 0;
+      document.getElementById('metric-completion-ratio').textContent = `${completedToday} / ${total} completed`;
+      document.getElementById('metric-percentage').textContent = `${ratio}%`;
+      document.getElementById('metric-progress-fill').style.width = `${ratio}%`;
+
+      const headline = document.getElementById('progress-status-headline');
+      const sub = document.getElementById('progress-status-sub');
+
+      if (ratio === 100 && total > 0) {
+        headline.textContent = "Unshakable Victory, Kevin";
+        sub.textContent = "20 dials, 90m focus, scripture, and clean nutrition conquered.";
+      } else if (ratio >= 60) {
+        headline.textContent = "Relentless Momentum";
+        sub.textContent = "You are dominating today's arena. Keep pressing forward.";
+      } else {
+        headline.textContent = "Execution Starts Now";
+        sub.textContent = "20 dials, 90m focus, scripture, purity, and clean nutrition.";
+      }
+    }
+
+    function renderHeatmap() {
+      const container = document.getElementById('heatmap-cells');
+      container.innerHTML = '';
+
+      const totalDays = 30;
+      const today = new Date();
+      const pastDates = [];
+
+      for (let i = totalDays - 1; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(today.getDate() - i);
+        pastDates.push(d);
+      }
+
+      const totalHabits = appData.habits.length;
+
+      pastDates.forEach(date => {
+        const key = formatKey(date);
+        let done = 0;
+
+        appData.habits.forEach(h => {
+          if (h.logs && h.logs[key]) done++;
+        });
+
+        const ratio = totalHabits > 0 ? (done / totalHabits) : 0;
+
+        let cellClass = 'bg-obsidian-DEFAULT border-obsidian-border';
+        if (ratio >= 0.85) {
+          cellClass = 'bg-white border-white';
+        } else if (ratio >= 0.6) {
+          cellClass = 'bg-zinc-400 border-zinc-300';
+        } else if (ratio >= 0.35) {
+          cellClass = 'bg-zinc-600 border-zinc-500';
+        } else if (ratio > 0) {
+          cellClass = 'bg-zinc-800 border-zinc-700';
+        }
+
+        const cell = document.createElement('div');
+        cell.className = `aspect-square rounded border transition transform hover:scale-125 cursor-pointer ${cellClass}`;
+        
+        const dateText = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        cell.title = `${dateText}: ${done}/${totalHabits} completed (${Math.round(ratio * 100)}%)`;
+        container.appendChild(cell);
+      });
+    }
+
+    window.toggleHabitDay = function(habitId, dateKey) {
+      const habit = appData.habits.find(h => h.id === habitId);
+      if (!habit) return;
+
+      if (!habit.logs) habit.logs = {};
+      const wasDone = Boolean(habit.logs[dateKey]);
+      habit.logs[dateKey] = !wasDone;
+
+      playVictoryChime(!wasDone);
+
+      if (!wasDone && habit.linkedGoal === 'bible') {
+        const inc = parseInt(habit.unitsPerCheck, 10) || 10;
+        appData.bibleGoal.current = Math.min(appData.bibleGoal.target, appData.bibleGoal.current + inc);
+        renderGoalsUI();
+      }
+
+      const todayKey = formatKey(new Date());
+      if (dateKey === todayKey && !wasDone) {
+        const remaining = appData.habits.filter(h => !h.logs || !h.logs[todayKey]).length;
+        if (remaining === 0 && typeof confetti === 'function') {
+          confetti({
+            particleCount: 80,
+            spread: 60,
+            origin: { y: 0.7 },
+            colors: ['#ffffff', '#10b981', '#f59e0b', '#ef4444', '#a1a1aa']
+          });
+        }
+      }
+
+      saveStorage();
+      renderCareerEngine();
+      renderMatrix();
+    };
+
+    window.adjustBibleChapters = function(delta) {
+      const g = appData.bibleGoal;
+      g.current = Math.max(0, Math.min(g.target, g.current + delta));
+      playVictoryChime(delta > 0);
+      saveStorage();
+      renderGoalsUI();
+    };
+
+    window.customBiblePrompt = function() {
+      const g = appData.bibleGoal;
+      const res = prompt(`Enter total chapters read so far (Target: ${g.target}):`, g.current);
+      if (res !== null) {
+        const val = parseInt(res, 10);
+        if (!isNaN(val) && val >= 0) {
+          g.current = Math.min(g.target, val);
+          saveStorage();
+          renderGoalsUI();
+        }
+      }
+    };
+
+    window.openWeighInModal = function() {
+      document.getElementById('form-weighin').reset();
+      document.getElementById('field-weighin-date').value = formatKey(new Date());
+      document.getElementById('field-weighin-val').value = appData.weightGoal.currentWeight;
+      document.getElementById('modal-weighin').classList.remove('hidden');
+      document.getElementById('field-weighin-val').focus();
+    };
+
+    window.closeWeighInModal = function() {
+      document.getElementById('modal-weighin').classList.add('hidden');
+    };
+
+    window.openHabitModal = function() {
+      document.getElementById('form-habit').reset();
+      document.getElementById('field-habit-id').value = '';
+      document.getElementById('modal-habit-heading').textContent = 'ADD NEW HABIT';
+      document.getElementById('box-linked-increment').classList.add('hidden');
+      document.getElementById('modal-habit').classList.remove('hidden');
+      document.getElementById('field-habit-name').focus();
+    };
+
+    window.closeHabitModal = function() {
+      document.getElementById('modal-habit').classList.add('hidden');
+    };
+
+    window.openInstallInstructions = function() {
+      document.getElementById('modal-install').classList.remove('hidden');
+    };
+
+    window.editHabit = function(habitId) {
+      const habit = appData.habits.find(h => h.id === habitId);
+      if (!habit) return;
+
+      document.getElementById('modal-habit-heading').textContent = 'EDIT HABIT';
+      document.getElementById('field-habit-id').value = habit.id;
+      document.getElementById('field-habit-name').value = habit.name;
+      document.getElementById('field-habit-target').value = habit.targetDays || 7;
+      document.getElementById('field-habit-goal-link').value = habit.linkedGoal || 'none';
+
+      const incBox = document.getElementById('box-linked-increment');
+      if (habit.linkedGoal === 'bible') {
+        incBox.classList.remove('hidden');
+        document.getElementById('field-habit-increment').value = habit.unitsPerCheck || 10;
+      } else {
+        incBox.classList.add('hidden');
+      }
+
+      const radios = document.getElementsByName('habit-category');
+      radios.forEach(r => {
+        r.checked = r.value.toLowerCase() === (habit.category || '').toLowerCase();
+      });
+
+      document.getElementById('modal-habit').classList.remove('hidden');
+    };
+
+    window.removeHabit = function(habitId) {
+      if (confirm('Permanently remove this habit and its history?')) {
+        appData.habits = appData.habits.filter(h => h.id !== habitId);
+        saveStorage();
+        renderMatrix();
+      }
+    };
+
+    window.viewWeighInHistory = function() {
+      const cont = document.getElementById('weighin-history-container');
+      cont.innerHTML = '';
+
+      const list = [...appData.weightGoal.history].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      if (list.length === 0) {
+        cont.innerHTML = '<p class="text-obsidian-muted text-xs font-mono p-4 text-center">No weigh-ins recorded yet.</p>';
+      } else {
+        list.forEach((entry, idx) => {
+          const item = document.createElement('div');
+          item.className = 'p-3 bg-obsidian-DEFAULT border border-obsidian-border rounded-lg flex items-center justify-between text-xs font-mono';
+          item.innerHTML = `
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-amber-400 font-bold text-sm">${entry.weight.toFixed(1)} lbs</span>
+                <span class="text-obsidian-muted text-[10px]">${entry.date}</span>
+              </div>
+              ${entry.notes ? `<p class="text-[11px] text-obsidian-subtle mt-0.5">${escapeHtml(entry.notes)}</p>` : ''}
+            </div>
+            <button onclick="deleteWeighIn(${idx})" class="p-1.5 text-obsidian-muted hover:text-red-400 transition" title="Delete">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          `;
+          cont.appendChild(item);
+        });
+      }
+
+      lucide.createIcons();
+      document.getElementById('modal-history').classList.remove('hidden');
+    };
+
+    window.deleteWeighIn = function(reversedIndex) {
+      const list = [...appData.weightGoal.history].sort((a, b) => new Date(b.date) - new Date(a.date));
+      const targetItem = list[reversedIndex];
+
+      appData.weightGoal.history = appData.weightGoal.history.filter(h => h !== targetItem);
+
+      if (appData.weightGoal.history.length > 0) {
+        const sorted = [...appData.weightGoal.history].sort((a, b) => new Date(a.date) - new Date(b.date));
+        appData.weightGoal.currentWeight = sorted[sorted.length - 1].weight;
+      }
+
+      saveStorage();
+      renderGoalsUI();
+      viewWeighInHistory();
+    };
+
+    function escapeHtml(text) {
+      const d = document.createElement('div');
+      d.textContent = text;
+      return d.innerHTML;
+    }
+
+    // PWA Prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('btn-install-app');
+      btn.classList.remove('hidden');
+    });
+
+    document.getElementById('btn-install-app').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          document.getElementById('btn-install-app').classList.add('hidden');
+        }
+        deferredPrompt = null;
+      } else {
+        openInstallInstructions();
+      }
+    });
+
+    document.getElementById('btn-mobile-install').addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+      } else {
+        openInstallInstructions();
+      }
+    });
+
+    // Offline Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const swScript = `
+          self.addEventListener('install', e => self.skipWaiting());
+          self.addEventListener('activate', e => self.clients.claim());
+          self.addEventListener('fetch', e => {
+            e.respondWith(
+              fetch(e.request).catch(() => caches.match(e.request))
+            );
+          });
+        `;
+        const blob = new Blob([swScript], { type: 'text/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadStorage();
+
+      const today = new Date();
+      const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+      document.getElementById('header-date').textContent = today.toLocaleDateString('en-US', options);
+
+      const btnMatrix = document.getElementById('nav-btn-matrix');
+      const btnAgenda = document.getElementById('nav-btn-agenda');
+      const matrixCont = document.getElementById('container-weekly-view');
+      const agendaCont = document.getElementById('container-agenda-view');
+      const weekNav = document.getElementById('week-nav-controls');
+
+      btnMatrix.addEventListener('click', () => {
+        currentViewMode = 'matrix';
+        btnMatrix.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white text-black font-semibold transition shadow-sm';
+        btnAgenda.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-obsidian-muted hover:text-white transition';
+
+        matrixCont.classList.remove('hidden');
+        agendaCont.classList.add('hidden');
+        weekNav.classList.remove('hidden');
+      });
+
+      btnAgenda.addEventListener('click', () => {
+        currentViewMode = 'agenda';
+        btnAgenda.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white text-black font-semibold transition shadow-sm';
+        btnMatrix.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-obsidian-muted hover:text-white transition';
+
+        matrixCont.classList.add('hidden');
+        agendaCont.classList.remove('hidden');
+        weekNav.classList.add('hidden');
+        renderTodayAgenda();
+      });
+
+      document.getElementById('btn-prev-week').addEventListener('click', () => {
+        currentWeekOffset--;
+        renderMatrix();
+      });
+      document.getElementById('btn-next-week').addEventListener('click', () => {
+        currentWeekOffset++;
+        renderMatrix();
+      });
+
+      document.getElementById('form-weighin').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const weight = parseFloat(document.getElementById('field-weighin-val').value);
+        const date = document.getElementById('field-weighin-date').value;
+        const notes = document.getElementById('field-weighin-notes').value.trim();
+
+        if (isNaN(weight) || !date) return;
+
+        appData.weightGoal.history.push({ date, weight, notes });
+        appData.weightGoal.history.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        const latest = appData.weightGoal.history[appData.weightGoal.history.length - 1];
+        appData.weightGoal.currentWeight = latest.weight;
+
+        playVictoryChime(true);
+        saveStorage();
+        closeWeighInModal();
+        renderGoalsUI();
+      });
+
+      document.getElementById('field-habit-goal-link').addEventListener('change', (e) => {
+        const box = document.getElementById('box-linked-increment');
+        if (e.target.value === 'bible') {
+          box.classList.remove('hidden');
+        } else {
+          box.classList.add('hidden');
+        }
+      });
+
+      document.getElementById('form-habit').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('field-habit-id').value;
+        const name = document.getElementById('field-habit-name').value.trim();
+        const targetDays = parseInt(document.getElementById('field-habit-target').value, 10);
+        const category = document.querySelector('input[name="habit-category"]:checked').value;
+        const linkedGoal = document.getElementById('field-habit-goal-link').value;
+        const unitsPerCheck = linkedGoal === 'bible' ? (parseInt(document.getElementById('field-habit-increment').value, 10) || 10) : 0;
+
+        if (id) {
+          const habit = appData.habits.find(h => h.id === id);
+          if (habit) {
+            habit.name = name;
+            habit.category = category;
+            habit.targetDays = targetDays;
+            habit.linkedGoal = linkedGoal;
+            habit.unitsPerCheck = unitsPerCheck;
+          }
+        } else {
+          appData.habits.unshift({
+            id: 'hab_' + Date.now(),
+            name,
+            category,
+            targetDays,
+            linkedGoal,
+            unitsPerCheck,
+            logs: {}
+          });
+        }
+
+        saveStorage();
+        closeHabitModal();
+        renderMatrix();
+      });
+
+      const pills = document.querySelectorAll('.cat-pill');
+      pills.forEach(btn => {
+        btn.addEventListener('click', () => {
+          pills.forEach(p => {
+            p.classList.remove('bg-white', 'text-black');
+            p.classList.add('bg-obsidian-surface', 'text-obsidian-muted');
+          });
+          btn.classList.add('bg-white', 'text-black');
+          btn.classList.remove('bg-obsidian-surface', 'text-obsidian-muted');
+
+          activeCategory = btn.dataset.cat;
+          renderMatrix();
+        });
+      });
+
+      document.getElementById('btn-export-backup').addEventListener('click', () => {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+        const dlAnchor = document.createElement('a');
+        dlAnchor.setAttribute("href", dataStr);
+        dlAnchor.setAttribute("download", `kevins_discipline_backup_${formatKey(new Date())}.json`);
+        document.body.appendChild(dlAnchor);
+        dlAnchor.click();
+        dlAnchor.remove();
+      });
+
+      document.getElementById('input-import-file').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const parsed = JSON.parse(event.target.result);
+            if (parsed.bibleGoal && parsed.weightGoal && Array.isArray(parsed.habits)) {
+              appData = parsed;
+              saveStorage();
+              renderCareerEngine();
+              renderGoalsUI();
+              renderMatrix();
+            } else {
+              alert('Unrecognized JSON backup format.');
+            }
+          } catch (err) {
+            alert('Error parsing backup file.');
+          }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+      });
+
+      document.getElementById('btn-reset-storage').addEventListener('click', () => {
+        if (confirm("Reset dashboard to Kevin's default starter habits, career targets, and goals?")) {
+          appData = getDefaultState();
+          saveStorage();
+          renderCareerEngine();
+          renderGoalsUI();
+          renderMatrix();
+        }
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeHabitModal();
+          closeWeighInModal();
+          document.getElementById('modal-history').classList.add('hidden');
+          document.getElementById('modal-install').classList.add('hidden');
+        }
+      });
+
+      // Initial Renders
+      renderCareerEngine();
+      renderGoalsUI();
+      renderMatrix();
+    });
+  </script>
+</body>
+</html>
