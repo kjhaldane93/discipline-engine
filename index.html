@@ -50,6 +50,33 @@
     .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
     .custom-scroll::-webkit-scrollbar-track { background: #09090b; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+    
+    /* Native Custom Checkbox */
+    .engine-check {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border: 1.5px solid #3f3f46;
+      border-radius: 6px;
+      background-color: #09090b;
+      cursor: pointer;
+      display: inline-grid;
+      place-content: center;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .engine-check:checked {
+      background-color: #ffffff;
+      border-color: #ffffff;
+    }
+    .engine-check:checked::before {
+      content: "✓";
+      color: #09090b;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans selection:bg-zinc-800 selection:text-white pb-12">
@@ -162,34 +189,37 @@
           <span class="text-xs text-zinc-500 font-mono">Spiritual Foundation</span>
         </div>
 
-        <!-- Prayers & Purity -->
+        <!-- Prayers & Purity (Native Checkboxes with Label Clicks) -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <button type="button" onclick="toggleHabit('morning_prayer')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_morning_prayer">
-            <div class="flex items-center space-x-2.5">
-              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_morning_prayer"></div>
+          <!-- Morning Prayer -->
+          <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_morning_prayer">
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="chk_morning_prayer" onchange="toggleHabitDirect('morning_prayer', this.checked)" class="engine-check">
               <span class="text-xs font-semibold text-zinc-200">Morning Prayer</span>
             </div>
             <i data-lucide="sun" class="w-4 h-4 text-amberAccent pointer-events-none"></i>
-          </button>
+          </label>
 
-          <button type="button" onclick="toggleHabit('bedtime_prayer')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedtime_prayer">
-            <div class="flex items-center space-x-2.5">
-              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_bedtime_prayer"></div>
+          <!-- Bed Time Prayer -->
+          <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_bedtime_prayer">
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="chk_bedtime_prayer" onchange="toggleHabitDirect('bedtime_prayer', this.checked)" class="engine-check">
               <span class="text-xs font-semibold text-zinc-200">Bed Time Prayer</span>
             </div>
             <i data-lucide="moon" class="w-4 h-4 text-zinc-400 pointer-events-none"></i>
-          </button>
+          </label>
 
-          <button type="button" onclick="toggleHabit('purity')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_purity">
-            <div class="flex items-center space-x-2.5">
-              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_purity"></div>
+          <!-- Kept My Purity -->
+          <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_purity">
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="chk_purity" onchange="toggleHabitDirect('purity', this.checked)" class="engine-check">
               <div>
                 <span class="text-xs font-semibold text-zinc-200 block">Kept My Purity</span>
                 <span class="text-[10px] font-mono text-zinc-500">Streak: <span id="purityStreakNum" class="text-crimsonAccent font-bold">0</span> d</span>
               </div>
             </div>
             <i data-lucide="shield" class="w-4 h-4 text-crimsonAccent pointer-events-none"></i>
-          </button>
+          </label>
         </div>
 
         <!-- Bible Goal Engine -->
@@ -219,10 +249,10 @@
         <div class="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/80 space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-white uppercase font-mono">Read 10 Pages of Ministry</span>
-            <button type="button" onclick="toggleHabit('ministry_done')" class="flex items-center space-x-2 cursor-pointer select-none">
-              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_ministry_done"></div>
+            <label class="flex items-center space-x-2 cursor-pointer select-none">
+              <input type="checkbox" id="chk_ministry_done" onchange="toggleHabitDirect('ministry_done', this.checked)" class="engine-check">
               <span class="text-xs font-mono text-zinc-400">10 Pages Done</span>
-            </button>
+            </label>
           </div>
           <input type="text" id="ministrySummaryInput" oninput="saveMinistrySummary(this.value)" placeholder="Overall summary of what I read today in Ministry..." class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-600">
 
@@ -238,7 +268,6 @@
               </div>
               <textarea id="t1_notes" oninput="saveTakeawayField(1, 'notes', this.value)" placeholder="Notes on Takeaway 1..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
 
-              <!-- Dynamic Tags Section 1 -->
               <div class="space-y-2 pt-1 border-t border-zinc-900">
                 <div class="flex items-center gap-2">
                   <input type="text" id="t1_new_tag" placeholder="Add custom subject tag (e.g. Faith, Grace)..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomTag(1);}" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none flex-1 font-mono">
@@ -259,7 +288,6 @@
               </div>
               <textarea id="t2_notes" oninput="saveTakeawayField(2, 'notes', this.value)" placeholder="Notes on Takeaway 2..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
 
-              <!-- Dynamic Tags Section 2 -->
               <div class="space-y-2 pt-1 border-t border-zinc-900">
                 <div class="flex items-center gap-2">
                   <input type="text" id="t2_new_tag" placeholder="Add custom subject tag..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomTag(2);}" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none flex-1 font-mono">
@@ -280,7 +308,6 @@
               </div>
               <textarea id="t3_notes" oninput="saveTakeawayField(3, 'notes', this.value)" placeholder="Notes on Takeaway 3..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
 
-              <!-- Dynamic Tags Section 3 -->
               <div class="space-y-2 pt-1 border-t border-zinc-900">
                 <div class="flex items-center gap-2">
                   <input type="text" id="t3_new_tag" placeholder="Add custom subject tag..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomTag(3);}" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none flex-1 font-mono">
@@ -328,18 +355,18 @@
               <span id="prioritiesCountText" class="text-xs font-mono text-emeraldAccent">0/3 Completed</span>
             </div>
             <div class="space-y-2">
-              <div class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800">
-                <input type="checkbox" id="p1_check" onchange="togglePriority(1)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
+              <label class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800 cursor-pointer">
+                <input type="checkbox" id="p1_check" onchange="togglePriority(1, this.checked)" class="engine-check">
                 <input type="text" id="p1_text" oninput="savePriorityText(1, this.value)" placeholder="Priority 1: Key strategic deliverable..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
-              </div>
-              <div class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800">
-                <input type="checkbox" id="p2_check" onchange="togglePriority(2)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
+              </label>
+              <label class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800 cursor-pointer">
+                <input type="checkbox" id="p2_check" onchange="togglePriority(2, this.checked)" class="engine-check">
                 <input type="text" id="p2_text" oninput="savePriorityText(2, this.value)" placeholder="Priority 2: Critical client or internal milestone..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
-              </div>
-              <div class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800">
-                <input type="checkbox" id="p3_check" onchange="togglePriority(3)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
+              </label>
+              <label class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800 cursor-pointer">
+                <input type="checkbox" id="p3_check" onchange="togglePriority(3, this.checked)" class="engine-check">
                 <input type="text" id="p3_text" oninput="savePriorityText(3, this.value)" placeholder="Priority 3: Must-close action item..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
-              </div>
+              </label>
             </div>
           </div>
 
@@ -491,10 +518,10 @@
               <span id="healthWeightCard" class="text-2xl font-black font-mono text-amberAccent">229.0</span>
               <span class="text-[11px] font-mono text-zinc-400">Target: 190.0 lbs</span>
             </div>
-            <button type="button" onclick="toggleHabit('nofastfood')" class="w-full text-left p-2 rounded border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_nofastfood">
+            <label class="p-2 rounded border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_nofastfood">
               <span class="text-xs text-zinc-200">No Fast Food</span>
-              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_nofastfood"></div>
-            </button>
+              <input type="checkbox" id="chk_nofastfood" onchange="toggleHabitDirect('nofastfood', this.checked)" class="engine-check">
+            </label>
           </div>
         </div>
       </section>
@@ -552,22 +579,22 @@
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <button type="button" onclick="toggleHabit('nosnooze')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_nosnooze">
+          <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_nosnooze">
             <span class="text-xs font-semibold text-zinc-200">No Snooze</span>
-            <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_nosnooze"></div>
-          </button>
-          <button type="button" onclick="toggleHabit('madebed')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_madebed">
+            <input type="checkbox" id="chk_nosnooze" onchange="toggleHabitDirect('nosnooze', this.checked)" class="engine-check">
+          </label>
+          <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_madebed">
             <span class="text-xs font-semibold text-zinc-200">Made Bed</span>
-            <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_madebed"></div>
-          </button>
-          <button type="button" onclick="toggleHabit('shaved')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_shaved">
+            <input type="checkbox" id="chk_madebed" onchange="toggleHabitDirect('madebed', this.checked)" class="engine-check">
+          </label>
+          <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_shaved">
             <span class="text-xs font-semibold text-zinc-200">Shaved</span>
-            <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_shaved"></div>
-          </button>
-          <button type="button" onclick="toggleHabit('bedby1030')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedby1030">
+            <input type="checkbox" id="chk_shaved" onchange="toggleHabitDirect('shaved', this.checked)" class="engine-check">
+          </label>
+          <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_bedby1030">
             <span class="text-xs font-semibold text-zinc-200">In Bed by 10:30</span>
-            <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_bedby1030"></div>
-          </button>
+            <input type="checkbox" id="chk_bedby1030" onchange="toggleHabitDirect('bedby1030', this.checked)" class="engine-check">
+          </label>
         </div>
       </section>
 
@@ -844,38 +871,22 @@
       const health = appState.health[today] || {};
       const review = appState.dayReviews[today] || {};
 
-      // Habit Checkbox Cards
+      // Sync Native Checkboxes
       CORE_HABITS.forEach(h => {
-        const isChecked = !!habits[h.id];
+        const chk = document.getElementById(`chk_${h.id}`);
         const card = document.getElementById(`card_${h.id}`);
-        const box = document.getElementById(`box_${h.id}`);
-        if (card && box) {
+        const isChecked = !!habits[h.id];
+        if (chk) chk.checked = isChecked;
+        if (card) {
           if (isChecked) {
-            card.classList.add('bg-zinc-900', 'border-zinc-500');
-            card.classList.remove('bg-zinc-950/60', 'border-zinc-800');
-            box.className = 'w-5 h-5 rounded border flex items-center justify-center bg-white border-white text-zinc-950 font-black text-xs';
-            box.textContent = '✓';
+            card.classList.add('border-zinc-500', 'bg-zinc-900');
+            card.classList.remove('border-zinc-800', 'bg-zinc-950/60');
           } else {
-            card.classList.remove('bg-zinc-900', 'border-zinc-500');
-            card.classList.add('bg-zinc-950/60', 'border-zinc-800');
-            box.className = 'w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold text-transparent';
-            box.textContent = '';
+            card.classList.remove('border-zinc-500', 'bg-zinc-900');
+            card.classList.add('border-zinc-800', 'bg-zinc-950/60');
           }
         }
       });
-
-      // Ministry 10 Pages Done Checkbox
-      const isMinistryDone = !!habits['ministry_done'];
-      const ministryBox = document.getElementById('box_ministry_done');
-      if (ministryBox) {
-        if (isMinistryDone) {
-          ministryBox.className = 'w-5 h-5 rounded border flex items-center justify-center bg-white border-white text-zinc-950 font-black text-xs';
-          ministryBox.textContent = '✓';
-        } else {
-          ministryBox.className = 'w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold text-transparent';
-          ministryBox.textContent = '';
-        }
-      }
 
       // Moral Pacing & Inputs
       const bibleRead = appState.bibleTotal || 301;
@@ -1019,7 +1030,15 @@
       renderMatrix();
     }
 
-    // DYNAMIC CUSTOM TAGS (ZERO DEFAULT PRESET TAGS)
+    // DIRECT HABIT TOGGLE
+    function toggleHabitDirect(id, isChecked) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.habits[today][id] = !!isChecked;
+      saveState();
+    }
+
+    // DYNAMIC CUSTOM TAGS
     function renderTakeawayCustomTags(tNum, activeTags) {
       const container = document.getElementById(`t${tNum}_tags_container`);
       const libContainer = document.getElementById(`t${tNum}_library_container`);
@@ -1028,7 +1047,6 @@
       container.innerHTML = '';
       libContainer.innerHTML = '';
 
-      // Render currently assigned tags with remove button
       if (!activeTags || activeTags.length === 0) {
         container.innerHTML = '<span class="text-[10px] font-mono text-zinc-600 italic">No subject tags added yet.</span>';
       } else {
@@ -1040,7 +1058,6 @@
         });
       }
 
-      // Render library of previously created tags for quick 1-tap addition
       const library = appState.moral.customTagsLibrary || [];
       const unselected = library.filter(t => !activeTags.includes(t));
       if (unselected.length > 0) {
@@ -1074,7 +1091,6 @@
         currentTags.push(val);
       }
 
-      // Add to global custom tags library
       if (!Array.isArray(appState.moral.customTagsLibrary)) {
         appState.moral.customTagsLibrary = [];
       }
@@ -1108,13 +1124,6 @@
         currentTags.splice(idx, 1);
         saveState();
       }
-    }
-
-    function toggleHabit(id) {
-      const today = getTodayKey();
-      ensureDateStructures(today);
-      appState.habits[today][id] = !appState.habits[today][id];
-      saveState();
     }
 
     function logBible(ch) {
@@ -1158,10 +1167,10 @@
       saveState();
     }
 
-    function togglePriority(num) {
+    function togglePriority(num, isChecked) {
       const today = getTodayKey();
       ensureDateStructures(today);
-      appState.career[today][`p${num}_done`] = !appState.career[today][`p${num}_done`];
+      appState.career[today][`p${num}_done`] = !!isChecked;
       saveState();
     }
 
