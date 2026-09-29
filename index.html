@@ -51,8 +51,8 @@
     .custom-scroll::-webkit-scrollbar-track { background: #09090b; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
     
-    /* Native Custom Checkbox */
-    .engine-check {
+    /* Native Bulletproof Custom Checkbox */
+    .habit-check {
       appearance: none;
       -webkit-appearance: none;
       width: 22px;
@@ -66,11 +66,11 @@
       transition: all 0.15s ease;
       flex-shrink: 0;
     }
-    .engine-check:checked {
+    .habit-check:checked {
       background-color: #ffffff;
       border-color: #ffffff;
     }
-    .engine-check:checked::before {
+    .habit-check:checked::before {
       content: "✓";
       color: #09090b;
       font-size: 14px;
@@ -189,12 +189,12 @@
           <span class="text-xs text-zinc-500 font-mono">Spiritual Foundation</span>
         </div>
 
-        <!-- Prayers & Purity (Native Checkboxes with Label Clicks) -->
+        <!-- Prayers & Purity (Native Checkboxes) -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <!-- Morning Prayer -->
           <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_morning_prayer">
             <div class="flex items-center space-x-3">
-              <input type="checkbox" id="chk_morning_prayer" onchange="toggleHabitDirect('morning_prayer', this.checked)" class="engine-check">
+              <input type="checkbox" id="chk_morning_prayer" onchange="onHabitCheckboxChange('morning_prayer', this.checked)" class="habit-check">
               <span class="text-xs font-semibold text-zinc-200">Morning Prayer</span>
             </div>
             <i data-lucide="sun" class="w-4 h-4 text-amberAccent pointer-events-none"></i>
@@ -203,7 +203,7 @@
           <!-- Bed Time Prayer -->
           <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_bedtime_prayer">
             <div class="flex items-center space-x-3">
-              <input type="checkbox" id="chk_bedtime_prayer" onchange="toggleHabitDirect('bedtime_prayer', this.checked)" class="engine-check">
+              <input type="checkbox" id="chk_bedtime_prayer" onchange="onHabitCheckboxChange('bedtime_prayer', this.checked)" class="habit-check">
               <span class="text-xs font-semibold text-zinc-200">Bed Time Prayer</span>
             </div>
             <i data-lucide="moon" class="w-4 h-4 text-zinc-400 pointer-events-none"></i>
@@ -212,7 +212,7 @@
           <!-- Kept My Purity -->
           <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_purity">
             <div class="flex items-center space-x-3">
-              <input type="checkbox" id="chk_purity" onchange="toggleHabitDirect('purity', this.checked)" class="engine-check">
+              <input type="checkbox" id="chk_purity" onchange="onHabitCheckboxChange('purity', this.checked)" class="habit-check">
               <div>
                 <span class="text-xs font-semibold text-zinc-200 block">Kept My Purity</span>
                 <span class="text-[10px] font-mono text-zinc-500">Streak: <span id="purityStreakNum" class="text-crimsonAccent font-bold">0</span> d</span>
@@ -222,17 +222,22 @@
           </label>
         </div>
 
-        <!-- Bible Goal Engine -->
+        <!-- Bible Goal Engine with Decrement Steppers -->
         <div class="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/80 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <span class="text-xs font-semibold text-white uppercase font-mono">Scripture Mastery · 1,189 Chapters</span>
               <span class="text-[11px] font-mono text-zinc-400 block sm:inline sm:ml-2">Target Dec 31, 2026</span>
             </div>
-            <div class="flex items-center gap-1.5">
-              <button type="button" onclick="logBible(1)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+1</button>
-              <button type="button" onclick="logBible(5)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+5</button>
-              <button type="button" onclick="logBible(10)" class="px-2.5 py-1 text-xs font-mono bg-zinc-200 hover:bg-white text-zinc-950 font-semibold rounded">+10</button>
+            <!-- Minus and Plus Steppers -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button type="button" onclick="adjustBible(-10)" class="px-2 py-1 text-xs font-mono bg-zinc-900 hover:bg-zinc-800 text-zinc-400 rounded border border-zinc-800">-10</button>
+              <button type="button" onclick="adjustBible(-5)" class="px-2 py-1 text-xs font-mono bg-zinc-900 hover:bg-zinc-800 text-zinc-400 rounded border border-zinc-800">-5</button>
+              <button type="button" onclick="adjustBible(-1)" class="px-2 py-1 text-xs font-mono bg-zinc-900 hover:bg-zinc-800 text-zinc-400 rounded border border-zinc-800">-1</button>
+              <span class="text-zinc-700 font-mono px-0.5">|</span>
+              <button type="button" onclick="adjustBible(1)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+1</button>
+              <button type="button" onclick="adjustBible(5)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+5</button>
+              <button type="button" onclick="adjustBible(10)" class="px-2.5 py-1 text-xs font-mono bg-zinc-200 hover:bg-white text-zinc-950 font-semibold rounded">+10</button>
             </div>
           </div>
           <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
@@ -250,7 +255,7 @@
           <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-white uppercase font-mono">Read 10 Pages of Ministry</span>
             <label class="flex items-center space-x-2 cursor-pointer select-none">
-              <input type="checkbox" id="chk_ministry_done" onchange="toggleHabitDirect('ministry_done', this.checked)" class="engine-check">
+              <input type="checkbox" id="chk_ministry_done" onchange="onHabitCheckboxChange('ministry_done', this.checked)" class="habit-check">
               <span class="text-xs font-mono text-zinc-400">10 Pages Done</span>
             </label>
           </div>
@@ -355,16 +360,16 @@
               <span id="prioritiesCountText" class="text-xs font-mono text-emeraldAccent">0/3 Completed</span>
             </div>
             <div class="space-y-2">
-              <label class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800 cursor-pointer">
-                <input type="checkbox" id="p1_check" onchange="togglePriority(1, this.checked)" class="engine-check">
+              <label class="flex items-center space-x-3 bg-zinc-950/80 p-2.5 rounded border border-zinc-800 cursor-pointer">
+                <input type="checkbox" id="p1_check" onchange="togglePriority(1, this.checked)" class="habit-check">
                 <input type="text" id="p1_text" oninput="savePriorityText(1, this.value)" placeholder="Priority 1: Key strategic deliverable..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
               </label>
-              <label class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800 cursor-pointer">
-                <input type="checkbox" id="p2_check" onchange="togglePriority(2, this.checked)" class="engine-check">
+              <label class="flex items-center space-x-3 bg-zinc-950/80 p-2.5 rounded border border-zinc-800 cursor-pointer">
+                <input type="checkbox" id="p2_check" onchange="togglePriority(2, this.checked)" class="habit-check">
                 <input type="text" id="p2_text" oninput="savePriorityText(2, this.value)" placeholder="Priority 2: Critical client or internal milestone..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
               </label>
-              <label class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800 cursor-pointer">
-                <input type="checkbox" id="p3_check" onchange="togglePriority(3, this.checked)" class="engine-check">
+              <label class="flex items-center space-x-3 bg-zinc-950/80 p-2.5 rounded border border-zinc-800 cursor-pointer">
+                <input type="checkbox" id="p3_check" onchange="togglePriority(3, this.checked)" class="habit-check">
                 <input type="text" id="p3_text" oninput="savePriorityText(3, this.value)" placeholder="Priority 3: Must-close action item..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
               </label>
             </div>
@@ -468,7 +473,7 @@
         <div class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll" id="txHistoryContainer"></div>
       </section>
 
-      <!-- 4. HEALTH PILLAR -->
+      <!-- 4. HEALTH PILLAR with Decrement Steppers -->
       <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
           <div class="flex items-center space-x-2">
@@ -479,36 +484,54 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Water Tracker -->
           <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2">
             <div class="flex justify-between items-center text-xs font-mono">
               <span class="text-zinc-300 uppercase">Water (2.0L Target)</span>
               <span id="waterDisplay" class="text-white font-bold">0.0 / 2.0 L</span>
             </div>
-            <div class="flex items-center justify-between py-1">
-              <button type="button" onclick="addWater(250)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+250ml</button>
-              <button type="button" onclick="addWater(500)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+500ml</button>
+            <!-- Minus and Plus Steppers for Water -->
+            <div class="flex items-center justify-between py-1 flex-wrap gap-1">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustWater(-500)" class="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 text-xs font-mono rounded border border-zinc-800">-500</button>
+                <button type="button" onclick="adjustWater(-250)" class="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 text-xs font-mono rounded border border-zinc-800">-250</button>
+              </div>
               <button type="button" onclick="resetWater()" class="px-2 py-1 bg-zinc-900 text-zinc-500 hover:text-zinc-300 text-[10px] font-mono rounded">Reset</button>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustWater(250)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+250</button>
+                <button type="button" onclick="adjustWater(500)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+500</button>
+              </div>
             </div>
             <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
               <div id="waterProgressBar" class="bg-zinc-200 h-full transition-all duration-300" style="width: 0%"></div>
             </div>
           </div>
 
+          <!-- Exercise Tracker with Decrement Steppers -->
           <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2">
             <div class="flex justify-between items-center text-xs font-mono">
               <span class="text-zinc-300 uppercase">Exercise (30m Target)</span>
               <span id="exerciseDisplay" class="text-white font-bold">0 / 30m</span>
             </div>
-            <div class="flex items-center justify-between py-1">
-              <button type="button" onclick="addExercise(10)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+10m</button>
-              <button type="button" onclick="addExercise(15)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+15m</button>
-              <button type="button" onclick="addExercise(30)" class="px-2.5 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-mono font-semibold rounded">+30m</button>
+            <!-- Minus and Plus Steppers for Exercise -->
+            <div class="flex items-center justify-between py-1 flex-wrap gap-1">
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustExercise(-30)" class="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 text-xs font-mono rounded border border-zinc-800">-30</button>
+                <button type="button" onclick="adjustExercise(-15)" class="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 text-xs font-mono rounded border border-zinc-800">-15</button>
+                <button type="button" onclick="adjustExercise(-10)" class="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 text-xs font-mono rounded border border-zinc-800">-10</button>
+              </div>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="adjustExercise(10)" class="px-2 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+10</button>
+                <button type="button" onclick="adjustExercise(15)" class="px-2 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+15</button>
+                <button type="button" onclick="adjustExercise(30)" class="px-2.5 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-mono font-semibold rounded">+30</button>
+              </div>
             </div>
             <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
               <div id="exerciseProgressBar" class="bg-emeraldAccent h-full transition-all duration-300" style="width: 0%"></div>
             </div>
           </div>
 
+          <!-- Weight Protocol & Fast Food -->
           <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2.5">
             <div class="flex justify-between items-center text-xs font-mono">
               <span class="text-zinc-300 uppercase">Weight Protocol</span>
@@ -520,7 +543,7 @@
             </div>
             <label class="p-2 rounded border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_nofastfood">
               <span class="text-xs text-zinc-200">No Fast Food</span>
-              <input type="checkbox" id="chk_nofastfood" onchange="toggleHabitDirect('nofastfood', this.checked)" class="engine-check">
+              <input type="checkbox" id="chk_nofastfood" onchange="onHabitCheckboxChange('nofastfood', this.checked)" class="habit-check">
             </label>
           </div>
         </div>
@@ -581,19 +604,19 @@
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_nosnooze">
             <span class="text-xs font-semibold text-zinc-200">No Snooze</span>
-            <input type="checkbox" id="chk_nosnooze" onchange="toggleHabitDirect('nosnooze', this.checked)" class="engine-check">
+            <input type="checkbox" id="chk_nosnooze" onchange="onHabitCheckboxChange('nosnooze', this.checked)" class="habit-check">
           </label>
           <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_madebed">
             <span class="text-xs font-semibold text-zinc-200">Made Bed</span>
-            <input type="checkbox" id="chk_madebed" onchange="toggleHabitDirect('madebed', this.checked)" class="engine-check">
+            <input type="checkbox" id="chk_madebed" onchange="onHabitCheckboxChange('madebed', this.checked)" class="habit-check">
           </label>
           <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_shaved">
             <span class="text-xs font-semibold text-zinc-200">Shaved</span>
-            <input type="checkbox" id="chk_shaved" onchange="toggleHabitDirect('shaved', this.checked)" class="engine-check">
+            <input type="checkbox" id="chk_shaved" onchange="onHabitCheckboxChange('shaved', this.checked)" class="habit-check">
           </label>
           <label class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between hover:border-zinc-700" id="card_bedby1030">
             <span class="text-xs font-semibold text-zinc-200">In Bed by 10:30</span>
-            <input type="checkbox" id="chk_bedby1030" onchange="toggleHabitDirect('bedby1030', this.checked)" class="engine-check">
+            <input type="checkbox" id="chk_bedby1030" onchange="onHabitCheckboxChange('bedby1030', this.checked)" class="habit-check">
           </label>
         </div>
       </section>
@@ -812,7 +835,9 @@
       try {
         localStorage.setItem('kevin_discipline_state_v2', JSON.stringify(appState));
       } catch(e) {}
-      renderUI();
+      
+      updateKpisAndCounters();
+
       if (!skipCloud && isCloudSyncActive && db && syncKey) {
         db.collection('engines').doc(syncKey).set({
           state: JSON.stringify(appState),
@@ -848,7 +873,7 @@
             try {
               appState = JSON.parse(data.state);
               localStorage.setItem('kevin_discipline_state_v2', JSON.stringify(appState));
-              renderUI();
+              renderFullUI();
             } catch(e) {}
           }
         } else {
@@ -860,8 +885,28 @@
       });
     }
 
-    // UI RENDERER
-    function renderUI() {
+    // DIRECT HABIT CHECKBOX HANDLER (Bulletproof native updates)
+    function onHabitCheckboxChange(habitId, isChecked) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.habits[today][habitId] = !!isChecked;
+
+      const card = document.getElementById(`card_${habitId}`);
+      if (card) {
+        if (isChecked) {
+          card.classList.add('border-zinc-500', 'bg-zinc-900');
+          card.classList.remove('border-zinc-800', 'bg-zinc-950/60');
+        } else {
+          card.classList.remove('border-zinc-500', 'bg-zinc-900');
+          card.classList.add('border-zinc-800', 'bg-zinc-950/60');
+        }
+      }
+
+      saveState();
+    }
+
+    // FULL INITIAL RENDER
+    function renderFullUI() {
       const today = getTodayKey();
       ensureDateStructures(today);
 
@@ -871,7 +916,7 @@
       const health = appState.health[today] || {};
       const review = appState.dayReviews[today] || {};
 
-      // Sync Native Checkboxes
+      // Checkboxes & Card Styling
       CORE_HABITS.forEach(h => {
         const chk = document.getElementById(`chk_${h.id}`);
         const card = document.getElementById(`card_${h.id}`);
@@ -888,14 +933,7 @@
         }
       });
 
-      // Moral Pacing & Inputs
-      const bibleRead = appState.bibleTotal || 301;
-      const biblePct = ((bibleRead / 1189) * 100).toFixed(1);
-      const bBar = document.getElementById('bibleProgressBar');
-      if (bBar) bBar.style.width = `${biblePct}%`;
-      const bText = document.getElementById('bibleStatusText');
-      if (bText) bText.textContent = `${bibleRead} / 1189 read (${biblePct}%)`;
-
+      // Moral Inputs
       const bJournal = document.getElementById('bibleJournalInput');
       if (bJournal && document.activeElement !== bJournal) bJournal.value = moral.bibleJournal || '';
 
@@ -913,22 +951,6 @@
         if (nInput && document.activeElement !== nInput) nInput.value = moral[`t${num}_notes`] || '';
         renderTakeawayCustomTags(num, moral[`t${num}_tags`] || []);
       });
-
-      // Purity Streak
-      let streak = 0;
-      let d = new Date();
-      for (let i = 0; i < 90; i++) {
-        const dK = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-        if (appState.habits[dK] && appState.habits[dK]['purity']) {
-          streak++;
-          d.setDate(d.getDate() - 1);
-        } else {
-          if (i === 0) { d.setDate(d.getDate() - 1); continue; }
-          break;
-        }
-      }
-      const pStreak = document.getElementById('purityStreakNum');
-      if (pStreak) pStreak.textContent = streak;
 
       // Career Module
       const dSelect = document.getElementById('dayStatusSelect');
@@ -951,10 +973,63 @@
       if (p2t && document.activeElement !== p2t) p2t.value = career.p2_text || '';
       if (p3t && document.activeElement !== p3t) p3t.value = career.p3_text || '';
 
+      const cReview = document.getElementById('careerEndReview');
+      if (cReview && document.activeElement !== cReview) cReview.value = career.endReview || '';
+
+      // Review Fields
+      renderScoreButtons(review.score || 0);
+      const rVic = document.getElementById('reviewVictories');
+      const rFric = document.getElementById('reviewFriction');
+      const rTom = document.getElementById('reviewTomorrow');
+      if (rVic && document.activeElement !== rVic) rVic.value = review.victories || '';
+      if (rFric && document.activeElement !== rFric) rFric.value = review.friction || '';
+      if (rTom && document.activeElement !== rTom) rTom.value = review.tomorrow || '';
+
+      renderTransactions();
+      renderCareSessions();
+      updateKpisAndCounters();
+      renderMatrix();
+    }
+
+    // TARGETED KPI & PROGRESS UPDATES (No DOM Destruction)
+    function updateKpisAndCounters() {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+
+      const habits = appState.habits[today] || {};
+      const career = appState.career[today] || {};
+      const health = appState.health[today] || {};
+
+      // Bible Calculations
+      const bibleRead = appState.bibleTotal || 301;
+      const biblePct = ((bibleRead / 1189) * 100).toFixed(1);
+      const bBar = document.getElementById('bibleProgressBar');
+      const bText = document.getElementById('bibleStatusText');
+      if (bBar) bBar.style.width = `${Math.min(100, biblePct)}%`;
+      if (bText) bText.textContent = `${bibleRead} / 1189 read (${biblePct}%)`;
+
+      // Purity Streak
+      let streak = 0;
+      let d = new Date();
+      for (let i = 0; i < 90; i++) {
+        const dK = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        if (appState.habits[dK] && appState.habits[dK]['purity']) {
+          streak++;
+          d.setDate(d.getDate() - 1);
+        } else {
+          if (i === 0) { d.setDate(d.getDate() - 1); continue; }
+          break;
+        }
+      }
+      const pStreak = document.getElementById('purityStreakNum');
+      if (pStreak) pStreak.textContent = streak;
+
+      // Priorities
       const pDone = (career.p1_done?1:0)+(career.p2_done?1:0)+(career.p3_done?1:0);
       const pCountText = document.getElementById('prioritiesCountText');
       if (pCountText) pCountText.textContent = `${pDone}/3 Completed`;
 
+      // Career Calls
       const dDisplay = document.getElementById('dialsDisplay');
       const dBig = document.getElementById('dialsBig');
       const dBar = document.getElementById('dialsBar');
@@ -969,13 +1044,7 @@
       if (cBig) cBig.textContent = career.connects || 0;
       if (cBar) cBar.style.width = `${Math.min(100, ((career.connects || 0) / 5) * 100)}%`;
 
-      const cReview = document.getElementById('careerEndReview');
-      if (cReview && document.activeElement !== cReview) cReview.value = career.endReview || '';
-
-      // Financial Cash Flow
-      renderTransactions();
-
-      // Health
+      // Health Water & Exercise
       const waterL = ((health.waterMl || 0) / 1000).toFixed(1);
       const wDisplay = document.getElementById('waterDisplay');
       const wBar = document.getElementById('waterProgressBar');
@@ -991,24 +1060,12 @@
       const hwCard = document.getElementById('healthWeightCard');
       if (hwCard) hwCard.textContent = curWeight.toFixed(1);
 
-      // Community Care
-      renderCareSessions();
-
       // Discipline Score
       const discDone = (habits['nosnooze']?1:0)+(habits['madebed']?1:0)+(habits['shaved']?1:0)+(habits['bedby1030']?1:0);
       const dRatio = document.getElementById('disciplineRatio');
       const dScore = document.getElementById('kpiDisciplineScore');
       if (dRatio) dRatio.textContent = `${discDone}/4 Standards`;
       if (dScore) dScore.textContent = `${discDone}/4`;
-
-      // Day Review
-      renderScoreButtons(review.score || 0);
-      const rVic = document.getElementById('reviewVictories');
-      const rFric = document.getElementById('reviewFriction');
-      const rTom = document.getElementById('reviewTomorrow');
-      if (rVic && document.activeElement !== rVic) rVic.value = review.victories || '';
-      if (rFric && document.activeElement !== rFric) rFric.value = review.friction || '';
-      if (rTom && document.activeElement !== rTom) rTom.value = review.tomorrow || '';
 
       // Top Strip KPI Calculations
       const prayerCount = (habits['morning_prayer']?1:0)+(habits['bedtime_prayer']?1:0);
@@ -1026,15 +1083,32 @@
       const kwtrText = document.getElementById('kpiWaterText');
       if (kwText) kwText.textContent = curWeight.toFixed(1);
       if (kwtrText) kwtrText.textContent = `Water: ${waterL}/2.0L`;
-
-      renderMatrix();
     }
 
-    // DIRECT HABIT TOGGLE
-    function toggleHabitDirect(id, isChecked) {
+    // SCRIPTURE STEPPERS WITH MINUS
+    function adjustBible(delta) {
+      appState.bibleTotal = Math.max(0, (appState.bibleTotal || 301) + delta);
+      saveState();
+    }
+
+    function saveBibleJournal(val) {
       const today = getTodayKey();
       ensureDateStructures(today);
-      appState.habits[today][id] = !!isChecked;
+      appState.moral[today].bibleJournal = val;
+      saveState();
+    }
+
+    function saveMinistrySummary(val) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.moral[today].ministryReadSummary = val;
+      saveState();
+    }
+
+    function saveTakeawayField(tNum, field, val) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.moral[today][`t${tNum}_${field}`] = val;
       saveState();
     }
 
@@ -1085,7 +1159,6 @@
       if (!Array.isArray(appState.moral[today][`t${tNum}_tags`])) {
         appState.moral[today][`t${tNum}_tags`] = [];
       }
-
       const currentTags = appState.moral[today][`t${tNum}_tags`];
       if (!currentTags.includes(val)) {
         currentTags.push(val);
@@ -1100,6 +1173,7 @@
 
       input.value = '';
       saveState();
+      renderTakeawayCustomTags(tNum, currentTags);
     }
 
     function selectExistingTag(tNum, tag) {
@@ -1112,6 +1186,7 @@
       if (!currentTags.includes(tag)) {
         currentTags.push(tag);
         saveState();
+        renderTakeawayCustomTags(tNum, currentTags);
       }
     }
 
@@ -1123,33 +1198,8 @@
       if (idx > -1) {
         currentTags.splice(idx, 1);
         saveState();
+        renderTakeawayCustomTags(tNum, currentTags);
       }
-    }
-
-    function logBible(ch) {
-      appState.bibleTotal = (appState.bibleTotal || 301) + ch;
-      saveState();
-    }
-
-    function saveBibleJournal(val) {
-      const today = getTodayKey();
-      ensureDateStructures(today);
-      appState.moral[today].bibleJournal = val;
-      saveState();
-    }
-
-    function saveMinistrySummary(val) {
-      const today = getTodayKey();
-      ensureDateStructures(today);
-      appState.moral[today].ministryReadSummary = val;
-      saveState();
-    }
-
-    function saveTakeawayField(tNum, field, val) {
-      const today = getTodayKey();
-      ensureDateStructures(today);
-      appState.moral[today][`t${tNum}_${field}`] = val;
-      saveState();
     }
 
     // CAREER FUNCTIONS
@@ -1224,11 +1274,13 @@
       document.getElementById('txAmount').value = '';
       document.getElementById('txReason').value = '';
       saveState();
+      renderTransactions();
     }
 
     function deleteTransaction(id) {
       appState.financial.transactions = appState.financial.transactions.filter(t => t.id !== id);
       saveState();
+      renderTransactions();
     }
 
     function renderTransactions() {
@@ -1273,23 +1325,25 @@
       if (kSub) kSub.textContent = `${txs.length} total tx`;
     }
 
-    // HEALTH FUNCTIONS
-    function addWater(ml) {
+    // HEALTH FUNCTIONS WITH MINUS
+    function adjustWater(deltaMl) {
       const today = getTodayKey();
       ensureDateStructures(today);
-      appState.health[today].waterMl = (appState.health[today].waterMl || 0) + ml;
+      appState.health[today].waterMl = Math.max(0, (appState.health[today].waterMl || 0) + deltaMl);
       saveState();
     }
+
     function resetWater() {
       const today = getTodayKey();
       ensureDateStructures(today);
       appState.health[today].waterMl = 0;
       saveState();
     }
-    function addExercise(mins) {
+
+    function adjustExercise(deltaMins) {
       const today = getTodayKey();
       ensureDateStructures(today);
-      appState.health[today].exerciseMins = (appState.health[today].exerciseMins || 0) + mins;
+      appState.health[today].exerciseMins = Math.max(0, (appState.health[today].exerciseMins || 0) + deltaMins);
       saveState();
     }
 
@@ -1313,11 +1367,13 @@
       document.getElementById('careMinutes').value = '';
       document.getElementById('careNote').value = '';
       saveState();
+      renderCareSessions();
     }
 
     function deleteCareSession(id) {
       appState.community.careSessions = appState.community.careSessions.filter(c => c.id !== id);
       saveState();
+      renderCareSessions();
     }
 
     function renderCareSessions() {
@@ -1394,6 +1450,7 @@
       ensureDateStructures(today);
       appState.dayReviews[today].score = val;
       saveState();
+      renderScoreButtons(val);
     }
 
     function saveDayReviewField(field, val) {
@@ -1444,6 +1501,7 @@
       if (!appState.habits[dKey]) appState.habits[dKey] = {};
       appState.habits[dKey][hId] = !appState.habits[dKey][hId];
       saveState();
+      renderMatrix();
     }
 
     function switchView(view) {
@@ -1457,6 +1515,7 @@
         document.getElementById('matrixView').classList.remove('hidden');
         document.getElementById('tabMatrix').className = 'px-3 py-1 rounded-md bg-zinc-800 text-white shadow-sm transition-all flex items-center gap-1.5';
         document.getElementById('tabToday').className = 'px-3 py-1 rounded-md text-zinc-400 hover:text-zinc-200 transition-all flex items-center gap-1.5';
+        renderMatrix();
       }
     }
 
@@ -1512,7 +1571,7 @@
         if (typeof lucide !== 'undefined') lucide.createIcons();
       } catch(e) {}
       loadLocal();
-      renderUI();
+      renderFullUI();
       initFirebase();
     });
   </script>
