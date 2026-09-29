@@ -21,7 +21,6 @@
             surface: '#121215',
             surfaceElevated: '#18181b',
             surfaceBorder: '#27272a',
-            surfaceHighlight: '#3f3f46',
             emeraldAccent: '#10b981',
             amberAccent: '#f59e0b',
             crimsonAccent: '#ef4444',
@@ -43,7 +42,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
-    body { background-color: #09090b; color: #f4f4f5; font-feature-settings: "cv02", "cv03", "cv04", "cv11"; }
+    body { background-color: #09090b; color: #f4f4f5; -webkit-tap-highlight-color: transparent; }
     .hairline-border { border: 1px solid rgba(255, 255, 255, 0.08); }
     .hairline-border-hover:hover { border-color: rgba(255, 255, 255, 0.18); }
     .glass-card { background: rgba(18, 18, 21, 0.85); backdrop-filter: blur(16px); }
@@ -53,7 +52,7 @@
     .custom-scroll::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-zinc-800 selection:text-white">
+<body class="min-h-screen flex flex-col font-sans selection:bg-zinc-800 selection:text-white pb-12">
 
   <!-- TOP NAVIGATION BAR -->
   <header class="sticky top-0 z-40 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
@@ -62,7 +61,7 @@
         K
       </div>
       <div>
-        <h1 class="text-sm font-semibold tracking-tight text-white flex items-center gap-1.5">
+        <h1 class="text-sm font-semibold tracking-tight text-white flex items-center gap-1.5 font-mono">
           Kevin's Discipline Engine
           <span class="inline-flex items-center px-1.5 py-0.2 text-[10px] font-mono tracking-wider uppercase rounded bg-zinc-800 text-zinc-300 border border-zinc-700/60">Pro</span>
         </h1>
@@ -165,23 +164,23 @@
 
         <!-- Prayers & Purity -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div onclick="toggleHabit('morning_prayer')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_morning_prayer">
+          <button type="button" onclick="toggleHabit('morning_prayer')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_morning_prayer">
             <div class="flex items-center space-x-2.5">
               <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_morning_prayer"></div>
               <span class="text-xs font-semibold text-zinc-200">Morning Prayer</span>
             </div>
-            <i data-lucide="sun" class="w-4 h-4 text-amberAccent"></i>
-          </div>
+            <i data-lucide="sun" class="w-4 h-4 text-amberAccent pointer-events-none"></i>
+          </button>
 
-          <div onclick="toggleHabit('bedtime_prayer')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedtime_prayer">
+          <button type="button" onclick="toggleHabit('bedtime_prayer')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedtime_prayer">
             <div class="flex items-center space-x-2.5">
               <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_bedtime_prayer"></div>
               <span class="text-xs font-semibold text-zinc-200">Bed Time Prayer</span>
             </div>
-            <i data-lucide="moon" class="w-4 h-4 text-zinc-400"></i>
-          </div>
+            <i data-lucide="moon" class="w-4 h-4 text-zinc-400 pointer-events-none"></i>
+          </button>
 
-          <div onclick="toggleHabit('purity')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_purity">
+          <button type="button" onclick="toggleHabit('purity')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_purity">
             <div class="flex items-center space-x-2.5">
               <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_purity"></div>
               <div>
@@ -189,8 +188,8 @@
                 <span class="text-[10px] font-mono text-zinc-500">Streak: <span id="purityStreakNum" class="text-crimsonAccent font-bold">0</span> d</span>
               </div>
             </div>
-            <i data-lucide="shield" class="w-4 h-4 text-crimsonAccent"></i>
-          </div>
+            <i data-lucide="shield" class="w-4 h-4 text-crimsonAccent pointer-events-none"></i>
+          </button>
         </div>
 
         <!-- Bible Goal Engine -->
@@ -201,9 +200,9 @@
               <span class="text-[11px] font-mono text-zinc-400 block sm:inline sm:ml-2">Target Dec 31, 2026</span>
             </div>
             <div class="flex items-center gap-1.5">
-              <button onclick="logBible(1)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+1</button>
-              <button onclick="logBible(5)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+5</button>
-              <button onclick="logBible(10)" class="px-2.5 py-1 text-xs font-mono bg-zinc-200 hover:bg-white text-zinc-950 font-semibold rounded">+10</button>
+              <button type="button" onclick="logBible(1)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+1</button>
+              <button type="button" onclick="logBible(5)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+5</button>
+              <button type="button" onclick="logBible(10)" class="px-2.5 py-1 text-xs font-mono bg-zinc-200 hover:bg-white text-zinc-950 font-semibold rounded">+10</button>
             </div>
           </div>
           <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
@@ -213,53 +212,83 @@
             <span id="bibleStatusText">301 / 1189 read (25.3%)</span>
             <span id="biblePaceText">~9.5 ch/day pace</span>
           </div>
-          <textarea id="bibleJournalInput" onchange="saveBibleJournal(this.value)" placeholder="What I read in Scripture today..." class="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 h-16"></textarea>
+          <textarea id="bibleJournalInput" oninput="saveBibleJournal(this.value)" placeholder="What I read in Scripture today..." class="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 h-16"></textarea>
         </div>
 
         <!-- Read 10 Pages of Ministry -->
         <div class="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/80 space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-white uppercase font-mono">Read 10 Pages of Ministry</span>
-            <div onclick="toggleHabit('ministry_done')" class="flex items-center space-x-2 cursor-pointer select-none">
+            <button type="button" onclick="toggleHabit('ministry_done')" class="flex items-center space-x-2 cursor-pointer select-none">
               <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_ministry_done"></div>
               <span class="text-xs font-mono text-zinc-400">10 Pages Done</span>
-            </div>
+            </button>
           </div>
-          <input type="text" id="ministrySummaryInput" onchange="saveMinistrySummary(this.value)" placeholder="Overall summary of what I read today in Ministry..." class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-600">
+          <input type="text" id="ministrySummaryInput" oninput="saveMinistrySummary(this.value)" placeholder="Overall summary of what I read today in Ministry..." class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-600">
 
-          <!-- 3 Structured Takeaways with Citations -->
-          <div class="space-y-3 pt-1">
-            <div class="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2">
+          <!-- 3 Structured Takeaways with Citations & Dynamic Custom Tags -->
+          <div class="space-y-4 pt-1">
+            <!-- Takeaway 1 -->
+            <div class="p-3.5 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2.5">
               <span class="text-[11px] font-mono text-amberAccent font-semibold uppercase">Takeaway 1 Citation & Revelation</span>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="t1_author" onchange="saveTakeawayField(1, 'author', this.value)" placeholder="Author (e.g. Watchman Nee)" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
-                <input type="text" id="t1_book" onchange="saveTakeawayField(1, 'book', this.value)" placeholder="Book Title" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
-                <input type="text" id="t1_page" onchange="saveTakeawayField(1, 'page', this.value)" placeholder="Page (e.g. 42)" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t1_author" oninput="saveTakeawayField(1, 'author', this.value)" placeholder="Author (e.g. Watchman Nee)" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t1_book" oninput="saveTakeawayField(1, 'book', this.value)" placeholder="Book Title" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t1_page" oninput="saveTakeawayField(1, 'page', this.value)" placeholder="Page (e.g. 42)" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
               </div>
-              <textarea id="t1_notes" onchange="saveTakeawayField(1, 'notes', this.value)" placeholder="Notes on Takeaway 1..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
-              <div class="flex flex-wrap items-center gap-1.5 pt-1" id="t1_tags_container"></div>
+              <textarea id="t1_notes" oninput="saveTakeawayField(1, 'notes', this.value)" placeholder="Notes on Takeaway 1..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
+
+              <!-- Dynamic Tags Section 1 -->
+              <div class="space-y-2 pt-1 border-t border-zinc-900">
+                <div class="flex items-center gap-2">
+                  <input type="text" id="t1_new_tag" placeholder="Add custom subject tag (e.g. Faith, Grace)..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomTag(1);}" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none flex-1 font-mono">
+                  <button type="button" onclick="addCustomTag(1)" class="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-amberAccent text-xs font-mono rounded border border-zinc-700">+ Add</button>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5" id="t1_tags_container"></div>
+                <div class="text-[10px] font-mono text-zinc-500 flex flex-wrap items-center gap-1.5 pt-0.5" id="t1_library_container"></div>
+              </div>
             </div>
 
-            <div class="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2">
+            <!-- Takeaway 2 -->
+            <div class="p-3.5 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2.5">
               <span class="text-[11px] font-mono text-amberAccent font-semibold uppercase">Takeaway 2 Citation & Revelation</span>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="t2_author" onchange="saveTakeawayField(2, 'author', this.value)" placeholder="Author" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
-                <input type="text" id="t2_book" onchange="saveTakeawayField(2, 'book', this.value)" placeholder="Book Title" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
-                <input type="text" id="t2_page" onchange="saveTakeawayField(2, 'page', this.value)" placeholder="Page" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t2_author" oninput="saveTakeawayField(2, 'author', this.value)" placeholder="Author" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t2_book" oninput="saveTakeawayField(2, 'book', this.value)" placeholder="Book Title" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t2_page" oninput="saveTakeawayField(2, 'page', this.value)" placeholder="Page" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
               </div>
-              <textarea id="t2_notes" onchange="saveTakeawayField(2, 'notes', this.value)" placeholder="Notes on Takeaway 2..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
-              <div class="flex flex-wrap items-center gap-1.5 pt-1" id="t2_tags_container"></div>
+              <textarea id="t2_notes" oninput="saveTakeawayField(2, 'notes', this.value)" placeholder="Notes on Takeaway 2..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
+
+              <!-- Dynamic Tags Section 2 -->
+              <div class="space-y-2 pt-1 border-t border-zinc-900">
+                <div class="flex items-center gap-2">
+                  <input type="text" id="t2_new_tag" placeholder="Add custom subject tag..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomTag(2);}" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none flex-1 font-mono">
+                  <button type="button" onclick="addCustomTag(2)" class="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-amberAccent text-xs font-mono rounded border border-zinc-700">+ Add</button>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5" id="t2_tags_container"></div>
+                <div class="text-[10px] font-mono text-zinc-500 flex flex-wrap items-center gap-1.5 pt-0.5" id="t2_library_container"></div>
+              </div>
             </div>
 
-            <div class="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2">
+            <!-- Takeaway 3 -->
+            <div class="p-3.5 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2.5">
               <span class="text-[11px] font-mono text-amberAccent font-semibold uppercase">Takeaway 3 Citation & Revelation</span>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="t3_author" onchange="saveTakeawayField(3, 'author', this.value)" placeholder="Author" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
-                <input type="text" id="t3_book" onchange="saveTakeawayField(3, 'book', this.value)" placeholder="Book Title" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
-                <input type="text" id="t3_page" onchange="saveTakeawayField(3, 'page', this.value)" placeholder="Page" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t3_author" oninput="saveTakeawayField(3, 'author', this.value)" placeholder="Author" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t3_book" oninput="saveTakeawayField(3, 'book', this.value)" placeholder="Book Title" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t3_page" oninput="saveTakeawayField(3, 'page', this.value)" placeholder="Page" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
               </div>
-              <textarea id="t3_notes" onchange="saveTakeawayField(3, 'notes', this.value)" placeholder="Notes on Takeaway 3..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
-              <div class="flex flex-wrap items-center gap-1.5 pt-1" id="t3_tags_container"></div>
+              <textarea id="t3_notes" oninput="saveTakeawayField(3, 'notes', this.value)" placeholder="Notes on Takeaway 3..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
+
+              <!-- Dynamic Tags Section 3 -->
+              <div class="space-y-2 pt-1 border-t border-zinc-900">
+                <div class="flex items-center gap-2">
+                  <input type="text" id="t3_new_tag" placeholder="Add custom subject tag..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomTag(3);}" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none flex-1 font-mono">
+                  <button type="button" onclick="addCustomTag(3)" class="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-amberAccent text-xs font-mono rounded border border-zinc-700">+ Add</button>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5" id="t3_tags_container"></div>
+                <div class="text-[10px] font-mono text-zinc-500 flex flex-wrap items-center gap-1.5 pt-0.5" id="t3_library_container"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -289,7 +318,7 @@
               <span class="text-xs font-bold text-emeraldAccent font-mono uppercase tracking-wider">Step 1 · Daily Battle Plan</span>
               <span class="text-[10px] font-mono text-zinc-500">Morning Strategy & Alignment</span>
             </div>
-            <textarea id="careerBattlePlan" onchange="saveCareerBattlePlan(this.value)" placeholder="Outline today's strategic roadmap, focus blocks, and critical targets..." class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-emeraldAccent/60 h-20"></textarea>
+            <textarea id="careerBattlePlan" oninput="saveCareerBattlePlan(this.value)" placeholder="Outline today's strategic roadmap, focus blocks, and critical targets..." class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-emeraldAccent/60 h-20"></textarea>
           </div>
 
           <!-- Step 2: 3 Priorities -->
@@ -301,20 +330,20 @@
             <div class="space-y-2">
               <div class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800">
                 <input type="checkbox" id="p1_check" onchange="togglePriority(1)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
-                <input type="text" id="p1_text" onchange="savePriorityText(1, this.value)" placeholder="Priority 1: Key strategic deliverable..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="p1_text" oninput="savePriorityText(1, this.value)" placeholder="Priority 1: Key strategic deliverable..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
               </div>
               <div class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800">
                 <input type="checkbox" id="p2_check" onchange="togglePriority(2)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
-                <input type="text" id="p2_text" onchange="savePriorityText(2, this.value)" placeholder="Priority 2: Critical client or internal milestone..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="p2_text" oninput="savePriorityText(2, this.value)" placeholder="Priority 2: Critical client or internal milestone..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
               </div>
               <div class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800">
                 <input type="checkbox" id="p3_check" onchange="togglePriority(3)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
-                <input type="text" id="p3_text" onchange="savePriorityText(3, this.value)" placeholder="Priority 3: Must-close action item..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="p3_text" oninput="savePriorityText(3, this.value)" placeholder="Priority 3: Must-close action item..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
               </div>
             </div>
           </div>
 
-          <!-- Step 3: Calls Execution (20 Dials & 5 Connects) -->
+          <!-- Step 3: Calls Execution -->
           <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-3">
             <span class="text-xs font-bold text-emeraldAccent font-mono uppercase tracking-wider block">Step 3 · Calls Execution</span>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -324,11 +353,11 @@
                   <span id="dialsDisplay">0 / 20</span>
                 </div>
                 <div class="flex items-center justify-between py-2">
-                  <button onclick="adjustDials(-1)" class="w-8 h-8 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold">-</button>
+                  <button type="button" onclick="adjustDials(-1)" class="w-8 h-8 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold">-</button>
                   <span id="dialsBig" class="text-2xl font-black font-mono text-white">0</span>
                   <div class="flex gap-1.5">
-                    <button onclick="adjustDials(1)" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono">+1</button>
-                    <button onclick="adjustDials(5)" class="px-2.5 py-1 rounded bg-emeraldAccent/20 hover:bg-emeraldAccent/30 text-emeraldAccent text-xs font-mono font-bold">+5</button>
+                    <button type="button" onclick="adjustDials(1)" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono">+1</button>
+                    <button type="button" onclick="adjustDials(5)" class="px-2.5 py-1 rounded bg-emeraldAccent/20 hover:bg-emeraldAccent/30 text-emeraldAccent text-xs font-mono font-bold">+5</button>
                   </div>
                 </div>
                 <div class="w-full bg-zinc-800 rounded-full h-1 overflow-hidden">
@@ -342,9 +371,9 @@
                   <span id="connectsDisplay">0 / 5</span>
                 </div>
                 <div class="flex items-center justify-between py-2">
-                  <button onclick="adjustConnects(-1)" class="w-8 h-8 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold">-</button>
+                  <button type="button" onclick="adjustConnects(-1)" class="w-8 h-8 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold">-</button>
                   <span id="connectsBig" class="text-2xl font-black font-mono text-white">0</span>
-                  <button onclick="adjustConnects(1)" class="px-3 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono">+1</button>
+                  <button type="button" onclick="adjustConnects(1)" class="px-3 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono">+1</button>
                 </div>
                 <div class="w-full bg-zinc-800 rounded-full h-1 overflow-hidden">
                   <div id="connectsBar" class="bg-emeraldAccent h-full transition-all duration-300" style="width: 0%"></div>
@@ -359,12 +388,12 @@
               <span class="text-xs font-bold text-emeraldAccent font-mono uppercase tracking-wider">Step 4 · End of Work Day Review</span>
               <span class="text-[10px] font-mono text-zinc-500">Closing Debrief & Pipeline Status</span>
             </div>
-            <textarea id="careerEndReview" onchange="saveCareerEndReview(this.value)" placeholder="Debrief career performance: What was won, key follow-ups queued, pipeline adjustments..." class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-emeraldAccent/60 h-20"></textarea>
+            <textarea id="careerEndReview" oninput="saveCareerEndReview(this.value)" placeholder="Debrief career performance: What was won, key follow-ups queued, pipeline adjustments..." class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-emeraldAccent/60 h-20"></textarea>
           </div>
         </div>
       </section>
 
-      <!-- 3. FINANCIAL PILLAR (Cash Flow) -->
+      <!-- 3. FINANCIAL PILLAR -->
       <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
           <div class="flex items-center space-x-2">
@@ -405,7 +434,7 @@
             <input type="text" id="txReason" placeholder="Reason / Description" class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
           </div>
           <div class="flex justify-end">
-            <button onclick="addTransaction()" class="px-3 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-semibold font-mono rounded">Record Entry</button>
+            <button type="button" onclick="addTransaction()" class="px-3 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-semibold font-mono rounded">Record Entry</button>
           </div>
         </div>
 
@@ -429,9 +458,9 @@
               <span id="waterDisplay" class="text-white font-bold">0.0 / 2.0 L</span>
             </div>
             <div class="flex items-center justify-between py-1">
-              <button onclick="addWater(250)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+250ml</button>
-              <button onclick="addWater(500)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+500ml</button>
-              <button onclick="resetWater()" class="px-2 py-1 bg-zinc-900 text-zinc-500 hover:text-zinc-300 text-[10px] font-mono rounded">Reset</button>
+              <button type="button" onclick="addWater(250)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+250ml</button>
+              <button type="button" onclick="addWater(500)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+500ml</button>
+              <button type="button" onclick="resetWater()" class="px-2 py-1 bg-zinc-900 text-zinc-500 hover:text-zinc-300 text-[10px] font-mono rounded">Reset</button>
             </div>
             <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
               <div id="waterProgressBar" class="bg-zinc-200 h-full transition-all duration-300" style="width: 0%"></div>
@@ -444,9 +473,9 @@
               <span id="exerciseDisplay" class="text-white font-bold">0 / 30m</span>
             </div>
             <div class="flex items-center justify-between py-1">
-              <button onclick="addExercise(10)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+10m</button>
-              <button onclick="addExercise(15)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+15m</button>
-              <button onclick="addExercise(30)" class="px-2.5 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-mono font-semibold rounded">+30m</button>
+              <button type="button" onclick="addExercise(10)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+10m</button>
+              <button type="button" onclick="addExercise(15)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+15m</button>
+              <button type="button" onclick="addExercise(30)" class="px-2.5 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-mono font-semibold rounded">+30m</button>
             </div>
             <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
               <div id="exerciseProgressBar" class="bg-emeraldAccent h-full transition-all duration-300" style="width: 0%"></div>
@@ -456,21 +485,21 @@
           <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2.5">
             <div class="flex justify-between items-center text-xs font-mono">
               <span class="text-zinc-300 uppercase">Weight Protocol</span>
-              <button onclick="openWeightModal()" class="text-amberAccent hover:underline text-[11px]">Log Weigh-In</button>
+              <button type="button" onclick="openWeightModal()" class="text-amberAccent hover:underline text-[11px]">Log Weigh-In</button>
             </div>
             <div class="flex items-baseline justify-between">
               <span id="healthWeightCard" class="text-2xl font-black font-mono text-amberAccent">229.0</span>
               <span class="text-[11px] font-mono text-zinc-400">Target: 190.0 lbs</span>
             </div>
-            <div onclick="toggleHabit('nofastfood')" class="p-2 rounded border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_nofastfood">
+            <button type="button" onclick="toggleHabit('nofastfood')" class="w-full text-left p-2 rounded border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_nofastfood">
               <span class="text-xs text-zinc-200">No Fast Food</span>
               <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_nofastfood"></div>
-            </div>
+            </button>
           </div>
         </div>
       </section>
 
-      <!-- 5. COMMUNITY PILLAR (Care for Others) -->
+      <!-- 5. COMMUNITY PILLAR -->
       <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
           <div class="flex items-center space-x-2">
@@ -495,7 +524,6 @@
           </div>
         </div>
 
-        <!-- Add Care Session -->
         <div class="bg-zinc-900/40 p-3 rounded-lg border border-zinc-800/80 space-y-2">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <select id="careCategory" class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
@@ -506,7 +534,7 @@
             <input type="text" id="careNote" placeholder="Who was cared for / details..." class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
           </div>
           <div class="flex justify-end">
-            <button onclick="addCareSession()" class="px-3 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-semibold font-mono rounded">Record Care Time</button>
+            <button type="button" onclick="addCareSession()" class="px-3 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-semibold font-mono rounded">Record Care Time</button>
           </div>
         </div>
 
@@ -524,22 +552,22 @@
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div onclick="toggleHabit('nosnooze')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_nosnooze">
+          <button type="button" onclick="toggleHabit('nosnooze')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_nosnooze">
             <span class="text-xs font-semibold text-zinc-200">No Snooze</span>
             <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_nosnooze"></div>
-          </div>
-          <div onclick="toggleHabit('madebed')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_madebed">
+          </button>
+          <button type="button" onclick="toggleHabit('madebed')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_madebed">
             <span class="text-xs font-semibold text-zinc-200">Made Bed</span>
             <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_madebed"></div>
-          </div>
-          <div onclick="toggleHabit('shaved')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_shaved">
+          </button>
+          <button type="button" onclick="toggleHabit('shaved')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_shaved">
             <span class="text-xs font-semibold text-zinc-200">Shaved</span>
             <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_shaved"></div>
-          </div>
-          <div onclick="toggleHabit('bedby1030')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedby1030">
+          </button>
+          <button type="button" onclick="toggleHabit('bedby1030')" class="w-full text-left p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedby1030">
             <span class="text-xs font-semibold text-zinc-200">In Bed by 10:30</span>
             <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_bedby1030"></div>
-          </div>
+          </button>
         </div>
       </section>
 
@@ -564,23 +592,23 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="space-y-1.5">
             <label class="text-xs font-mono text-zinc-400">Today's Biggest Victories & High Standards</label>
-            <textarea id="reviewVictories" onchange="saveDayReviewField('victories', this.value)" placeholder="What did I execute with excellence today? Where did God give the victory?" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 h-24"></textarea>
+            <textarea id="reviewVictories" oninput="saveDayReviewField('victories', this.value)" placeholder="What did I execute with excellence today? Where did God give the victory?" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 h-24"></textarea>
           </div>
           <div class="space-y-1.5">
             <label class="text-xs font-mono text-zinc-400">Where Did I Fall Short / Lessons Learned</label>
-            <textarea id="reviewFriction" onchange="saveDayReviewField('friction', this.value)" placeholder="Radical self-honesty: where was there drift, distraction, or compromise?" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 h-24"></textarea>
+            <textarea id="reviewFriction" oninput="saveDayReviewField('friction', this.value)" placeholder="Radical self-honesty: where was there drift, distraction, or compromise?" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 h-24"></textarea>
           </div>
         </div>
 
         <div class="space-y-1.5">
           <label class="text-xs font-mono text-zinc-400">Primary Focus & Non-Negotiable for Tomorrow</label>
-          <input type="text" id="reviewTomorrow" onchange="saveDayReviewField('tomorrow', this.value)" placeholder="The single most important objective to lock in tomorrow morning..." class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 font-mono">
+          <input type="text" id="reviewTomorrow" oninput="saveDayReviewField('tomorrow', this.value)" placeholder="The single most important objective to lock in tomorrow morning..." class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 font-mono">
         </div>
       </section>
 
     </div>
 
-    <!-- 7-DAY CONSISTENCY MATRIX VIEW (Hidden by default) -->
+    <!-- 7-DAY CONSISTENCY MATRIX VIEW -->
     <div id="matrixView" class="glass-card rounded-xl p-5 hairline-border space-y-4 hidden">
       <div class="flex items-center justify-between pb-2 border-b border-zinc-800">
         <h2 class="text-sm font-semibold uppercase tracking-tight text-white font-mono">7-Day Consistency Matrix</h2>
@@ -608,7 +636,7 @@
           <i data-lucide="cloud" class="w-4 h-4 text-emeraldAccent"></i>
           <h3 class="text-sm font-semibold text-white font-mono uppercase">Cloud Synchronization</h3>
         </div>
-        <button onclick="closeSyncModal()" class="text-zinc-400 hover:text-white">✕</button>
+        <button type="button" onclick="closeSyncModal()" class="text-zinc-400 hover:text-white">✕</button>
       </div>
 
       <p class="text-xs text-zinc-400 leading-relaxed">
@@ -626,8 +654,8 @@
       </div>
 
       <div class="pt-2 flex justify-end gap-2">
-        <button onclick="closeSyncModal()" class="px-4 py-2 rounded bg-zinc-800 hover:bg-zinc-700 text-xs font-mono text-zinc-300">Cancel</button>
-        <button onclick="saveAndConnectSync()" class="px-4 py-2 rounded bg-white hover:bg-zinc-200 text-zinc-950 font-semibold text-xs font-mono">Connect & Sync</button>
+        <button type="button" onclick="closeSyncModal()" class="px-4 py-2 rounded bg-zinc-800 hover:bg-zinc-700 text-xs font-mono text-zinc-300">Cancel</button>
+        <button type="button" onclick="saveAndConnectSync()" class="px-4 py-2 rounded bg-white hover:bg-zinc-200 text-zinc-950 font-semibold text-xs font-mono">Connect & Sync</button>
       </div>
     </div>
   </div>
@@ -637,15 +665,15 @@
     <div class="bg-zinc-900 border border-zinc-800 rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
         <h3 class="text-sm font-semibold text-white font-mono uppercase">Log Weigh-In</h3>
-        <button onclick="closeWeightModal()" class="text-zinc-400 hover:text-white">✕</button>
+        <button type="button" onclick="closeWeightModal()" class="text-zinc-400 hover:text-white">✕</button>
       </div>
       <div>
         <label class="block text-[11px] font-mono text-zinc-400 mb-1">CURRENT WEIGHT (LBS)</label>
         <input type="number" step="0.1" id="newWeightInput" placeholder="229.0" class="w-full bg-zinc-950 border border-zinc-700 rounded px-3 py-2 text-base text-white font-mono focus:outline-none focus:border-amberAccent">
       </div>
       <div class="pt-2 flex justify-end gap-2">
-        <button onclick="closeWeightModal()" class="px-4 py-2 rounded bg-zinc-800 text-xs font-mono text-zinc-300">Cancel</button>
-        <button onclick="saveWeightEntry()" class="px-4 py-2 rounded bg-amberAccent hover:bg-amber-400 text-zinc-950 font-semibold text-xs font-mono">Record</button>
+        <button type="button" onclick="closeWeightModal()" class="px-4 py-2 rounded bg-zinc-800 text-xs font-mono text-zinc-300">Cancel</button>
+        <button type="button" onclick="saveWeightEntry()" class="px-4 py-2 rounded bg-amberAccent hover:bg-amber-400 text-zinc-950 font-semibold text-xs font-mono">Record</button>
       </div>
     </div>
   </div>
@@ -666,8 +694,6 @@
     let syncKey = localStorage.getItem('kevin_sync_key') || '';
     let isCloudSyncActive = false;
 
-    const DEFAULT_TAGS = ['Faith', 'Doctrine', 'Leadership', 'Sanctification', 'Grace', 'Christ as Life', 'Body of Christ', 'Consecration'];
-
     const CORE_HABITS = [
       { id: 'morning_prayer', name: 'Morning Prayer' },
       { id: 'bedtime_prayer', name: 'Bed Time Prayer' },
@@ -682,7 +708,9 @@
 
     let appState = {
       habits: {},
-      moral: {},
+      moral: {
+        customTagsLibrary: []
+      },
       career: {},
       financial: { transactions: [] },
       health: {},
@@ -698,6 +726,16 @@
     }
 
     function ensureDateStructures(dKey) {
+      if (!appState.habits) appState.habits = {};
+      if (!appState.moral) appState.moral = {};
+      if (!Array.isArray(appState.moral.customTagsLibrary)) appState.moral.customTagsLibrary = [];
+      if (!appState.career) appState.career = {};
+      if (!appState.financial) appState.financial = { transactions: [] };
+      if (!appState.health) appState.health = {};
+      if (!appState.community) appState.community = { careSessions: [] };
+      if (!appState.dayReviews) appState.dayReviews = {};
+      if (!appState.weightHistory) appState.weightHistory = [{ date: dKey, weight: 229.0 }];
+
       if (!appState.habits[dKey]) appState.habits[dKey] = {};
       if (!appState.moral[dKey]) {
         appState.moral[dKey] = {
@@ -729,15 +767,24 @@
     }
 
     function loadLocal() {
-      const saved = localStorage.getItem('kevin_discipline_state_v2');
-      if (saved) {
-        try { appState = Object.assign(appState, JSON.parse(saved)); } catch(e) {}
+      try {
+        const saved = localStorage.getItem('kevin_discipline_state_v2');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object') {
+            appState = Object.assign(appState, parsed);
+          }
+        }
+      } catch(e) {
+        console.warn("Storage parse error:", e);
       }
       ensureDateStructures(getTodayKey());
     }
 
     function saveState(skipCloud = false) {
-      localStorage.setItem('kevin_discipline_state_v2', JSON.stringify(appState));
+      try {
+        localStorage.setItem('kevin_discipline_state_v2', JSON.stringify(appState));
+      } catch(e) {}
       renderUI();
       if (!skipCloud && isCloudSyncActive && db && syncKey) {
         db.collection('engines').doc(syncKey).set({
@@ -749,19 +796,23 @@
 
     function initFirebase() {
       try {
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
-        if (syncKey) connectToCloudSync(syncKey);
+        if (typeof firebase !== 'undefined') {
+          if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+          db = firebase.firestore();
+          if (syncKey) connectToCloudSync(syncKey);
+        }
       } catch (err) {
-        console.error("Firebase init err:", err);
+        console.warn("Firebase offline or unavailable:", err);
       }
     }
 
     function connectToCloudSync(key) {
       if (!db || !key) return;
       isCloudSyncActive = true;
-      document.getElementById('syncDot').className = 'w-2 h-2 rounded-full bg-emeraldAccent';
-      document.getElementById('syncStatusText').textContent = 'Live Sync';
+      const dot = document.getElementById('syncDot');
+      const text = document.getElementById('syncStatusText');
+      if (dot) dot.className = 'w-2 h-2 rounded-full bg-emeraldAccent';
+      if (text) text.textContent = 'Live Sync';
 
       db.collection('engines').doc(key).onSnapshot(doc => {
         if (doc.exists) {
@@ -777,8 +828,8 @@
           saveState();
         }
       }, err => {
-        document.getElementById('syncDot').className = 'w-2 h-2 rounded-full bg-crimsonAccent';
-        document.getElementById('syncStatusText').textContent = 'Offline';
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-crimsonAccent';
+        if (text) text.textContent = 'Offline';
       });
     }
 
@@ -787,11 +838,11 @@
       const today = getTodayKey();
       ensureDateStructures(today);
 
-      const habits = appState.habits[today];
-      const moral = appState.moral[today];
-      const career = appState.career[today];
-      const health = appState.health[today];
-      const review = appState.dayReviews[today];
+      const habits = appState.habits[today] || {};
+      const moral = appState.moral[today] || {};
+      const career = appState.career[today] || {};
+      const health = appState.health[today] || {};
+      const review = appState.dayReviews[today] || {};
 
       // Habit Checkbox Cards
       CORE_HABITS.forEach(h => {
@@ -813,7 +864,7 @@
         }
       });
 
-      // Ministry Done Checkbox
+      // Ministry 10 Pages Done Checkbox
       const isMinistryDone = !!habits['ministry_done'];
       const ministryBox = document.getElementById('box_ministry_done');
       if (ministryBox) {
@@ -829,17 +880,27 @@
       // Moral Pacing & Inputs
       const bibleRead = appState.bibleTotal || 301;
       const biblePct = ((bibleRead / 1189) * 100).toFixed(1);
-      document.getElementById('bibleProgressBar').style.width = `${biblePct}%`;
-      document.getElementById('bibleStatusText').textContent = `${bibleRead} / 1189 read (${biblePct}%)`;
-      document.getElementById('bibleJournalInput').value = moral.bibleJournal || '';
-      document.getElementById('ministrySummaryInput').value = moral.ministryReadSummary || '';
+      const bBar = document.getElementById('bibleProgressBar');
+      if (bBar) bBar.style.width = `${biblePct}%`;
+      const bText = document.getElementById('bibleStatusText');
+      if (bText) bText.textContent = `${bibleRead} / 1189 read (${biblePct}%)`;
+
+      const bJournal = document.getElementById('bibleJournalInput');
+      if (bJournal && document.activeElement !== bJournal) bJournal.value = moral.bibleJournal || '';
+
+      const mSummary = document.getElementById('ministrySummaryInput');
+      if (mSummary && document.activeElement !== mSummary) mSummary.value = moral.ministryReadSummary || '';
 
       [1, 2, 3].forEach(num => {
-        document.getElementById(`t${num}_author`).value = moral[`t${num}_author`] || '';
-        document.getElementById(`t${num}_book`).value = moral[`t${num}_book`] || '';
-        document.getElementById(`t${num}_page`).value = moral[`t${num}_page`] || '';
-        document.getElementById(`t${num}_notes`).value = moral[`t${num}_notes`] || '';
-        renderTakeawayTags(num, moral[`t${num}_tags`] || []);
+        const aInput = document.getElementById(`t${num}_author`);
+        const bInput = document.getElementById(`t${num}_book`);
+        const pInput = document.getElementById(`t${num}_page`);
+        const nInput = document.getElementById(`t${num}_notes`);
+        if (aInput && document.activeElement !== aInput) aInput.value = moral[`t${num}_author`] || '';
+        if (bInput && document.activeElement !== bInput) bInput.value = moral[`t${num}_book`] || '';
+        if (pInput && document.activeElement !== pInput) pInput.value = moral[`t${num}_page`] || '';
+        if (nInput && document.activeElement !== nInput) nInput.value = moral[`t${num}_notes`] || '';
+        renderTakeawayCustomTags(num, moral[`t${num}_tags`] || []);
       });
 
       // Purity Streak
@@ -855,91 +916,198 @@
           break;
         }
       }
-      document.getElementById('purityStreakNum').textContent = streak;
+      const pStreak = document.getElementById('purityStreakNum');
+      if (pStreak) pStreak.textContent = streak;
 
       // Career Module
-      document.getElementById('dayStatusSelect').value = career.dayStatus || 'normal';
-      document.getElementById('careerBattlePlan').value = career.battlePlan || '';
-      document.getElementById('p1_check').checked = !!career.p1_done;
-      document.getElementById('p2_check').checked = !!career.p2_done;
-      document.getElementById('p3_check').checked = !!career.p3_done;
-      document.getElementById('p1_text').value = career.p1_text || '';
-      document.getElementById('p2_text').value = career.p2_text || '';
-      document.getElementById('p3_text').value = career.p3_text || '';
+      const dSelect = document.getElementById('dayStatusSelect');
+      if (dSelect) dSelect.value = career.dayStatus || 'normal';
+
+      const bPlan = document.getElementById('careerBattlePlan');
+      if (bPlan && document.activeElement !== bPlan) bPlan.value = career.battlePlan || '';
+
+      const p1c = document.getElementById('p1_check');
+      const p2c = document.getElementById('p2_check');
+      const p3c = document.getElementById('p3_check');
+      if (p1c) p1c.checked = !!career.p1_done;
+      if (p2c) p2c.checked = !!career.p2_done;
+      if (p3c) p3c.checked = !!career.p3_done;
+
+      const p1t = document.getElementById('p1_text');
+      const p2t = document.getElementById('p2_text');
+      const p3t = document.getElementById('p3_text');
+      if (p1t && document.activeElement !== p1t) p1t.value = career.p1_text || '';
+      if (p2t && document.activeElement !== p2t) p2t.value = career.p2_text || '';
+      if (p3t && document.activeElement !== p3t) p3t.value = career.p3_text || '';
+
       const pDone = (career.p1_done?1:0)+(career.p2_done?1:0)+(career.p3_done?1:0);
-      document.getElementById('prioritiesCountText').textContent = `${pDone}/3 Completed`;
+      const pCountText = document.getElementById('prioritiesCountText');
+      if (pCountText) pCountText.textContent = `${pDone}/3 Completed`;
 
-      document.getElementById('dialsDisplay').textContent = `${career.dials || 0} / 20`;
-      document.getElementById('dialsBig').textContent = career.dials || 0;
-      document.getElementById('dialsBar').style.width = `${Math.min(100, ((career.dials || 0) / 20) * 100)}%`;
+      const dDisplay = document.getElementById('dialsDisplay');
+      const dBig = document.getElementById('dialsBig');
+      const dBar = document.getElementById('dialsBar');
+      if (dDisplay) dDisplay.textContent = `${career.dials || 0} / 20`;
+      if (dBig) dBig.textContent = career.dials || 0;
+      if (dBar) dBar.style.width = `${Math.min(100, ((career.dials || 0) / 20) * 100)}%`;
 
-      document.getElementById('connectsDisplay').textContent = `${career.connects || 0} / 5`;
-      document.getElementById('connectsBig').textContent = career.connects || 0;
-      document.getElementById('connectsBar').style.width = `${Math.min(100, ((career.connects || 0) / 5) * 100)}%`;
-      document.getElementById('careerEndReview').value = career.endReview || '';
+      const cDisplay = document.getElementById('connectsDisplay');
+      const cBig = document.getElementById('connectsBig');
+      const cBar = document.getElementById('connectsBar');
+      if (cDisplay) cDisplay.textContent = `${career.connects || 0} / 5`;
+      if (cBig) cBig.textContent = career.connects || 0;
+      if (cBar) cBar.style.width = `${Math.min(100, ((career.connects || 0) / 5) * 100)}%`;
+
+      const cReview = document.getElementById('careerEndReview');
+      if (cReview && document.activeElement !== cReview) cReview.value = career.endReview || '';
 
       // Financial Cash Flow
       renderTransactions();
 
       // Health
       const waterL = ((health.waterMl || 0) / 1000).toFixed(1);
-      document.getElementById('waterDisplay').textContent = `${waterL} / 2.0 L`;
-      document.getElementById('waterProgressBar').style.width = `${Math.min(100, (health.waterMl / 2000) * 100)}%`;
-      document.getElementById('exerciseDisplay').textContent = `${health.exerciseMins || 0} / 30m`;
-      document.getElementById('exerciseProgressBar').style.width = `${Math.min(100, (health.exerciseMins / 30) * 100)}%`;
+      const wDisplay = document.getElementById('waterDisplay');
+      const wBar = document.getElementById('waterProgressBar');
+      if (wDisplay) wDisplay.textContent = `${waterL} / 2.0 L`;
+      if (wBar) wBar.style.width = `${Math.min(100, (health.waterMl / 2000) * 100)}%`;
 
-      const curWeight = appState.weightHistory.length ? appState.weightHistory[appState.weightHistory.length - 1].weight : 229.0;
-      document.getElementById('healthWeightCard').textContent = curWeight.toFixed(1);
+      const eDisplay = document.getElementById('exerciseDisplay');
+      const eBar = document.getElementById('exerciseProgressBar');
+      if (eDisplay) eDisplay.textContent = `${health.exerciseMins || 0} / 30m`;
+      if (eBar) eBar.style.width = `${Math.min(100, (health.exerciseMins / 30) * 100)}%`;
 
-      // Community Care For Others
+      const curWeight = appState.weightHistory && appState.weightHistory.length ? appState.weightHistory[appState.weightHistory.length - 1].weight : 229.0;
+      const hwCard = document.getElementById('healthWeightCard');
+      if (hwCard) hwCard.textContent = curWeight.toFixed(1);
+
+      // Community Care
       renderCareSessions();
 
       // Discipline Score
       const discDone = (habits['nosnooze']?1:0)+(habits['madebed']?1:0)+(habits['shaved']?1:0)+(habits['bedby1030']?1:0);
-      document.getElementById('disciplineRatio').textContent = `${discDone}/4 Standards`;
-      document.getElementById('kpiDisciplineScore').textContent = `${discDone}/4`;
+      const dRatio = document.getElementById('disciplineRatio');
+      const dScore = document.getElementById('kpiDisciplineScore');
+      if (dRatio) dRatio.textContent = `${discDone}/4 Standards`;
+      if (dScore) dScore.textContent = `${discDone}/4`;
 
-      // Day Review & Score Buttons
+      // Day Review
       renderScoreButtons(review.score || 0);
-      document.getElementById('reviewVictories').value = review.victories || '';
-      document.getElementById('reviewFriction').value = review.friction || '';
-      document.getElementById('reviewTomorrow').value = review.tomorrow || '';
+      const rVic = document.getElementById('reviewVictories');
+      const rFric = document.getElementById('reviewFriction');
+      const rTom = document.getElementById('reviewTomorrow');
+      if (rVic && document.activeElement !== rVic) rVic.value = review.victories || '';
+      if (rFric && document.activeElement !== rFric) rFric.value = review.friction || '';
+      if (rTom && document.activeElement !== rTom) rTom.value = review.tomorrow || '';
 
       // Top Strip KPI Calculations
       const prayerCount = (habits['morning_prayer']?1:0)+(habits['bedtime_prayer']?1:0);
-      document.getElementById('kpiPrayerText').textContent = `Prayer: ${prayerCount}/2`;
-      document.getElementById('kpiMoralScore').textContent = `${Math.round(((prayerCount + (habits['purity']?1:0) + (habits['ministry_done']?1:0)) / 4) * 100)}%`;
-      document.getElementById('kpiCareerScore').textContent = `${Math.round(((pDone/3 + Math.min(1, (career.dials||0)/20) + Math.min(1, (career.connects||0)/5)) / 3) * 100)}%`;
-      document.getElementById('kpiDialsText').textContent = `${career.dials || 0}/20 Dials`;
-      document.getElementById('kpiWeightText').textContent = curWeight.toFixed(1);
-      document.getElementById('kpiWaterText').textContent = `Water: ${waterL}/2.0L`;
+      const kpText = document.getElementById('kpiPrayerText');
+      const kmScore = document.getElementById('kpiMoralScore');
+      if (kpText) kpText.textContent = `Prayer: ${prayerCount}/2`;
+      if (kmScore) kmScore.textContent = `${Math.round(((prayerCount + (habits['purity']?1:0) + (habits['ministry_done']?1:0)) / 4) * 100)}%`;
+
+      const kcScore = document.getElementById('kpiCareerScore');
+      const kdText = document.getElementById('kpiDialsText');
+      if (kcScore) kcScore.textContent = `${Math.round(((pDone/3 + Math.min(1, (career.dials||0)/20) + Math.min(1, (career.connects||0)/5)) / 3) * 100)}%`;
+      if (kdText) kdText.textContent = `${career.dials || 0}/20 Dials`;
+
+      const kwText = document.getElementById('kpiWeightText');
+      const kwtrText = document.getElementById('kpiWaterText');
+      if (kwText) kwText.textContent = curWeight.toFixed(1);
+      if (kwtrText) kwtrText.textContent = `Water: ${waterL}/2.0L`;
 
       renderMatrix();
     }
 
-    function renderTakeawayTags(tNum, activeTags) {
+    // DYNAMIC CUSTOM TAGS (ZERO DEFAULT PRESET TAGS)
+    function renderTakeawayCustomTags(tNum, activeTags) {
       const container = document.getElementById(`t${tNum}_tags_container`);
+      const libContainer = document.getElementById(`t${tNum}_library_container`);
+      if (!container || !libContainer) return;
+
       container.innerHTML = '';
-      DEFAULT_TAGS.forEach(tag => {
-        const isSelected = activeTags.includes(tag);
-        const pill = document.createElement('button');
-        pill.onclick = () => toggleTakeawayTag(tNum, tag);
-        pill.className = `px-2 py-0.5 rounded text-[10px] font-mono transition-all border ${
-          isSelected ? 'bg-amberAccent text-zinc-950 border-amberAccent font-bold' : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200'
-        }`;
-        pill.textContent = `#${tag}`;
-        container.appendChild(pill);
-      });
+      libContainer.innerHTML = '';
+
+      // Render currently assigned tags with remove button
+      if (!activeTags || activeTags.length === 0) {
+        container.innerHTML = '<span class="text-[10px] font-mono text-zinc-600 italic">No subject tags added yet.</span>';
+      } else {
+        activeTags.forEach(tag => {
+          const pill = document.createElement('span');
+          pill.className = 'inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-amberAccent text-zinc-950 font-bold';
+          pill.innerHTML = `<span>#${escapeHtml(tag)}</span><button type="button" onclick="removeCustomTag(${tNum}, '${escapeForAttr(tag)}')" class="hover:opacity-70 text-zinc-950 font-black">✕</button>`;
+          container.appendChild(pill);
+        });
+      }
+
+      // Render library of previously created tags for quick 1-tap addition
+      const library = appState.moral.customTagsLibrary || [];
+      const unselected = library.filter(t => !activeTags.includes(t));
+      if (unselected.length > 0) {
+        libContainer.innerHTML = '<span class="text-zinc-600">Quick Add:</span>';
+        unselected.forEach(tag => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.onclick = () => selectExistingTag(tNum, tag);
+          btn.className = 'px-1.5 py-0.2 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 text-[10px]';
+          btn.textContent = `+ #${tag}`;
+          libContainer.appendChild(btn);
+        });
+      }
     }
 
-    function toggleTakeawayTag(tNum, tag) {
+    function addCustomTag(tNum) {
+      const input = document.getElementById(`t${tNum}_new_tag`);
+      if (!input) return;
+      let val = input.value.trim().replace(/^#+/, '');
+      if (!val) return;
+
       const today = getTodayKey();
       ensureDateStructures(today);
-      const tagList = appState.moral[today][`t${tNum}_tags`];
-      const idx = tagList.indexOf(tag);
-      if (idx > -1) tagList.splice(idx, 1);
-      else tagList.push(tag);
+
+      if (!Array.isArray(appState.moral[today][`t${tNum}_tags`])) {
+        appState.moral[today][`t${tNum}_tags`] = [];
+      }
+
+      const currentTags = appState.moral[today][`t${tNum}_tags`];
+      if (!currentTags.includes(val)) {
+        currentTags.push(val);
+      }
+
+      // Add to global custom tags library
+      if (!Array.isArray(appState.moral.customTagsLibrary)) {
+        appState.moral.customTagsLibrary = [];
+      }
+      if (!appState.moral.customTagsLibrary.includes(val)) {
+        appState.moral.customTagsLibrary.push(val);
+      }
+
+      input.value = '';
       saveState();
+    }
+
+    function selectExistingTag(tNum, tag) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      if (!Array.isArray(appState.moral[today][`t${tNum}_tags`])) {
+        appState.moral[today][`t${tNum}_tags`] = [];
+      }
+      const currentTags = appState.moral[today][`t${tNum}_tags`];
+      if (!currentTags.includes(tag)) {
+        currentTags.push(tag);
+        saveState();
+      }
+    }
+
+    function removeCustomTag(tNum, tag) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      const currentTags = appState.moral[today][`t${tNum}_tags`] || [];
+      const idx = currentTags.indexOf(tag);
+      if (idx > -1) {
+        currentTags.splice(idx, 1);
+        saveState();
+      }
     }
 
     function toggleHabit(id) {
@@ -1055,8 +1223,9 @@
     }
 
     function renderTransactions() {
-      const txs = appState.financial.transactions || [];
+      const txs = (appState.financial && appState.financial.transactions) || [];
       const container = document.getElementById('txHistoryContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       let inTotal = 0;
@@ -1071,23 +1240,28 @@
         row.innerHTML = `
           <div class="flex items-center space-x-2">
             <span class="px-1.5 py-0.5 rounded text-[10px] ${t.type === 'inflow' ? 'bg-emeraldAccent/20 text-emeraldAccent' : 'bg-crimsonAccent/20 text-crimsonAccent'}">${t.type === 'inflow' ? 'IN' : t.category}</span>
-            <span class="text-zinc-200">${t.reason}</span>
+            <span class="text-zinc-200">${escapeHtml(t.reason)}</span>
             <span class="text-zinc-500 text-[10px]">${t.date}</span>
           </div>
           <div class="flex items-center space-x-3">
             <span class="${t.type === 'inflow' ? 'text-emeraldAccent' : 'text-zinc-200'} font-bold">${t.type === 'inflow' ? '+' : '-'}$${t.amount.toFixed(2)}</span>
-            <button onclick="deleteTransaction(${t.id})" class="text-zinc-600 hover:text-crimsonAccent">✕</button>
+            <button type="button" onclick="deleteTransaction(${t.id})" class="text-zinc-600 hover:text-crimsonAccent">✕</button>
           </div>
         `;
         container.appendChild(row);
       });
 
       const net = inTotal - outTotal;
-      document.getElementById('cashInTotal').textContent = `$${inTotal.toFixed(2)}`;
-      document.getElementById('cashOutTotal').textContent = `$${outTotal.toFixed(2)}`;
-      document.getElementById('cashNetTotal').textContent = `${net >= 0 ? '+' : ''}$${net.toFixed(2)}`;
-      document.getElementById('kpiNetCash').textContent = `${net >= 0 ? '+' : ''}$${net.toFixed(2)}`;
-      document.getElementById('kpiCashSubtext').textContent = `${txs.length} total tx`;
+      const cIn = document.getElementById('cashInTotal');
+      const cOut = document.getElementById('cashOutTotal');
+      const cNet = document.getElementById('cashNetTotal');
+      const kNet = document.getElementById('kpiNetCash');
+      const kSub = document.getElementById('kpiCashSubtext');
+      if (cIn) cIn.textContent = `$${inTotal.toFixed(2)}`;
+      if (cOut) cOut.textContent = `$${outTotal.toFixed(2)}`;
+      if (cNet) cNet.textContent = `${net >= 0 ? '+' : ''}$${net.toFixed(2)}`;
+      if (kNet) kNet.textContent = `${net >= 0 ? '+' : ''}$${net.toFixed(2)}`;
+      if (kSub) kSub.textContent = `${txs.length} total tx`;
     }
 
     // HEALTH FUNCTIONS
@@ -1138,8 +1312,9 @@
     }
 
     function renderCareSessions() {
-      const sessions = appState.community.careSessions || [];
+      const sessions = (appState.community && appState.community.careSessions) || [];
       const container = document.getElementById('careHistoryContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       let pbcc = 0;
@@ -1154,31 +1329,38 @@
         row.innerHTML = `
           <div class="flex items-center space-x-2">
             <span class="px-1.5 py-0.5 rounded text-[10px] bg-zinc-800 text-zinc-300">${s.category}</span>
-            <span class="text-zinc-200">${s.note}</span>
+            <span class="text-zinc-200">${escapeHtml(s.note)}</span>
             <span class="text-zinc-500 text-[10px]">${s.date}</span>
           </div>
           <div class="flex items-center space-x-3">
             <span class="text-zinc-100 font-bold">${s.minutes}m</span>
-            <button onclick="deleteCareSession(${s.id})" class="text-zinc-600 hover:text-crimsonAccent">✕</button>
+            <button type="button" onclick="deleteCareSession(${s.id})" class="text-zinc-600 hover:text-crimsonAccent">✕</button>
           </div>
         `;
         container.appendChild(row);
       });
 
       const total = pbcc + rrt;
-      document.getElementById('careWeekTotal').textContent = `${total}m / 120m`;
-      document.getElementById('carePbccTotal').textContent = `${pbcc}m`;
-      document.getElementById('careRrtTotal').textContent = `${rrt}m`;
-      document.getElementById('kpiCareTotal').textContent = `${total}m`;
-      document.getElementById('kpiCareRemaining').textContent = `${Math.max(0, 120 - total)}m left`;
+      const cWTotal = document.getElementById('careWeekTotal');
+      const cPbcc = document.getElementById('carePbccTotal');
+      const cRrt = document.getElementById('careRrtTotal');
+      const kTotal = document.getElementById('kpiCareTotal');
+      const kRem = document.getElementById('kpiCareRemaining');
+      if (cWTotal) cWTotal.textContent = `${total}m / 120m`;
+      if (cPbcc) cPbcc.textContent = `${pbcc}m`;
+      if (cRrt) cRrt.textContent = `${rrt}m`;
+      if (kTotal) kTotal.textContent = `${total}m`;
+      if (kRem) kRem.textContent = `${Math.max(0, 120 - total)}m left`;
     }
 
     // DAY REVIEW FUNCTIONS
     function renderScoreButtons(selectedScore) {
       const container = document.getElementById('scoreButtonGroup');
+      if (!container) return;
       container.innerHTML = '';
       for (let i = 1; i <= 10; i++) {
         const btn = document.createElement('button');
+        btn.type = 'button';
         btn.onclick = () => setScore(i);
         btn.className = `w-7 h-7 rounded text-xs font-mono font-bold transition-all ${
           selectedScore === i 
@@ -1189,11 +1371,13 @@
         container.appendChild(btn);
       }
       const label = document.getElementById('scoreRatingLabel');
-      if (selectedScore >= 9) label.textContent = `${selectedScore}/10 · Elite Execution`;
-      else if (selectedScore >= 7) label.textContent = `${selectedScore}/10 · Solid Day`;
-      else if (selectedScore >= 5) label.textContent = `${selectedScore}/10 · Friction & Drift`;
-      else if (selectedScore > 0) label.textContent = `${selectedScore}/10 · Unacceptable`;
-      else label.textContent = 'Score today from 1 to 10';
+      if (label) {
+        if (selectedScore >= 9) label.textContent = `${selectedScore}/10 · Elite Execution`;
+        else if (selectedScore >= 7) label.textContent = `${selectedScore}/10 · Solid Day`;
+        else if (selectedScore >= 5) label.textContent = `${selectedScore}/10 · Friction & Drift`;
+        else if (selectedScore > 0) label.textContent = `${selectedScore}/10 · Unacceptable`;
+        else label.textContent = 'Score today from 1 to 10';
+      }
     }
 
     function setScore(val) {
@@ -1233,7 +1417,7 @@
           const isDone = !!(appState.habits[d.key] && appState.habits[d.key][h.id]);
           rowHtml += `
             <td class="py-2 px-2 text-center">
-              <button onclick="toggleMatrixCell('${d.key}', '${h.id}')" class="w-6 h-6 rounded flex items-center justify-center mx-auto transition-all ${
+              <button type="button" onclick="toggleMatrixCell('${d.key}', '${h.id}')" class="w-6 h-6 rounded flex items-center justify-center mx-auto transition-all ${
                 isDone ? 'bg-zinc-100 text-zinc-950 font-bold' : 'bg-zinc-900 border border-zinc-800'
               }">
                 ${isDone ? '✓' : ''}
@@ -1297,14 +1481,27 @@
     function saveWeightEntry() {
       const val = parseFloat(document.getElementById('newWeightInput').value);
       if (!isNaN(val) && val > 50) {
+        if (!appState.weightHistory) appState.weightHistory = [];
         appState.weightHistory.push({ date: getTodayKey(), weight: val });
         saveState();
       }
       closeWeightModal();
     }
 
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
+    }
+
+    function escapeForAttr(str) {
+      if (!str) return '';
+      return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
+      try {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      } catch(e) {}
       loadLocal();
       renderUI();
       initFirebase();
