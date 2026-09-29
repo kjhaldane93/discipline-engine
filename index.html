@@ -38,8 +38,6 @@
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Canvas Confetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <!-- Firebase Compatibility SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -68,7 +66,7 @@
           Kevin's Discipline Engine
           <span class="inline-flex items-center px-1.5 py-0.2 text-[10px] font-mono tracking-wider uppercase rounded bg-zinc-800 text-zinc-300 border border-zinc-700/60">Pro</span>
         </h1>
-        <p class="text-[11px] text-zinc-400 font-mono hidden sm:block">Faith · Career · Financial · Health · Community · Discipline</p>
+        <p class="text-[11px] text-zinc-400 font-mono hidden sm:block">Moral · Career · Financial · Health · Community · Discipline</p>
       </div>
     </div>
 
@@ -97,7 +95,6 @@
 
     <!-- KPI SUMMARY STRIP -->
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-      <!-- Moral Score -->
       <div class="glass-card rounded-xl p-3.5 hairline-border">
         <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
           <span>MORAL</span>
@@ -107,7 +104,6 @@
         <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiPrayerText">Prayer: 0/2</div>
       </div>
 
-      <!-- Career Score -->
       <div class="glass-card rounded-xl p-3.5 hairline-border">
         <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
           <span>CAREER</span>
@@ -117,7 +113,6 @@
         <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiDialsText">0/20 Dials</div>
       </div>
 
-      <!-- Financial Net -->
       <div class="glass-card rounded-xl p-3.5 hairline-border">
         <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
           <span>NET CASH</span>
@@ -127,7 +122,6 @@
         <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiCashSubtext">0 tx today</div>
       </div>
 
-      <!-- Health -->
       <div class="glass-card rounded-xl p-3.5 hairline-border">
         <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
           <span>WEIGHT TO 190</span>
@@ -137,7 +131,6 @@
         <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiWaterText">Water: 0.0/2.0L</div>
       </div>
 
-      <!-- Community Care -->
       <div class="glass-card rounded-xl p-3.5 hairline-border">
         <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
           <span>CARE / WK</span>
@@ -147,7 +140,6 @@
         <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiCareRemaining">120m left</div>
       </div>
 
-      <!-- Discipline -->
       <div class="glass-card rounded-xl p-3.5 hairline-border">
         <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
           <span>DISCIPLINE</span>
@@ -158,7 +150,7 @@
       </div>
     </div>
 
-    <!-- MAIN ARENA VIEW -->
+    <!-- MAIN TODAY VIEW -->
     <div id="todayView" class="space-y-6">
 
       <!-- 1. MORAL PILLAR -->
@@ -171,30 +163,27 @@
           <span class="text-xs text-zinc-500 font-mono">Spiritual Foundation</span>
         </div>
 
-        <!-- Prayers & Purity Quick Row -->
+        <!-- Prayers & Purity -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <!-- Morning Prayer -->
-          <div onclick="toggleHabit('morning_prayer')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_morning_prayer">
+          <div onclick="toggleHabit('morning_prayer')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_morning_prayer">
             <div class="flex items-center space-x-2.5">
-              <div class="w-5 h-5 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_morning_prayer"></div>
+              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_morning_prayer"></div>
               <span class="text-xs font-semibold text-zinc-200">Morning Prayer</span>
             </div>
             <i data-lucide="sun" class="w-4 h-4 text-amberAccent"></i>
           </div>
 
-          <!-- Bed Time Prayer -->
-          <div onclick="toggleHabit('bedtime_prayer')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedtime_prayer">
+          <div onclick="toggleHabit('bedtime_prayer')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedtime_prayer">
             <div class="flex items-center space-x-2.5">
-              <div class="w-5 h-5 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_bedtime_prayer"></div>
+              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_bedtime_prayer"></div>
               <span class="text-xs font-semibold text-zinc-200">Bed Time Prayer</span>
             </div>
             <i data-lucide="moon" class="w-4 h-4 text-zinc-400"></i>
           </div>
 
-          <!-- Kept My Purity Shield -->
-          <div onclick="toggleHabit('purity')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_purity">
+          <div onclick="toggleHabit('purity')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_purity">
             <div class="flex items-center space-x-2.5">
-              <div class="w-5 h-5 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_purity"></div>
+              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_purity"></div>
               <div>
                 <span class="text-xs font-semibold text-zinc-200 block">Kept My Purity</span>
                 <span class="text-[10px] font-mono text-zinc-500">Streak: <span id="purityStreakNum" class="text-crimsonAccent font-bold">0</span> d</span>
@@ -231,8 +220,8 @@
         <div class="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/80 space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-xs font-semibold text-white uppercase font-mono">Read 10 Pages of Ministry</span>
-            <div onclick="toggleHabit('ministry_done')" class="flex items-center space-x-1.5 cursor-pointer">
-              <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_ministry_done"></div>
+            <div onclick="toggleHabit('ministry_done')" class="flex items-center space-x-2 cursor-pointer select-none">
+              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_ministry_done"></div>
               <span class="text-xs font-mono text-zinc-400">10 Pages Done</span>
             </div>
           </div>
@@ -240,7 +229,6 @@
 
           <!-- 3 Structured Takeaways with Citations -->
           <div class="space-y-3 pt-1">
-            <!-- Takeaway 1 -->
             <div class="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2">
               <span class="text-[11px] font-mono text-amberAccent font-semibold uppercase">Takeaway 1 Citation & Revelation</span>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -252,7 +240,6 @@
               <div class="flex flex-wrap items-center gap-1.5 pt-1" id="t1_tags_container"></div>
             </div>
 
-            <!-- Takeaway 2 -->
             <div class="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2">
               <span class="text-[11px] font-mono text-amberAccent font-semibold uppercase">Takeaway 2 Citation & Revelation</span>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -264,7 +251,6 @@
               <div class="flex flex-wrap items-center gap-1.5 pt-1" id="t2_tags_container"></div>
             </div>
 
-            <!-- Takeaway 3 -->
             <div class="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2">
               <span class="text-[11px] font-mono text-amberAccent font-semibold uppercase">Takeaway 3 Citation & Revelation</span>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -332,7 +318,6 @@
           <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-3">
             <span class="text-xs font-bold text-emeraldAccent font-mono uppercase tracking-wider block">Step 3 · Calls Execution</span>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <!-- 20 Dials -->
               <div class="bg-zinc-950/90 rounded p-3 border border-zinc-800 flex flex-col justify-between">
                 <div class="flex items-center justify-between text-xs font-mono text-zinc-400">
                   <span>DIALS KPI (TARGET 20)</span>
@@ -351,7 +336,6 @@
                 </div>
               </div>
 
-              <!-- 5 Connects -->
               <div class="bg-zinc-950/90 rounded p-3 border border-zinc-800 flex flex-col justify-between">
                 <div class="flex items-center justify-between text-xs font-mono text-zinc-400">
                   <span>CONNECTS KPI (TARGET 5)</span>
@@ -425,7 +409,6 @@
           </div>
         </div>
 
-        <!-- Transaction Log -->
         <div class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll" id="txHistoryContainer"></div>
       </section>
 
@@ -440,7 +423,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Water Tracker -->
           <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2">
             <div class="flex justify-between items-center text-xs font-mono">
               <span class="text-zinc-300 uppercase">Water (2.0L Target)</span>
@@ -456,7 +438,6 @@
             </div>
           </div>
 
-          <!-- Exercise Tracker -->
           <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2">
             <div class="flex justify-between items-center text-xs font-mono">
               <span class="text-zinc-300 uppercase">Exercise (30m Target)</span>
@@ -472,7 +453,6 @@
             </div>
           </div>
 
-          <!-- Weight & Fast Food Check -->
           <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2.5">
             <div class="flex justify-between items-center text-xs font-mono">
               <span class="text-zinc-300 uppercase">Weight Protocol</span>
@@ -482,9 +462,9 @@
               <span id="healthWeightCard" class="text-2xl font-black font-mono text-amberAccent">229.0</span>
               <span class="text-[11px] font-mono text-zinc-400">Target: 190.0 lbs</span>
             </div>
-            <div onclick="toggleHabit('nofastfood')" class="p-2 rounded border cursor-pointer select-none transition-all flex items-center justify-between" id="card_nofastfood">
+            <div onclick="toggleHabit('nofastfood')" class="p-2 rounded border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_nofastfood">
               <span class="text-xs text-zinc-200">No Fast Food</span>
-              <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_nofastfood"></div>
+              <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_nofastfood"></div>
             </div>
           </div>
         </div>
@@ -544,21 +524,21 @@
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div onclick="toggleHabit('nosnooze')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_nosnooze">
+          <div onclick="toggleHabit('nosnooze')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_nosnooze">
             <span class="text-xs font-semibold text-zinc-200">No Snooze</span>
-            <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_nosnooze"></div>
+            <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_nosnooze"></div>
           </div>
-          <div onclick="toggleHabit('madebed')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_madebed">
+          <div onclick="toggleHabit('madebed')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_madebed">
             <span class="text-xs font-semibold text-zinc-200">Made Bed</span>
-            <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_madebed"></div>
+            <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_madebed"></div>
           </div>
-          <div onclick="toggleHabit('shaved')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_shaved">
+          <div onclick="toggleHabit('shaved')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_shaved">
             <span class="text-xs font-semibold text-zinc-200">Shaved</span>
-            <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_shaved"></div>
+            <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_shaved"></div>
           </div>
-          <div onclick="toggleHabit('bedby1030')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedby1030">
+          <div onclick="toggleHabit('bedby1030')" class="p-3.5 rounded-lg border border-zinc-800 bg-zinc-950/60 cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedby1030">
             <span class="text-xs font-semibold text-zinc-200">In Bed by 10:30</span>
-            <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_bedby1030"></div>
+            <div class="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold" id="box_bedby1030"></div>
           </div>
         </div>
       </section>
@@ -573,16 +553,12 @@
           <span class="text-xs text-zinc-500 font-mono">Evening Closer</span>
         </div>
 
-        <!-- Rating Stepper (1-10) -->
         <div class="bg-zinc-900/50 p-4 rounded-lg border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <span class="text-xs font-mono font-bold text-white uppercase block">Daily Self-Audit Score (1–10)</span>
             <span class="text-[11px] text-zinc-400 font-mono" id="scoreRatingLabel">Select score...</span>
           </div>
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <template id="scoreBtnTemplate"></template>
-            <div id="scoreButtonGroup" class="flex gap-1"></div>
-          </div>
+          <div id="scoreButtonGroup" class="flex gap-1 flex-wrap"></div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -824,15 +800,31 @@
         const box = document.getElementById(`box_${h.id}`);
         if (card && box) {
           if (isChecked) {
-            card.className = card.className.replace('bg-zinc-950/60', 'bg-zinc-900').replace('border-zinc-800', 'border-zinc-600');
-            box.className = 'w-5 h-5 rounded border flex items-center justify-center bg-white border-white text-zinc-950';
-            box.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>';
+            card.classList.add('bg-zinc-900', 'border-zinc-500');
+            card.classList.remove('bg-zinc-950/60', 'border-zinc-800');
+            box.className = 'w-5 h-5 rounded border flex items-center justify-center bg-white border-white text-zinc-950 font-black text-xs';
+            box.textContent = '✓';
           } else {
-            box.className = 'w-5 h-5 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700';
-            box.innerHTML = '';
+            card.classList.remove('bg-zinc-900', 'border-zinc-500');
+            card.classList.add('bg-zinc-950/60', 'border-zinc-800');
+            box.className = 'w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold text-transparent';
+            box.textContent = '';
           }
         }
       });
+
+      // Ministry Done Checkbox
+      const isMinistryDone = !!habits['ministry_done'];
+      const ministryBox = document.getElementById('box_ministry_done');
+      if (ministryBox) {
+        if (isMinistryDone) {
+          ministryBox.className = 'w-5 h-5 rounded border flex items-center justify-center bg-white border-white text-zinc-950 font-black text-xs';
+          ministryBox.textContent = '✓';
+        } else {
+          ministryBox.className = 'w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-bold text-transparent';
+          ministryBox.textContent = '';
+        }
+      }
 
       // Moral Pacing & Inputs
       const bibleRead = appState.bibleTotal || 301;
@@ -923,7 +915,6 @@
       document.getElementById('kpiWaterText').textContent = `Water: ${waterL}/2.0L`;
 
       renderMatrix();
-      lucide.createIcons();
     }
 
     function renderTakeawayTags(tNum, activeTags) {
@@ -1313,6 +1304,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
       loadLocal();
       renderUI();
       initFirebase();
