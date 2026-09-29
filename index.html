@@ -68,22 +68,20 @@
           Kevin's Discipline Engine
           <span class="inline-flex items-center px-1.5 py-0.2 text-[10px] font-mono tracking-wider uppercase rounded bg-zinc-800 text-zinc-300 border border-zinc-700/60">Pro</span>
         </h1>
-        <p class="text-[11px] text-zinc-400 font-mono hidden sm:block">Faith · Career · Health · Purity</p>
+        <p class="text-[11px] text-zinc-400 font-mono hidden sm:block">Faith · Career · Financial · Health · Community · Discipline</p>
       </div>
     </div>
 
     <!-- Right Controls -->
     <div class="flex items-center space-x-2 sm:space-x-3">
-      <!-- Sync Status Indicator & Modal Trigger -->
       <button onclick="openSyncModal()" id="syncBtn" class="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-md bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-xs font-mono transition-all text-zinc-400 hover:text-zinc-200">
         <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
         <span id="syncStatusText">Local</span>
       </button>
 
-      <!-- View Switcher -->
       <div class="bg-zinc-900 p-0.5 rounded-lg border border-zinc-800 flex text-xs font-medium">
         <button onclick="switchView('today')" id="tabToday" class="px-3 py-1 rounded-md bg-zinc-800 text-white shadow-sm transition-all flex items-center gap-1.5">
-          <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+          <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
           <span>Today</span>
         </button>
         <button onclick="switchView('matrix')" id="tabMatrix" class="px-3 py-1 rounded-md text-zinc-400 hover:text-zinc-200 transition-all flex items-center gap-1.5">
@@ -97,268 +95,529 @@
   <!-- MAIN CONTAINER -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
 
-    <!-- KPI STRIP -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-      <!-- Today Completion -->
-      <div class="glass-card rounded-xl p-4 hairline-border">
-        <div class="flex items-center justify-between text-zinc-400 text-xs font-mono mb-2">
-          <span>DAILY SCORE</span>
-          <i data-lucide="activity" class="w-3.5 h-3.5 text-zinc-400"></i>
+    <!-- KPI SUMMARY STRIP -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <!-- Moral Score -->
+      <div class="glass-card rounded-xl p-3.5 hairline-border">
+        <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
+          <span>MORAL</span>
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-zinc-300"></i>
         </div>
-        <div class="flex items-baseline gap-2">
-          <span id="kpiScore" class="text-2xl font-bold font-mono text-white">0%</span>
-          <span id="kpiCompletedRatio" class="text-xs text-zinc-500 font-mono">0/0</span>
-        </div>
-        <div class="w-full bg-zinc-800/80 rounded-full h-1 mt-3 overflow-hidden">
-          <div id="kpiScoreBar" class="bg-zinc-100 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
-        </div>
+        <div class="text-xl font-bold font-mono text-white" id="kpiMoralScore">0%</div>
+        <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiPrayerText">Prayer: 0/2</div>
       </div>
 
-      <!-- Purity Shield Streak -->
-      <div class="glass-card rounded-xl p-4 hairline-border">
-        <div class="flex items-center justify-between text-zinc-400 text-xs font-mono mb-2">
-          <span>PURITY SHIELD</span>
-          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-crimsonAccent"></i>
+      <!-- Career Score -->
+      <div class="glass-card rounded-xl p-3.5 hairline-border">
+        <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
+          <span>CAREER</span>
+          <i data-lucide="briefcase" class="w-3.5 h-3.5 text-emeraldAccent"></i>
         </div>
-        <div class="flex items-baseline gap-2">
-          <span id="kpiPurityStreak" class="text-2xl font-bold font-mono text-crimsonAccent">0</span>
-          <span class="text-xs text-zinc-400 font-mono">Clean Days</span>
-        </div>
-        <div class="text-[11px] text-zinc-500 mt-2 truncate font-mono">No Porn Non-Negotiable</div>
+        <div class="text-xl font-bold font-mono text-emeraldAccent" id="kpiCareerScore">0%</div>
+        <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiDialsText">0/20 Dials</div>
       </div>
 
-      <!-- Bible Pace -->
-      <div class="glass-card rounded-xl p-4 hairline-border">
-        <div class="flex items-center justify-between text-zinc-400 text-xs font-mono mb-2">
-          <span>SCRIPTURE PACE</span>
-          <i data-lucide="book-open" class="w-3.5 h-3.5 text-zinc-300"></i>
+      <!-- Financial Net -->
+      <div class="glass-card rounded-xl p-3.5 hairline-border">
+        <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
+          <span>NET CASH</span>
+          <i data-lucide="wallet" class="w-3.5 h-3.5 text-zinc-300"></i>
         </div>
-        <div class="flex items-baseline gap-2">
-          <span id="kpiBibleChapters" class="text-2xl font-bold font-mono text-zinc-100">301</span>
-          <span class="text-xs text-zinc-400 font-mono">/ 1189</span>
-        </div>
-        <div class="text-[11px] text-zinc-500 mt-2 font-mono" id="kpiBibleTarget">~9.5 ch/day req</div>
+        <div class="text-xl font-bold font-mono text-white" id="kpiNetCash">$0.00</div>
+        <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiCashSubtext">0 tx today</div>
       </div>
 
-      <!-- Weight Deficit -->
-      <div class="glass-card rounded-xl p-4 hairline-border">
-        <div class="flex items-center justify-between text-zinc-400 text-xs font-mono mb-2">
+      <!-- Health -->
+      <div class="glass-card rounded-xl p-3.5 hairline-border">
+        <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
           <span>WEIGHT TO 190</span>
           <i data-lucide="scale" class="w-3.5 h-3.5 text-amberAccent"></i>
         </div>
-        <div class="flex items-baseline gap-2">
-          <span id="kpiCurrentWeight" class="text-2xl font-bold font-mono text-amberAccent">229.0</span>
-          <span class="text-xs text-zinc-400 font-mono">lbs</span>
+        <div class="text-xl font-bold font-mono text-amberAccent" id="kpiWeightText">229.0</div>
+        <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiWaterText">Water: 0.0/2.0L</div>
+      </div>
+
+      <!-- Community Care -->
+      <div class="glass-card rounded-xl p-3.5 hairline-border">
+        <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
+          <span>CARE / WK</span>
+          <i data-lucide="heart" class="w-3.5 h-3.5 text-zinc-300"></i>
         </div>
-        <div class="text-[11px] text-zinc-500 mt-2 font-mono" id="kpiWeightDiff">-39.0 lbs left</div>
+        <div class="text-xl font-bold font-mono text-white" id="kpiCareTotal">0m</div>
+        <div class="text-[10px] text-zinc-500 font-mono mt-1" id="kpiCareRemaining">120m left</div>
+      </div>
+
+      <!-- Discipline -->
+      <div class="glass-card rounded-xl p-3.5 hairline-border">
+        <div class="flex items-center justify-between text-zinc-400 text-[10px] font-mono mb-1">
+          <span>DISCIPLINE</span>
+          <i data-lucide="check-check" class="w-3.5 h-3.5 text-silverAccent"></i>
+        </div>
+        <div class="text-xl font-bold font-mono text-silverAccent" id="kpiDisciplineScore">0/4</div>
+        <div class="text-[10px] text-zinc-500 font-mono mt-1">Core Standards</div>
       </div>
     </div>
 
-    <!-- CAREER & WORK EXECUTION ENGINE (Mon-Fri) -->
-    <div class="glass-card rounded-xl p-5 hairline-border space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-zinc-800/80 gap-3">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emeraldAccent"></span>
-            <h2 class="text-sm font-semibold tracking-tight text-white uppercase font-mono">Career & Execution Center</h2>
-            <span id="workdayBadge" class="px-2 py-0.5 text-[10px] font-mono rounded bg-emeraldAccent/10 text-emeraldAccent border border-emeraldAccent/20">Weekday Plan</span>
+    <!-- MAIN ARENA VIEW -->
+    <div id="todayView" class="space-y-6">
+
+      <!-- 1. MORAL PILLAR -->
+      <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-silverAccent"></span>
+            <h2 class="text-sm font-semibold tracking-tight text-white font-mono uppercase">1. Moral Pillar</h2>
           </div>
-          <p class="text-xs text-zinc-400 mt-0.5">Monday–Friday Execution System with Holiday/Off-day override</p>
+          <span class="text-xs text-zinc-500 font-mono">Spiritual Foundation</span>
         </div>
 
-        <!-- Holiday / Day Override Selector -->
-        <div class="flex items-center space-x-2">
-          <label class="text-xs font-mono text-zinc-400">Day Status:</label>
-          <select id="dayStatusSelect" onchange="updateDayOverride(this.value)" class="bg-zinc-900 border border-zinc-700/80 text-xs text-zinc-200 rounded px-2.5 py-1.5 focus:outline-none focus:border-zinc-500 font-mono">
-            <option value="normal">Normal Workday</option>
-            <option value="holiday">Holiday Override (No Penalty)</option>
-            <option value="off">Off-Day / Leave</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- 3 Columns: 3 Commitments, 20 Dials, 90m Focus -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
-        <!-- 3 Commitments -->
-        <div class="bg-zinc-900/60 rounded-lg p-3.5 border border-zinc-800">
-          <div class="flex items-center justify-between mb-2.5">
-            <span class="text-xs font-semibold text-zinc-200 uppercase font-mono">3 Non-Negotiables</span>
-            <span id="commitmentsProgress" class="text-[11px] font-mono text-emeraldAccent">0/3</span>
+        <!-- Prayers & Purity Quick Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <!-- Morning Prayer -->
+          <div onclick="toggleHabit('morning_prayer')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_morning_prayer">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-5 h-5 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_morning_prayer"></div>
+              <span class="text-xs font-semibold text-zinc-200">Morning Prayer</span>
+            </div>
+            <i data-lucide="sun" class="w-4 h-4 text-amberAccent"></i>
           </div>
-          <div class="space-y-2">
-            <div class="flex items-center space-x-2">
-              <input type="checkbox" id="c1_check" onchange="toggleCommitment(0)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
-              <input type="text" id="c1_text" placeholder="1. Key strategic deliverable..." onchange="saveCommitmentText(0, this.value)" class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none border-b border-transparent focus:border-zinc-700 pb-0.5">
+
+          <!-- Bed Time Prayer -->
+          <div onclick="toggleHabit('bedtime_prayer')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedtime_prayer">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-5 h-5 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_bedtime_prayer"></div>
+              <span class="text-xs font-semibold text-zinc-200">Bed Time Prayer</span>
             </div>
-            <div class="flex items-center space-x-2">
-              <input type="checkbox" id="c2_check" onchange="toggleCommitment(1)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
-              <input type="text" id="c2_text" placeholder="2. Important client / internal action..." onchange="saveCommitmentText(1, this.value)" class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none border-b border-transparent focus:border-zinc-700 pb-0.5">
+            <i data-lucide="moon" class="w-4 h-4 text-zinc-400"></i>
+          </div>
+
+          <!-- Kept My Purity Shield -->
+          <div onclick="toggleHabit('purity')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_purity">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-5 h-5 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_purity"></div>
+              <div>
+                <span class="text-xs font-semibold text-zinc-200 block">Kept My Purity</span>
+                <span class="text-[10px] font-mono text-zinc-500">Streak: <span id="purityStreakNum" class="text-crimsonAccent font-bold">0</span> d</span>
+              </div>
             </div>
-            <div class="flex items-center space-x-2">
-              <input type="checkbox" id="c3_check" onchange="toggleCommitment(2)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
-              <input type="text" id="c3_text" placeholder="3. Critical task to close today..." onchange="saveCommitmentText(2, this.value)" class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none border-b border-transparent focus:border-zinc-700 pb-0.5">
-            </div>
+            <i data-lucide="shield" class="w-4 h-4 text-crimsonAccent"></i>
           </div>
         </div>
 
-        <!-- 20 Dials KPI -->
-        <div class="bg-zinc-900/60 rounded-lg p-3.5 border border-zinc-800 flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-semibold text-zinc-200 uppercase font-mono">Dials Target (20)</span>
-            <span id="dialsCountDisplay" class="text-xs font-mono text-zinc-400">0 / 20</span>
-          </div>
-          <div class="flex items-center justify-between py-2">
-            <button onclick="adjustDials(-1)" class="w-8 h-8 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold flex items-center justify-center transition-all">-</button>
-            <span id="dialsBigDisplay" class="text-3xl font-black font-mono text-white">0</span>
-            <div class="flex gap-1.5">
-              <button onclick="adjustDials(1)" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-mono text-xs">+1</button>
-              <button onclick="adjustDials(5)" class="px-2.5 py-1 rounded bg-emeraldAccent/20 hover:bg-emeraldAccent/30 text-emeraldAccent font-mono text-xs font-semibold">+5</button>
+        <!-- Bible Goal Engine -->
+        <div class="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/80 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-semibold text-white uppercase font-mono">Scripture Mastery · 1,189 Chapters</span>
+              <span class="text-[11px] font-mono text-zinc-400 block sm:inline sm:ml-2">Target Dec 31, 2026</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="logBible(1)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+1</button>
+              <button onclick="logBible(5)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+5</button>
+              <button onclick="logBible(10)" class="px-2.5 py-1 text-xs font-mono bg-zinc-200 hover:bg-white text-zinc-950 font-semibold rounded">+10</button>
             </div>
           </div>
           <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
-            <div id="dialsProgressBar" class="bg-emeraldAccent h-full transition-all duration-300" style="width: 0%"></div>
-          </div>
-        </div>
-
-        <!-- 90 Mins Focus Time -->
-        <div class="bg-zinc-900/60 rounded-lg p-3.5 border border-zinc-800 flex flex-col justify-between">
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-xs font-semibold text-zinc-200 uppercase font-mono">Focus Block (90m)</span>
-            <span id="focusTimeDisplay" class="text-xs font-mono text-zinc-400">0 / 90 min</span>
-          </div>
-          <div class="flex items-center justify-between py-2">
-            <div class="flex items-baseline space-x-1.5">
-              <span id="focusTimeMinutes" class="text-3xl font-black font-mono text-white">0</span>
-              <span class="text-xs text-zinc-500 font-mono">min</span>
-            </div>
-            <div class="flex gap-1.5">
-              <button onclick="addFocusTime(15)" class="px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-mono text-xs">+15m</button>
-              <button onclick="addFocusTime(30)" class="px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-mono text-xs">+30m</button>
-              <button onclick="toggleFocusTimer()" id="focusTimerBtn" class="px-2.5 py-1 rounded bg-zinc-200 hover:bg-white text-zinc-950 font-mono text-xs font-semibold">Start</button>
-            </div>
-          </div>
-          <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
-            <div id="focusProgressBar" class="bg-zinc-200 h-full transition-all duration-300" style="width: 0%"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- GOAL ENGINES (Scripture + Weight Loss) -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <!-- Bible Engine -->
-      <div class="glass-card rounded-xl p-5 hairline-border flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
-            <div class="flex items-center space-x-2">
-              <i data-lucide="book" class="w-4 h-4 text-zinc-300"></i>
-              <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-200 font-mono">Scripture Mastery · 1,189 Chapters</h3>
-            </div>
-            <span class="text-[11px] font-mono text-zinc-400">Dec 31, 2026</span>
-          </div>
-          <div class="grid grid-cols-3 gap-2 py-4 text-center">
-            <div class="bg-zinc-900/50 p-2 rounded-lg border border-zinc-800">
-              <div class="text-[10px] font-mono text-zinc-500">COMPLETED</div>
-              <div id="bibleReadText" class="text-xl font-bold font-mono text-white mt-1">301</div>
-            </div>
-            <div class="bg-zinc-900/50 p-2 rounded-lg border border-zinc-800">
-              <div class="text-[10px] font-mono text-zinc-500">REMAINING</div>
-              <div id="bibleLeftText" class="text-xl font-bold font-mono text-zinc-300 mt-1">888</div>
-            </div>
-            <div class="bg-zinc-900/50 p-2 rounded-lg border border-zinc-800">
-              <div class="text-[10px] font-mono text-zinc-500">REQUIRED PACE</div>
-              <div id="biblePaceReq" class="text-xl font-bold font-mono text-emeraldAccent mt-1">~9.5/d</div>
-            </div>
-          </div>
-        </div>
-        <div class="space-y-3 pt-2">
-          <div class="w-full bg-zinc-800 rounded-full h-2 overflow-hidden">
             <div id="bibleProgressBar" class="bg-zinc-100 h-full transition-all duration-300" style="width: 25.3%"></div>
           </div>
-          <div class="flex items-center justify-between pt-1">
-            <div class="text-xs font-mono text-zinc-400" id="biblePercentageText">25.3% complete</div>
-            <div class="flex items-center gap-1.5">
-              <button onclick="logBibleChapters(1)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+1 Ch</button>
-              <button onclick="logBibleChapters(5)" class="px-2.5 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded">+5 Ch</button>
-              <button onclick="logBibleChapters(10)" class="px-2.5 py-1 text-xs font-mono bg-zinc-200 hover:bg-white text-zinc-950 font-semibold rounded">+10 Ch</button>
-            </div>
+          <div class="flex justify-between text-[11px] font-mono text-zinc-400">
+            <span id="bibleStatusText">301 / 1189 read (25.3%)</span>
+            <span id="biblePaceText">~9.5 ch/day pace</span>
           </div>
+          <textarea id="bibleJournalInput" onchange="saveBibleJournal(this.value)" placeholder="What I read in Scripture today..." class="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-600 h-16"></textarea>
         </div>
-      </div>
 
-      <!-- Weight Engine -->
-      <div class="glass-card rounded-xl p-5 hairline-border flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
-            <div class="flex items-center space-x-2">
-              <i data-lucide="trending-down" class="w-4 h-4 text-amberAccent"></i>
-              <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-200 font-mono">Weight Protocol · 229 &rarr; 190 lbs</h3>
+        <!-- Read 10 Pages of Ministry -->
+        <div class="bg-zinc-900/50 rounded-lg p-4 border border-zinc-800/80 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-white uppercase font-mono">Read 10 Pages of Ministry</span>
+            <div onclick="toggleHabit('ministry_done')" class="flex items-center space-x-1.5 cursor-pointer">
+              <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_ministry_done"></div>
+              <span class="text-xs font-mono text-zinc-400">10 Pages Done</span>
             </div>
-            <span class="text-[11px] font-mono text-zinc-400">Dec 31, 2026</span>
           </div>
-          <div class="grid grid-cols-3 gap-2 py-4 text-center">
-            <div class="bg-zinc-900/50 p-2 rounded-lg border border-zinc-800">
-              <div class="text-[10px] font-mono text-zinc-500">START</div>
-              <div class="text-xl font-bold font-mono text-zinc-400 mt-1">229.0</div>
+          <input type="text" id="ministrySummaryInput" onchange="saveMinistrySummary(this.value)" placeholder="Overall summary of what I read today in Ministry..." class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-600">
+
+          <!-- 3 Structured Takeaways with Citations -->
+          <div class="space-y-3 pt-1">
+            <!-- Takeaway 1 -->
+            <div class="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2">
+              <span class="text-[11px] font-mono text-amberAccent font-semibold uppercase">Takeaway 1 Citation & Revelation</span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input type="text" id="t1_author" onchange="saveTakeawayField(1, 'author', this.value)" placeholder="Author (e.g. Watchman Nee)" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t1_book" onchange="saveTakeawayField(1, 'book', this.value)" placeholder="Book Title" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t1_page" onchange="saveTakeawayField(1, 'page', this.value)" placeholder="Page (e.g. 42)" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+              </div>
+              <textarea id="t1_notes" onchange="saveTakeawayField(1, 'notes', this.value)" placeholder="Notes on Takeaway 1..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
+              <div class="flex flex-wrap items-center gap-1.5 pt-1" id="t1_tags_container"></div>
             </div>
-            <div class="bg-zinc-900/50 p-2 rounded-lg border border-zinc-800">
-              <div class="text-[10px] font-mono text-zinc-500">CURRENT</div>
-              <div id="weightCurrentCard" class="text-xl font-bold font-mono text-amberAccent mt-1">229.0</div>
+
+            <!-- Takeaway 2 -->
+            <div class="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2">
+              <span class="text-[11px] font-mono text-amberAccent font-semibold uppercase">Takeaway 2 Citation & Revelation</span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input type="text" id="t2_author" onchange="saveTakeawayField(2, 'author', this.value)" placeholder="Author" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t2_book" onchange="saveTakeawayField(2, 'book', this.value)" placeholder="Book Title" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t2_page" onchange="saveTakeawayField(2, 'page', this.value)" placeholder="Page" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+              </div>
+              <textarea id="t2_notes" onchange="saveTakeawayField(2, 'notes', this.value)" placeholder="Notes on Takeaway 2..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
+              <div class="flex flex-wrap items-center gap-1.5 pt-1" id="t2_tags_container"></div>
             </div>
-            <div class="bg-zinc-900/50 p-2 rounded-lg border border-zinc-800">
-              <div class="text-[10px] font-mono text-zinc-500">TARGET</div>
-              <div class="text-xl font-bold font-mono text-white mt-1">190.0</div>
+
+            <!-- Takeaway 3 -->
+            <div class="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-lg space-y-2">
+              <span class="text-[11px] font-mono text-amberAccent font-semibold uppercase">Takeaway 3 Citation & Revelation</span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input type="text" id="t3_author" onchange="saveTakeawayField(3, 'author', this.value)" placeholder="Author" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t3_book" onchange="saveTakeawayField(3, 'book', this.value)" placeholder="Book Title" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+                <input type="text" id="t3_page" onchange="saveTakeawayField(3, 'page', this.value)" placeholder="Page" class="bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+              </div>
+              <textarea id="t3_notes" onchange="saveTakeawayField(3, 'notes', this.value)" placeholder="Notes on Takeaway 3..." class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none h-14"></textarea>
+              <div class="flex flex-wrap items-center gap-1.5 pt-1" id="t3_tags_container"></div>
             </div>
           </div>
         </div>
-        <div class="space-y-3 pt-2">
-          <!-- Sparkline Mini Graph -->
-          <div class="h-10 w-full flex items-end">
-            <svg id="weightSparkline" class="w-full h-full overflow-visible"></svg>
+      </section>
+
+      <!-- 2. CAREER PILLAR (Strict Sequential Workflow) -->
+      <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-zinc-800 gap-2">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emeraldAccent"></span>
+            <h2 class="text-sm font-semibold tracking-tight text-white font-mono uppercase">2. Career Execution Sequence</h2>
           </div>
-          <div class="flex items-center justify-between pt-1">
-            <span class="text-xs font-mono text-zinc-400" id="weightRequiredPace">Pace: ~2.9 lbs/wk</span>
-            <button onclick="openWeightModal()" class="px-3 py-1 text-xs font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded flex items-center gap-1.5">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-              <span>Log Weigh-In</span>
-            </button>
+          <div class="flex items-center space-x-2">
+            <label class="text-xs font-mono text-zinc-400">Status:</label>
+            <select id="dayStatusSelect" onchange="updateCareerDayStatus(this.value)" class="bg-zinc-900 border border-zinc-700 text-xs text-zinc-200 rounded px-2.5 py-1 font-mono focus:outline-none">
+              <option value="normal">Normal Workday</option>
+              <option value="holiday">Holiday Override</option>
+              <option value="off">Off-Day / Leave</option>
+            </select>
           </div>
         </div>
-      </div>
+
+        <div class="space-y-4">
+          <!-- Step 1: Daily Battle Plan -->
+          <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emeraldAccent font-mono uppercase tracking-wider">Step 1 · Daily Battle Plan</span>
+              <span class="text-[10px] font-mono text-zinc-500">Morning Strategy & Alignment</span>
+            </div>
+            <textarea id="careerBattlePlan" onchange="saveCareerBattlePlan(this.value)" placeholder="Outline today's strategic roadmap, focus blocks, and critical targets..." class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-emeraldAccent/60 h-20"></textarea>
+          </div>
+
+          <!-- Step 2: 3 Priorities -->
+          <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emeraldAccent font-mono uppercase tracking-wider">Step 2 · 3 Priorities (Non-Negotiables)</span>
+              <span id="prioritiesCountText" class="text-xs font-mono text-emeraldAccent">0/3 Completed</span>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800">
+                <input type="checkbox" id="p1_check" onchange="togglePriority(1)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
+                <input type="text" id="p1_text" onchange="savePriorityText(1, this.value)" placeholder="Priority 1: Key strategic deliverable..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+              </div>
+              <div class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800">
+                <input type="checkbox" id="p2_check" onchange="togglePriority(2)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
+                <input type="text" id="p2_text" onchange="savePriorityText(2, this.value)" placeholder="Priority 2: Critical client or internal milestone..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+              </div>
+              <div class="flex items-center space-x-2 bg-zinc-950/80 p-2 rounded border border-zinc-800">
+                <input type="checkbox" id="p3_check" onchange="togglePriority(3)" class="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-emeraldAccent focus:ring-0">
+                <input type="text" id="p3_text" onchange="savePriorityText(3, this.value)" placeholder="Priority 3: Must-close action item..." class="w-full bg-transparent text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Calls Execution (20 Dials & 5 Connects) -->
+          <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-3">
+            <span class="text-xs font-bold text-emeraldAccent font-mono uppercase tracking-wider block">Step 3 · Calls Execution</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- 20 Dials -->
+              <div class="bg-zinc-950/90 rounded p-3 border border-zinc-800 flex flex-col justify-between">
+                <div class="flex items-center justify-between text-xs font-mono text-zinc-400">
+                  <span>DIALS KPI (TARGET 20)</span>
+                  <span id="dialsDisplay">0 / 20</span>
+                </div>
+                <div class="flex items-center justify-between py-2">
+                  <button onclick="adjustDials(-1)" class="w-8 h-8 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold">-</button>
+                  <span id="dialsBig" class="text-2xl font-black font-mono text-white">0</span>
+                  <div class="flex gap-1.5">
+                    <button onclick="adjustDials(1)" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono">+1</button>
+                    <button onclick="adjustDials(5)" class="px-2.5 py-1 rounded bg-emeraldAccent/20 hover:bg-emeraldAccent/30 text-emeraldAccent text-xs font-mono font-bold">+5</button>
+                  </div>
+                </div>
+                <div class="w-full bg-zinc-800 rounded-full h-1 overflow-hidden">
+                  <div id="dialsBar" class="bg-emeraldAccent h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- 5 Connects -->
+              <div class="bg-zinc-950/90 rounded p-3 border border-zinc-800 flex flex-col justify-between">
+                <div class="flex items-center justify-between text-xs font-mono text-zinc-400">
+                  <span>CONNECTS KPI (TARGET 5)</span>
+                  <span id="connectsDisplay">0 / 5</span>
+                </div>
+                <div class="flex items-center justify-between py-2">
+                  <button onclick="adjustConnects(-1)" class="w-8 h-8 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold">-</button>
+                  <span id="connectsBig" class="text-2xl font-black font-mono text-white">0</span>
+                  <button onclick="adjustConnects(1)" class="px-3 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono">+1</button>
+                </div>
+                <div class="w-full bg-zinc-800 rounded-full h-1 overflow-hidden">
+                  <div id="connectsBar" class="bg-emeraldAccent h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: End of Work Day Review -->
+          <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emeraldAccent font-mono uppercase tracking-wider">Step 4 · End of Work Day Review</span>
+              <span class="text-[10px] font-mono text-zinc-500">Closing Debrief & Pipeline Status</span>
+            </div>
+            <textarea id="careerEndReview" onchange="saveCareerEndReview(this.value)" placeholder="Debrief career performance: What was won, key follow-ups queued, pipeline adjustments..." class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-emeraldAccent/60 h-20"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. FINANCIAL PILLAR (Cash Flow) -->
+      <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amberAccent"></span>
+            <h2 class="text-sm font-semibold tracking-tight text-white font-mono uppercase">3. Financial Pillar · Cash Flow</h2>
+          </div>
+          <span class="text-xs text-zinc-500 font-mono">Incoming vs Outgoing</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/80">
+            <span class="text-[10px] font-mono text-emeraldAccent block">TOTAL INCOMING (+)</span>
+            <span id="cashInTotal" class="text-xl font-bold font-mono text-emeraldAccent">$0.00</span>
+          </div>
+          <div class="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/80">
+            <span class="text-[10px] font-mono text-crimsonAccent block">TOTAL OUTGOING (-)</span>
+            <span id="cashOutTotal" class="text-xl font-bold font-mono text-crimsonAccent">$0.00</span>
+          </div>
+          <div class="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/80">
+            <span class="text-[10px] font-mono text-zinc-400 block">NET DIFFERENCE</span>
+            <span id="cashNetTotal" class="text-xl font-bold font-mono text-white">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Add Transaction Form -->
+        <div class="bg-zinc-900/40 p-3 rounded-lg border border-zinc-800/80 space-y-2.5">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+            <select id="txType" class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
+              <option value="outflow">Outgoing (-)</option>
+              <option value="inflow">Incoming (+)</option>
+            </select>
+            <input type="number" step="0.01" id="txAmount" placeholder="Amount ($)" class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
+            <select id="txCategory" class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
+              <option value="Need">Need (Essential)</option>
+              <option value="Want">Want (Discretionary)</option>
+              <option value="Waste">Waste (Impulse / Regret)</option>
+            </select>
+            <input type="text" id="txReason" placeholder="Reason / Description" class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
+          </div>
+          <div class="flex justify-end">
+            <button onclick="addTransaction()" class="px-3 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-semibold font-mono rounded">Record Entry</button>
+          </div>
+        </div>
+
+        <!-- Transaction Log -->
+        <div class="space-y-1.5 max-h-48 overflow-y-auto custom-scroll" id="txHistoryContainer"></div>
+      </section>
+
+      <!-- 4. HEALTH PILLAR -->
+      <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emeraldAccent"></span>
+            <h2 class="text-sm font-semibold tracking-tight text-white font-mono uppercase">4. Health Pillar</h2>
+          </div>
+          <span class="text-xs text-zinc-500 font-mono">Vitality & Power</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Water Tracker -->
+          <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-zinc-300 uppercase">Water (2.0L Target)</span>
+              <span id="waterDisplay" class="text-white font-bold">0.0 / 2.0 L</span>
+            </div>
+            <div class="flex items-center justify-between py-1">
+              <button onclick="addWater(250)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+250ml</button>
+              <button onclick="addWater(500)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+500ml</button>
+              <button onclick="resetWater()" class="px-2 py-1 bg-zinc-900 text-zinc-500 hover:text-zinc-300 text-[10px] font-mono rounded">Reset</button>
+            </div>
+            <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+              <div id="waterProgressBar" class="bg-zinc-200 h-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Exercise Tracker -->
+          <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-zinc-300 uppercase">Exercise (30m Target)</span>
+              <span id="exerciseDisplay" class="text-white font-bold">0 / 30m</span>
+            </div>
+            <div class="flex items-center justify-between py-1">
+              <button onclick="addExercise(10)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+10m</button>
+              <button onclick="addExercise(15)" class="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-mono rounded">+15m</button>
+              <button onclick="addExercise(30)" class="px-2.5 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-mono font-semibold rounded">+30m</button>
+            </div>
+            <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+              <div id="exerciseProgressBar" class="bg-emeraldAccent h-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Weight & Fast Food Check -->
+          <div class="bg-zinc-900/50 rounded-lg p-3.5 border border-zinc-800/80 space-y-2.5">
+            <div class="flex justify-between items-center text-xs font-mono">
+              <span class="text-zinc-300 uppercase">Weight Protocol</span>
+              <button onclick="openWeightModal()" class="text-amberAccent hover:underline text-[11px]">Log Weigh-In</button>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <span id="healthWeightCard" class="text-2xl font-black font-mono text-amberAccent">229.0</span>
+              <span class="text-[11px] font-mono text-zinc-400">Target: 190.0 lbs</span>
+            </div>
+            <div onclick="toggleHabit('nofastfood')" class="p-2 rounded border cursor-pointer select-none transition-all flex items-center justify-between" id="card_nofastfood">
+              <span class="text-xs text-zinc-200">No Fast Food</span>
+              <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_nofastfood"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. COMMUNITY PILLAR (Care for Others) -->
+      <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-silverAccent"></span>
+            <h2 class="text-sm font-semibold tracking-tight text-white font-mono uppercase">5. Community Pillar · Care for Others</h2>
+          </div>
+          <span class="text-xs text-zinc-500 font-mono">Quota: 2 Hours (120m) / Week</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/80">
+            <span class="text-[10px] font-mono text-zinc-400 block">WEEK TOTAL</span>
+            <span id="careWeekTotal" class="text-xl font-bold font-mono text-white">0m / 120m</span>
+          </div>
+          <div class="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/80">
+            <span class="text-[10px] font-mono text-zinc-400 block">PBCC TIME</span>
+            <span id="carePbccTotal" class="text-xl font-bold font-mono text-zinc-300">0m</span>
+          </div>
+          <div class="bg-zinc-900/50 p-3 rounded-lg border border-zinc-800/80">
+            <span class="text-[10px] font-mono text-zinc-400 block">RRT TIME</span>
+            <span id="careRrtTotal" class="text-xl font-bold font-mono text-zinc-300">0m</span>
+          </div>
+        </div>
+
+        <!-- Add Care Session -->
+        <div class="bg-zinc-900/40 p-3 rounded-lg border border-zinc-800/80 space-y-2">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <select id="careCategory" class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
+              <option value="PBCC">PBCC</option>
+              <option value="RRT">RRT</option>
+            </select>
+            <input type="number" id="careMinutes" placeholder="Minutes spent" class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
+            <input type="text" id="careNote" placeholder="Who was cared for / details..." class="bg-zinc-950 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-200 font-mono focus:outline-none">
+          </div>
+          <div class="flex justify-end">
+            <button onclick="addCareSession()" class="px-3 py-1 bg-zinc-200 hover:bg-white text-zinc-950 text-xs font-semibold font-mono rounded">Record Care Time</button>
+          </div>
+        </div>
+
+        <div class="space-y-1.5 max-h-40 overflow-y-auto custom-scroll" id="careHistoryContainer"></div>
+      </section>
+
+      <!-- 6. DISCIPLINE PILLAR -->
+      <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-silverAccent"></span>
+            <h2 class="text-sm font-semibold tracking-tight text-white font-mono uppercase">6. Discipline Pillar · Core Standards</h2>
+          </div>
+          <span class="text-xs text-zinc-500 font-mono" id="disciplineRatio">0/4 Standards</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div onclick="toggleHabit('nosnooze')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_nosnooze">
+            <span class="text-xs font-semibold text-zinc-200">No Snooze</span>
+            <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_nosnooze"></div>
+          </div>
+          <div onclick="toggleHabit('madebed')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_madebed">
+            <span class="text-xs font-semibold text-zinc-200">Made Bed</span>
+            <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_madebed"></div>
+          </div>
+          <div onclick="toggleHabit('shaved')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_shaved">
+            <span class="text-xs font-semibold text-zinc-200">Shaved</span>
+            <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_shaved"></div>
+          </div>
+          <div onclick="toggleHabit('bedby1030')" class="p-3.5 rounded-lg border cursor-pointer select-none transition-all flex items-center justify-between" id="card_bedby1030">
+            <span class="text-xs font-semibold text-zinc-200">In Bed by 10:30</span>
+            <div class="w-4 h-4 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700" id="box_bedby1030"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. OVERALL DAY REVIEW -->
+      <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-silverAccent"></span>
+            <h2 class="text-sm font-semibold tracking-tight text-white font-mono uppercase">Overall Day Review & Debrief</h2>
+          </div>
+          <span class="text-xs text-zinc-500 font-mono">Evening Closer</span>
+        </div>
+
+        <!-- Rating Stepper (1-10) -->
+        <div class="bg-zinc-900/50 p-4 rounded-lg border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="text-xs font-mono font-bold text-white uppercase block">Daily Self-Audit Score (1–10)</span>
+            <span class="text-[11px] text-zinc-400 font-mono" id="scoreRatingLabel">Select score...</span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <template id="scoreBtnTemplate"></template>
+            <div id="scoreButtonGroup" class="flex gap-1"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="text-xs font-mono text-zinc-400">Today's Biggest Victories & High Standards</label>
+            <textarea id="reviewVictories" onchange="saveDayReviewField('victories', this.value)" placeholder="What did I execute with excellence today? Where did God give the victory?" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 h-24"></textarea>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-xs font-mono text-zinc-400">Where Did I Fall Short / Lessons Learned</label>
+            <textarea id="reviewFriction" onchange="saveDayReviewField('friction', this.value)" placeholder="Radical self-honesty: where was there drift, distraction, or compromise?" class="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 h-24"></textarea>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-xs font-mono text-zinc-400">Primary Focus & Non-Negotiable for Tomorrow</label>
+          <input type="text" id="reviewTomorrow" onchange="saveDayReviewField('tomorrow', this.value)" placeholder="The single most important objective to lock in tomorrow morning..." class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 font-mono">
+        </div>
+      </section>
+
     </div>
 
-    <!-- HABIT EXECUTION VIEWS -->
-    <div id="todayView" class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm font-semibold tracking-tight text-white uppercase font-mono flex items-center gap-2">
-          <i data-lucide="crosshair" class="w-4 h-4 text-zinc-400"></i>
-          Today's Battle Checklist
-        </h2>
-        <span id="currentDateDisplay" class="text-xs font-mono text-zinc-400"></span>
-      </div>
-
-      <div id="habitsListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <!-- Rendered dynamically -->
-      </div>
-    </div>
-
-    <!-- 7-DAY MATRIX VIEW (Hidden by default) -->
+    <!-- 7-DAY CONSISTENCY MATRIX VIEW (Hidden by default) -->
     <div id="matrixView" class="glass-card rounded-xl p-5 hairline-border space-y-4 hidden">
       <div class="flex items-center justify-between pb-2 border-b border-zinc-800">
         <h2 class="text-sm font-semibold uppercase tracking-tight text-white font-mono">7-Day Consistency Matrix</h2>
-        <span class="text-xs text-zinc-500 font-mono">Click any cell to toggle</span>
+        <span class="text-xs text-zinc-500 font-mono">Click any cell to toggle habit</span>
       </div>
       <div class="overflow-x-auto custom-scroll">
         <table class="w-full text-left text-xs font-mono min-w-[600px]">
           <thead>
             <tr class="text-zinc-500 border-b border-zinc-800" id="matrixHeaderRow">
-              <th class="py-2.5 px-3">Commitment</th>
-              <!-- Days populated via JS -->
+              <th class="py-2.5 px-3">Standard</th>
             </tr>
           </thead>
-          <tbody id="matrixTableBody" class="divide-y divide-zinc-800/60">
-            <!-- Populated via JS -->
-          </tbody>
+          <tbody id="matrixTableBody" class="divide-y divide-zinc-800/60"></tbody>
         </table>
       </div>
     </div>
@@ -367,28 +626,27 @@
 
   <!-- CLOUD SYNC MODAL -->
   <div id="syncModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-zinc-900 border border-zinc-800 rounded-xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
         <div class="flex items-center space-x-2">
-          <i data-lucide="cloud" class="w-5 h-5 text-emeraldAccent"></i>
+          <i data-lucide="cloud" class="w-4 h-4 text-emeraldAccent"></i>
           <h3 class="text-sm font-semibold text-white font-mono uppercase">Cloud Synchronization</h3>
         </div>
         <button onclick="closeSyncModal()" class="text-zinc-400 hover:text-white">✕</button>
       </div>
-      
+
       <p class="text-xs text-zinc-400 leading-relaxed">
-        Your Firebase project is pre-configured. Enter your <span class="text-white font-semibold">Private Sync Key</span> below on both your desktop and phone to keep them in 2-way real-time sync.
+        Pre-configured for Firebase. Enter your private key to link phone, desktop, and your separate Ministry Vault app.
       </p>
 
-      <div class="space-y-3">
-        <div>
-          <label class="block text-[11px] font-mono text-zinc-400 mb-1">PROJECT ID</label>
-          <input type="text" value="disciplineengine-604e9" readonly class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-xs text-zinc-400 font-mono">
-        </div>
-        <div>
-          <label class="block text-[11px] font-mono text-zinc-400 mb-1">PRIVATE SYNC KEY (Enter same key on all devices)</label>
-          <input type="text" id="syncKeyInput" placeholder="e.g. kevin2026" class="w-full bg-zinc-950 border border-zinc-700 focus:border-emeraldAccent rounded px-3 py-2 text-xs text-white font-mono focus:outline-none">
-        </div>
+      <div>
+        <label class="block text-[11px] font-mono text-zinc-400 mb-1">PROJECT ID</label>
+        <input type="text" value="disciplineengine-604e9" readonly class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-xs text-zinc-500 font-mono">
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-mono text-zinc-400 mb-1">PRIVATE SYNC KEY</label>
+        <input type="text" id="syncKeyInput" placeholder="e.g. kevin2026" class="w-full bg-zinc-950 border border-zinc-700 focus:border-emeraldAccent rounded px-3 py-2 text-xs text-white font-mono focus:outline-none">
       </div>
 
       <div class="pt-2 flex justify-end gap-2">
@@ -402,7 +660,7 @@
   <div id="weightModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 rounded-xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
-        <h3 class="text-sm font-semibold text-white font-mono uppercase">Log Morning Weight</h3>
+        <h3 class="text-sm font-semibold text-white font-mono uppercase">Log Weigh-In</h3>
         <button onclick="closeWeightModal()" class="text-zinc-400 hover:text-white">✕</button>
       </div>
       <div>
@@ -416,9 +674,8 @@
     </div>
   </div>
 
-  <!-- APPLICATION LOGIC & FIREBASE INITIALIZATION -->
+  <!-- APPLICATION LOGIC -->
   <script>
-    // PRE-LOADED FIREBASE CONFIGURATION
     const firebaseConfig = {
       apiKey: "AIzaSyDg-xrWvfRQc4i02lSkwLHXOhQaEUG2WDE",
       authDomain: "disciplineengine-604e9.firebaseapp.com",
@@ -433,26 +690,30 @@
     let syncKey = localStorage.getItem('kevin_sync_key') || '';
     let isCloudSyncActive = false;
 
-    // DEFAULT DATA STRUCTURE
-    const DEFAULT_HABITS = [
-      { id: 'bible', name: 'Read 10 Bible Chapters', category: 'Spiritual', color: 'silver', autoCount: 10 },
-      { id: 'ministry', name: 'Read 15 min of Ministry', category: 'Spiritual', color: 'silver' },
-      { id: 'commitments', name: 'Complete 3 Daily Commitments', category: 'Career', color: 'emerald' },
-      { id: 'dials', name: 'Hit 20 Dials KPI Target', category: 'Career', color: 'emerald' },
-      { id: 'focus', name: 'Execute 90 Mins Focus Time', category: 'Career', color: 'emerald' },
-      { id: 'nofastfood', name: 'No Fast Food', category: 'Health', color: 'amber' },
-      { id: 'bed', name: 'Make My Bed', category: 'Discipline', color: 'slate' },
-      { id: 'noporn', name: 'No Porn (Clean Shield)', category: 'Purity', color: 'crimson' }
+    const DEFAULT_TAGS = ['Faith', 'Doctrine', 'Leadership', 'Sanctification', 'Grace', 'Christ as Life', 'Body of Christ', 'Consecration'];
+
+    const CORE_HABITS = [
+      { id: 'morning_prayer', name: 'Morning Prayer' },
+      { id: 'bedtime_prayer', name: 'Bed Time Prayer' },
+      { id: 'purity', name: 'Kept My Purity' },
+      { id: 'ministry_done', name: 'Read 10 Pages Ministry' },
+      { id: 'nofastfood', name: 'No Fast Food' },
+      { id: 'nosnooze', name: 'No Snooze' },
+      { id: 'madebed', name: 'Made Bed' },
+      { id: 'shaved', name: 'Shaved' },
+      { id: 'bedby1030', name: 'In Bed by 10:30' }
     ];
 
-    let state = {
-      habits: DEFAULT_HABITS,
-      logs: {}, // 'YYYY-MM-DD': { habitId: boolean }
-      career: {}, // 'YYYY-MM-DD': { dayStatus: 'normal', c1: '', c2: '', c3: '', c1_done: false, c2_done: false, c3_done: false, dials: 0, focusMins: 0 }
+    let appState = {
+      habits: {},
+      moral: {},
+      career: {},
+      financial: { transactions: [] },
+      health: {},
+      community: { careSessions: [] },
+      dayReviews: {},
       bibleTotal: 301,
-      weightHistory: [
-        { date: '2026-09-28', weight: 229.0 }
-      ]
+      weightHistory: [{ date: '2026-09-28', weight: 229.0 }]
     };
 
     function getTodayKey() {
@@ -460,52 +721,63 @@
       return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
     }
 
-    // LOAD LOCAL STORAGE
-    function loadLocal() {
-      const saved = localStorage.getItem('kevin_discipline_state');
-      if (saved) {
-        try { state = Object.assign(state, JSON.parse(saved)); } catch (e) {}
+    function ensureDateStructures(dKey) {
+      if (!appState.habits[dKey]) appState.habits[dKey] = {};
+      if (!appState.moral[dKey]) {
+        appState.moral[dKey] = {
+          bibleJournal: '',
+          ministryReadSummary: '',
+          t1_author: '', t1_book: '', t1_page: '', t1_notes: '', t1_tags: [],
+          t2_author: '', t2_book: '', t2_page: '', t2_notes: '', t2_tags: [],
+          t3_author: '', t3_book: '', t3_page: '', t3_notes: '', t3_tags: []
+        };
       }
-      ensureTodayStructures();
+      if (!appState.career[dKey]) {
+        appState.career[dKey] = {
+          dayStatus: 'normal',
+          battlePlan: '',
+          p1_text: '', p1_done: false,
+          p2_text: '', p2_done: false,
+          p3_text: '', p3_done: false,
+          dials: 0,
+          connects: 0,
+          endReview: ''
+        };
+      }
+      if (!appState.health[dKey]) {
+        appState.health[dKey] = { waterMl: 0, exerciseMins: 0 };
+      }
+      if (!appState.dayReviews[dKey]) {
+        appState.dayReviews[dKey] = { score: 0, victories: '', friction: '', tomorrow: '' };
+      }
+    }
+
+    function loadLocal() {
+      const saved = localStorage.getItem('kevin_discipline_state_v2');
+      if (saved) {
+        try { appState = Object.assign(appState, JSON.parse(saved)); } catch(e) {}
+      }
+      ensureDateStructures(getTodayKey());
     }
 
     function saveState(skipCloud = false) {
-      localStorage.setItem('kevin_discipline_state', JSON.stringify(state));
+      localStorage.setItem('kevin_discipline_state_v2', JSON.stringify(appState));
       renderUI();
       if (!skipCloud && isCloudSyncActive && db && syncKey) {
         db.collection('engines').doc(syncKey).set({
-          state: JSON.stringify(state),
+          state: JSON.stringify(appState),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         }).catch(err => console.error("Cloud push failed:", err));
       }
     }
 
-    function ensureTodayStructures() {
-      const today = getTodayKey();
-      if (!state.logs[today]) state.logs[today] = {};
-      if (!state.career[today]) {
-        state.career[today] = {
-          dayStatus: 'normal',
-          c1: '', c2: '', c3: '',
-          c1_done: false, c2_done: false, c3_done: false,
-          dials: 0,
-          focusMins: 0
-        };
-      }
-    }
-
-    // INIT FIREBASE
     function initFirebase() {
       try {
-        if (!firebase.apps.length) {
-          firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
-        if (syncKey) {
-          connectToCloudSync(syncKey);
-        }
+        if (syncKey) connectToCloudSync(syncKey);
       } catch (err) {
-        console.error("Firebase init failed:", err);
+        console.error("Firebase init err:", err);
       }
     }
 
@@ -515,273 +787,463 @@
       document.getElementById('syncDot').className = 'w-2 h-2 rounded-full bg-emeraldAccent';
       document.getElementById('syncStatusText').textContent = 'Live Sync';
 
-      db.collection('engines').doc(key).onSnapshot((doc) => {
+      db.collection('engines').doc(key).onSnapshot(doc => {
         if (doc.exists) {
           const data = doc.data();
           if (data && data.state) {
             try {
-              const incoming = JSON.parse(data.state);
-              state = incoming;
-              localStorage.setItem('kevin_discipline_state', JSON.stringify(state));
+              appState = JSON.parse(data.state);
+              localStorage.setItem('kevin_discipline_state_v2', JSON.stringify(appState));
               renderUI();
             } catch(e) {}
           }
         } else {
-          saveState(); // Initialize remote doc
+          saveState();
         }
-      }, (err) => {
-        console.error("Sync listener error:", err);
+      }, err => {
         document.getElementById('syncDot').className = 'w-2 h-2 rounded-full bg-crimsonAccent';
-        document.getElementById('syncStatusText').textContent = 'Sync Offline';
+        document.getElementById('syncStatusText').textContent = 'Offline';
       });
     }
 
-    // UI RENDERERS
+    // UI RENDERER
     function renderUI() {
       const today = getTodayKey();
-      ensureTodayStructures();
+      ensureDateStructures(today);
 
-      // Update date banner
-      const dateObj = new Date();
-      document.getElementById('currentDateDisplay').textContent = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+      const habits = appState.habits[today];
+      const moral = appState.moral[today];
+      const career = appState.career[today];
+      const health = appState.health[today];
+      const review = appState.dayReviews[today];
 
-      // Daily Checklist
-      const habitsContainer = document.getElementById('habitsListContainer');
-      habitsContainer.innerHTML = '';
-      let completedCount = 0;
-
-      state.habits.forEach(h => {
-        const isChecked = !!(state.logs[today] && state.logs[today][h.id]);
-        if (isChecked) completedCount++;
-
-        const card = document.createElement('div');
-        card.className = `p-3.5 rounded-xl border transition-all flex items-center justify-between cursor-pointer select-none ${
-          isChecked 
-            ? 'bg-zinc-900/90 border-zinc-700/80 text-white' 
-            : 'bg-zinc-950/60 border-zinc-800/80 hover:border-zinc-700 text-zinc-300'
-        }`;
-        card.onclick = () => toggleHabit(h.id);
-
-        card.innerHTML = `
-          <div class="flex items-center space-x-3">
-            <div class="w-6 h-6 rounded flex items-center justify-center border transition-all ${
-              isChecked 
-                ? 'bg-white border-white text-zinc-950' 
-                : 'border-zinc-700 bg-zinc-900'
-            }">
-              ${isChecked ? '<i data-lucide="check" class="w-4 h-4 stroke-[3]"></i>' : ''}
-            </div>
-            <div>
-              <div class="text-xs font-semibold ${isChecked ? 'line-through text-zinc-400' : 'text-zinc-100'}">${h.name}</div>
-              <div class="text-[10px] font-mono text-zinc-500 uppercase">${h.category}</div>
-            </div>
-          </div>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">
-            ${isChecked ? 'DONE' : 'PENDING'}
-          </span>
-        `;
-        habitsContainer.appendChild(card);
+      // Habit Checkbox Cards
+      CORE_HABITS.forEach(h => {
+        const isChecked = !!habits[h.id];
+        const card = document.getElementById(`card_${h.id}`);
+        const box = document.getElementById(`box_${h.id}`);
+        if (card && box) {
+          if (isChecked) {
+            card.className = card.className.replace('bg-zinc-950/60', 'bg-zinc-900').replace('border-zinc-800', 'border-zinc-600');
+            box.className = 'w-5 h-5 rounded border flex items-center justify-center bg-white border-white text-zinc-950';
+            box.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>';
+          } else {
+            box.className = 'w-5 h-5 rounded border flex items-center justify-center bg-zinc-900 border-zinc-700';
+            box.innerHTML = '';
+          }
+        }
       });
 
-      // KPI Score
-      const totalHabits = state.habits.length;
-      const scorePct = totalHabits > 0 ? Math.round((completedCount / totalHabits) * 100) : 0;
-      document.getElementById('kpiScore').textContent = `${scorePct}%`;
-      document.getElementById('kpiCompletedRatio').textContent = `${completedCount}/${totalHabits}`;
-      document.getElementById('kpiScoreBar').style.width = `${scorePct}%`;
-
-      // Bible KPIs & Bars
-      const bibleRead = state.bibleTotal || 301;
-      const bibleRemaining = Math.max(0, 1189 - bibleRead);
+      // Moral Pacing & Inputs
+      const bibleRead = appState.bibleTotal || 301;
       const biblePct = ((bibleRead / 1189) * 100).toFixed(1);
-      document.getElementById('kpiBibleChapters').textContent = bibleRead;
-      document.getElementById('bibleReadText').textContent = bibleRead;
-      document.getElementById('bibleLeftText').textContent = bibleRemaining;
       document.getElementById('bibleProgressBar').style.width = `${biblePct}%`;
-      document.getElementById('biblePercentageText').textContent = `${biblePct}% complete`;
+      document.getElementById('bibleStatusText').textContent = `${bibleRead} / 1189 read (${biblePct}%)`;
+      document.getElementById('bibleJournalInput').value = moral.bibleJournal || '';
+      document.getElementById('ministrySummaryInput').value = moral.ministryReadSummary || '';
 
-      // Weight KPIs & Sparkline
-      const currentWeight = state.weightHistory.length ? state.weightHistory[state.weightHistory.length - 1].weight : 229.0;
-      document.getElementById('kpiCurrentWeight').textContent = currentWeight.toFixed(1);
-      document.getElementById('weightCurrentCard').textContent = currentWeight.toFixed(1);
-      const weightDiff = (currentWeight - 190.0).toFixed(1);
-      document.getElementById('kpiWeightDiff').textContent = `-${weightDiff} lbs left`;
-      renderSparkline();
+      [1, 2, 3].forEach(num => {
+        document.getElementById(`t${num}_author`).value = moral[`t${num}_author`] || '';
+        document.getElementById(`t${num}_book`).value = moral[`t${num}_book`] || '';
+        document.getElementById(`t${num}_page`).value = moral[`t${num}_page`] || '';
+        document.getElementById(`t${num}_notes`).value = moral[`t${num}_notes`] || '';
+        renderTakeawayTags(num, moral[`t${num}_tags`] || []);
+      });
 
-      // Purity Streak KPI
-      let cleanStreak = 0;
-      let checkDate = new Date();
+      // Purity Streak
+      let streak = 0;
+      let d = new Date();
       for (let i = 0; i < 90; i++) {
-        const dStr = `${checkDate.getFullYear()}-${String(checkDate.getMonth()+1).padStart(2,'0')}-${String(checkDate.getDate()).padStart(2,'0')}`;
-        if (state.logs[dStr] && state.logs[dStr]['noporn']) {
-          cleanStreak++;
-          checkDate.setDate(checkDate.getDate() - 1);
+        const dK = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        if (appState.habits[dK] && appState.habits[dK]['purity']) {
+          streak++;
+          d.setDate(d.getDate() - 1);
         } else {
-          if (i === 0) {
-            checkDate.setDate(checkDate.getDate() - 1);
-            continue;
-          }
+          if (i === 0) { d.setDate(d.getDate() - 1); continue; }
           break;
         }
       }
-      document.getElementById('kpiPurityStreak').textContent = cleanStreak;
+      document.getElementById('purityStreakNum').textContent = streak;
 
-      // Career Module Sync
-      const career = state.career[today];
+      // Career Module
       document.getElementById('dayStatusSelect').value = career.dayStatus || 'normal';
-      document.getElementById('c1_check').checked = !!career.c1_done;
-      document.getElementById('c2_check').checked = !!career.c2_done;
-      document.getElementById('c3_check').checked = !!career.c3_done;
-      document.getElementById('c1_text').value = career.c1 || '';
-      document.getElementById('c2_text').value = career.c2 || '';
-      document.getElementById('c3_text').value = career.c3 || '';
+      document.getElementById('careerBattlePlan').value = career.battlePlan || '';
+      document.getElementById('p1_check').checked = !!career.p1_done;
+      document.getElementById('p2_check').checked = !!career.p2_done;
+      document.getElementById('p3_check').checked = !!career.p3_done;
+      document.getElementById('p1_text').value = career.p1_text || '';
+      document.getElementById('p2_text').value = career.p2_text || '';
+      document.getElementById('p3_text').value = career.p3_text || '';
+      const pDone = (career.p1_done?1:0)+(career.p2_done?1:0)+(career.p3_done?1:0);
+      document.getElementById('prioritiesCountText').textContent = `${pDone}/3 Completed`;
 
-      const doneCommitments = (career.c1_done ? 1 : 0) + (career.c2_done ? 1 : 0) + (career.c3_done ? 1 : 0);
-      document.getElementById('commitmentsProgress').textContent = `${doneCommitments}/3`;
+      document.getElementById('dialsDisplay').textContent = `${career.dials || 0} / 20`;
+      document.getElementById('dialsBig').textContent = career.dials || 0;
+      document.getElementById('dialsBar').style.width = `${Math.min(100, ((career.dials || 0) / 20) * 100)}%`;
 
-      document.getElementById('dialsCountDisplay').textContent = `${career.dials} / 20`;
-      document.getElementById('dialsBigDisplay').textContent = career.dials;
-      document.getElementById('dialsProgressBar').style.width = `${Math.min(100, (career.dials / 20) * 100)}%`;
+      document.getElementById('connectsDisplay').textContent = `${career.connects || 0} / 5`;
+      document.getElementById('connectsBig').textContent = career.connects || 0;
+      document.getElementById('connectsBar').style.width = `${Math.min(100, ((career.connects || 0) / 5) * 100)}%`;
+      document.getElementById('careerEndReview').value = career.endReview || '';
 
-      document.getElementById('focusTimeDisplay').textContent = `${career.focusMins} / 90 min`;
-      document.getElementById('focusTimeMinutes').textContent = career.focusMins;
-      document.getElementById('focusProgressBar').style.width = `${Math.min(100, (career.focusMins / 90) * 100)}%`;
+      // Financial Cash Flow
+      renderTransactions();
+
+      // Health
+      const waterL = ((health.waterMl || 0) / 1000).toFixed(1);
+      document.getElementById('waterDisplay').textContent = `${waterL} / 2.0 L`;
+      document.getElementById('waterProgressBar').style.width = `${Math.min(100, (health.waterMl / 2000) * 100)}%`;
+      document.getElementById('exerciseDisplay').textContent = `${health.exerciseMins || 0} / 30m`;
+      document.getElementById('exerciseProgressBar').style.width = `${Math.min(100, (health.exerciseMins / 30) * 100)}%`;
+
+      const curWeight = appState.weightHistory.length ? appState.weightHistory[appState.weightHistory.length - 1].weight : 229.0;
+      document.getElementById('healthWeightCard').textContent = curWeight.toFixed(1);
+
+      // Community Care For Others
+      renderCareSessions();
+
+      // Discipline Score
+      const discDone = (habits['nosnooze']?1:0)+(habits['madebed']?1:0)+(habits['shaved']?1:0)+(habits['bedby1030']?1:0);
+      document.getElementById('disciplineRatio').textContent = `${discDone}/4 Standards`;
+      document.getElementById('kpiDisciplineScore').textContent = `${discDone}/4`;
+
+      // Day Review & Score Buttons
+      renderScoreButtons(review.score || 0);
+      document.getElementById('reviewVictories').value = review.victories || '';
+      document.getElementById('reviewFriction').value = review.friction || '';
+      document.getElementById('reviewTomorrow').value = review.tomorrow || '';
+
+      // Top Strip KPI Calculations
+      const prayerCount = (habits['morning_prayer']?1:0)+(habits['bedtime_prayer']?1:0);
+      document.getElementById('kpiPrayerText').textContent = `Prayer: ${prayerCount}/2`;
+      document.getElementById('kpiMoralScore').textContent = `${Math.round(((prayerCount + (habits['purity']?1:0) + (habits['ministry_done']?1:0)) / 4) * 100)}%`;
+      document.getElementById('kpiCareerScore').textContent = `${Math.round(((pDone/3 + Math.min(1, (career.dials||0)/20) + Math.min(1, (career.connects||0)/5)) / 3) * 100)}%`;
+      document.getElementById('kpiDialsText').textContent = `${career.dials || 0}/20 Dials`;
+      document.getElementById('kpiWeightText').textContent = curWeight.toFixed(1);
+      document.getElementById('kpiWaterText').textContent = `Water: ${waterL}/2.0L`;
 
       renderMatrix();
       lucide.createIcons();
     }
 
-    // ACTIONS
-    function toggleHabit(habitId) {
-      const today = getTodayKey();
-      ensureTodayStructures();
-      const current = !!state.logs[today][habitId];
-      state.logs[today][habitId] = !current;
+    function renderTakeawayTags(tNum, activeTags) {
+      const container = document.getElementById(`t${tNum}_tags_container`);
+      container.innerHTML = '';
+      DEFAULT_TAGS.forEach(tag => {
+        const isSelected = activeTags.includes(tag);
+        const pill = document.createElement('button');
+        pill.onclick = () => toggleTakeawayTag(tNum, tag);
+        pill.className = `px-2 py-0.5 rounded text-[10px] font-mono transition-all border ${
+          isSelected ? 'bg-amberAccent text-zinc-950 border-amberAccent font-bold' : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200'
+        }`;
+        pill.textContent = `#${tag}`;
+        container.appendChild(pill);
+      });
+    }
 
-      // If user toggles Bible habit, automatically increment 10 chapters
-      if (habitId === 'bible' && !current) {
-        state.bibleTotal = (state.bibleTotal || 301) + 10;
-      }
+    function toggleTakeawayTag(tNum, tag) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      const tagList = appState.moral[today][`t${tNum}_tags`];
+      const idx = tagList.indexOf(tag);
+      if (idx > -1) tagList.splice(idx, 1);
+      else tagList.push(tag);
       saveState();
     }
 
-    function logBibleChapters(count) {
-      state.bibleTotal = (state.bibleTotal || 301) + count;
+    function toggleHabit(id) {
       const today = getTodayKey();
-      if (!state.logs[today]) state.logs[today] = {};
-      state.logs[today]['bible'] = true;
+      ensureDateStructures(today);
+      appState.habits[today][id] = !appState.habits[today][id];
+      saveState();
+    }
+
+    function logBible(ch) {
+      appState.bibleTotal = (appState.bibleTotal || 301) + ch;
+      saveState();
+    }
+
+    function saveBibleJournal(val) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.moral[today].bibleJournal = val;
+      saveState();
+    }
+
+    function saveMinistrySummary(val) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.moral[today].ministryReadSummary = val;
+      saveState();
+    }
+
+    function saveTakeawayField(tNum, field, val) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.moral[today][`t${tNum}_${field}`] = val;
+      saveState();
+    }
+
+    // CAREER FUNCTIONS
+    function updateCareerDayStatus(val) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.career[today].dayStatus = val;
+      saveState();
+    }
+
+    function saveCareerBattlePlan(val) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.career[today].battlePlan = val;
+      saveState();
+    }
+
+    function togglePriority(num) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.career[today][`p${num}_done`] = !appState.career[today][`p${num}_done`];
+      saveState();
+    }
+
+    function savePriorityText(num, val) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.career[today][`p${num}_text`] = val;
       saveState();
     }
 
     function adjustDials(delta) {
       const today = getTodayKey();
-      ensureTodayStructures();
-      state.career[today].dials = Math.max(0, (state.career[today].dials || 0) + delta);
-      if (state.career[today].dials >= 20) {
-        state.logs[today]['dials'] = true;
+      ensureDateStructures(today);
+      appState.career[today].dials = Math.max(0, (appState.career[today].dials || 0) + delta);
+      saveState();
+    }
+
+    function adjustConnects(delta) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.career[today].connects = Math.max(0, (appState.career[today].connects || 0) + delta);
+      saveState();
+    }
+
+    function saveCareerEndReview(val) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.career[today].endReview = val;
+      saveState();
+    }
+
+    // FINANCIAL FUNCTIONS
+    function addTransaction() {
+      const type = document.getElementById('txType').value;
+      const amount = parseFloat(document.getElementById('txAmount').value);
+      const category = document.getElementById('txCategory').value;
+      const reason = document.getElementById('txReason').value.trim();
+
+      if (isNaN(amount) || amount <= 0) return alert('Enter a valid amount.');
+      if (!appState.financial.transactions) appState.financial.transactions = [];
+
+      appState.financial.transactions.unshift({
+        id: Date.now(),
+        date: getTodayKey(),
+        type,
+        amount,
+        category,
+        reason: reason || 'General Entry'
+      });
+
+      document.getElementById('txAmount').value = '';
+      document.getElementById('txReason').value = '';
+      saveState();
+    }
+
+    function deleteTransaction(id) {
+      appState.financial.transactions = appState.financial.transactions.filter(t => t.id !== id);
+      saveState();
+    }
+
+    function renderTransactions() {
+      const txs = appState.financial.transactions || [];
+      const container = document.getElementById('txHistoryContainer');
+      container.innerHTML = '';
+
+      let inTotal = 0;
+      let outTotal = 0;
+
+      txs.forEach(t => {
+        if (t.type === 'inflow') inTotal += t.amount;
+        else outTotal += t.amount;
+
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-2 rounded bg-zinc-950/70 border border-zinc-800/80 text-xs font-mono';
+        row.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="px-1.5 py-0.5 rounded text-[10px] ${t.type === 'inflow' ? 'bg-emeraldAccent/20 text-emeraldAccent' : 'bg-crimsonAccent/20 text-crimsonAccent'}">${t.type === 'inflow' ? 'IN' : t.category}</span>
+            <span class="text-zinc-200">${t.reason}</span>
+            <span class="text-zinc-500 text-[10px]">${t.date}</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <span class="${t.type === 'inflow' ? 'text-emeraldAccent' : 'text-zinc-200'} font-bold">${t.type === 'inflow' ? '+' : '-'}$${t.amount.toFixed(2)}</span>
+            <button onclick="deleteTransaction(${t.id})" class="text-zinc-600 hover:text-crimsonAccent">✕</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      const net = inTotal - outTotal;
+      document.getElementById('cashInTotal').textContent = `$${inTotal.toFixed(2)}`;
+      document.getElementById('cashOutTotal').textContent = `$${outTotal.toFixed(2)}`;
+      document.getElementById('cashNetTotal').textContent = `${net >= 0 ? '+' : ''}$${net.toFixed(2)}`;
+      document.getElementById('kpiNetCash').textContent = `${net >= 0 ? '+' : ''}$${net.toFixed(2)}`;
+      document.getElementById('kpiCashSubtext').textContent = `${txs.length} total tx`;
+    }
+
+    // HEALTH FUNCTIONS
+    function addWater(ml) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.health[today].waterMl = (appState.health[today].waterMl || 0) + ml;
+      saveState();
+    }
+    function resetWater() {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.health[today].waterMl = 0;
+      saveState();
+    }
+    function addExercise(mins) {
+      const today = getTodayKey();
+      ensureDateStructures(today);
+      appState.health[today].exerciseMins = (appState.health[today].exerciseMins || 0) + mins;
+      saveState();
+    }
+
+    // COMMUNITY CARE FUNCTIONS
+    function addCareSession() {
+      const cat = document.getElementById('careCategory').value;
+      const mins = parseInt(document.getElementById('careMinutes').value);
+      const note = document.getElementById('careNote').value.trim();
+
+      if (isNaN(mins) || mins <= 0) return alert('Enter minutes spent.');
+      if (!appState.community.careSessions) appState.community.careSessions = [];
+
+      appState.community.careSessions.unshift({
+        id: Date.now(),
+        date: getTodayKey(),
+        category: cat,
+        minutes: mins,
+        note: note || 'General Outreach'
+      });
+
+      document.getElementById('careMinutes').value = '';
+      document.getElementById('careNote').value = '';
+      saveState();
+    }
+
+    function deleteCareSession(id) {
+      appState.community.careSessions = appState.community.careSessions.filter(c => c.id !== id);
+      saveState();
+    }
+
+    function renderCareSessions() {
+      const sessions = appState.community.careSessions || [];
+      const container = document.getElementById('careHistoryContainer');
+      container.innerHTML = '';
+
+      let pbcc = 0;
+      let rrt = 0;
+
+      sessions.forEach(s => {
+        if (s.category === 'PBCC') pbcc += s.minutes;
+        else rrt += s.minutes;
+
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-2 rounded bg-zinc-950/70 border border-zinc-800/80 text-xs font-mono';
+        row.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="px-1.5 py-0.5 rounded text-[10px] bg-zinc-800 text-zinc-300">${s.category}</span>
+            <span class="text-zinc-200">${s.note}</span>
+            <span class="text-zinc-500 text-[10px]">${s.date}</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <span class="text-zinc-100 font-bold">${s.minutes}m</span>
+            <button onclick="deleteCareSession(${s.id})" class="text-zinc-600 hover:text-crimsonAccent">✕</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      const total = pbcc + rrt;
+      document.getElementById('careWeekTotal').textContent = `${total}m / 120m`;
+      document.getElementById('carePbccTotal').textContent = `${pbcc}m`;
+      document.getElementById('careRrtTotal').textContent = `${rrt}m`;
+      document.getElementById('kpiCareTotal').textContent = `${total}m`;
+      document.getElementById('kpiCareRemaining').textContent = `${Math.max(0, 120 - total)}m left`;
+    }
+
+    // DAY REVIEW FUNCTIONS
+    function renderScoreButtons(selectedScore) {
+      const container = document.getElementById('scoreButtonGroup');
+      container.innerHTML = '';
+      for (let i = 1; i <= 10; i++) {
+        const btn = document.createElement('button');
+        btn.onclick = () => setScore(i);
+        btn.className = `w-7 h-7 rounded text-xs font-mono font-bold transition-all ${
+          selectedScore === i 
+            ? 'bg-white text-zinc-950 ring-2 ring-zinc-400' 
+            : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
+        }`;
+        btn.textContent = i;
+        container.appendChild(btn);
       }
-      saveState();
+      const label = document.getElementById('scoreRatingLabel');
+      if (selectedScore >= 9) label.textContent = `${selectedScore}/10 · Elite Execution`;
+      else if (selectedScore >= 7) label.textContent = `${selectedScore}/10 · Solid Day`;
+      else if (selectedScore >= 5) label.textContent = `${selectedScore}/10 · Friction & Drift`;
+      else if (selectedScore > 0) label.textContent = `${selectedScore}/10 · Unacceptable`;
+      else label.textContent = 'Score today from 1 to 10';
     }
 
-    function addFocusTime(mins) {
+    function setScore(val) {
       const today = getTodayKey();
-      ensureTodayStructures();
-      state.career[today].focusMins = Math.max(0, (state.career[today].focusMins || 0) + mins);
-      if (state.career[today].focusMins >= 90) {
-        state.logs[today]['focus'] = true;
-      }
+      ensureDateStructures(today);
+      appState.dayReviews[today].score = val;
       saveState();
     }
 
-    let focusTimerInterval = null;
-    function toggleFocusTimer() {
-      const btn = document.getElementById('focusTimerBtn');
-      if (focusTimerInterval) {
-        clearInterval(focusTimerInterval);
-        focusTimerInterval = null;
-        btn.textContent = 'Start';
-        btn.className = 'px-2.5 py-1 rounded bg-zinc-200 hover:bg-white text-zinc-950 font-mono text-xs font-semibold';
-      } else {
-        btn.textContent = 'Pause';
-        btn.className = 'px-2.5 py-1 rounded bg-emeraldAccent text-zinc-950 font-mono text-xs font-semibold';
-        focusTimerInterval = setInterval(() => {
-          addFocusTime(1);
-        }, 60000);
-      }
-    }
-
-    function toggleCommitment(index) {
+    function saveDayReviewField(field, val) {
       const today = getTodayKey();
-      ensureTodayStructures();
-      const keys = ['c1_done', 'c2_done', 'c3_done'];
-      state.career[today][keys[index]] = !state.career[today][keys[index]];
-      const allDone = state.career[today].c1_done && state.career[today].c2_done && state.career[today].c3_done;
-      state.logs[today]['commitments'] = allDone;
+      ensureDateStructures(today);
+      appState.dayReviews[today][field] = val;
       saveState();
     }
 
-    function saveCommitmentText(index, val) {
-      const today = getTodayKey();
-      ensureTodayStructures();
-      const keys = ['c1', 'c2', 'c3'];
-      state.career[today][keys[index]] = val;
-      saveState();
-    }
-
-    function updateDayOverride(val) {
-      const today = getTodayKey();
-      ensureTodayStructures();
-      state.career[today].dayStatus = val;
-      saveState();
-    }
-
-    // SPARKLINE RENDERER
-    function renderSparkline() {
-      const svg = document.getElementById('weightSparkline');
-      if (!svg || !state.weightHistory.length) return;
-      const history = state.weightHistory;
-      const weights = history.map(h => h.weight);
-      const min = Math.min(...weights, 190.0) - 2;
-      const max = Math.max(...weights, 229.0) + 2;
-      const w = svg.clientWidth || 300;
-      const h = svg.clientHeight || 40;
-
-      const points = weights.map((val, idx) => {
-        const x = (idx / Math.max(1, weights.length - 1)) * w;
-        const y = h - ((val - min) / (max - min)) * h;
-        return `${x},${y}`;
-      }).join(' ');
-
-      svg.innerHTML = `
-        <polyline fill="none" stroke="#f59e0b" stroke-width="2" points="${points}" />
-      `;
-    }
-
-    // 7-DAY MATRIX TABLE
+    // 7-DAY MATRIX
     function renderMatrix() {
-      const headerRow = document.getElementById('matrixHeaderRow');
-      const tbody = document.getElementById('matrixTableBody');
-      if (!headerRow || !tbody) return;
+      const header = document.getElementById('matrixHeaderRow');
+      const body = document.getElementById('matrixTableBody');
+      if (!header || !body) return;
 
-      headerRow.innerHTML = '<th class="py-2.5 px-3">Commitment</th>';
+      header.innerHTML = '<th class="py-2.5 px-3">Standard</th>';
       const days = [];
       for (let i = 6; i >= 0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
-        const dKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-        days.push({ key: dKey, label: d.toLocaleDateString('en-US', { weekday: 'short' }) });
-        headerRow.innerHTML += `<th class="py-2.5 px-2 text-center">${d.toLocaleDateString('en-US', { weekday: 'narrow' })}</th>`;
+        const dK = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        days.push({ key: dK, label: d.toLocaleDateString('en-US', { weekday: 'narrow' }) });
+        header.innerHTML += `<th class="py-2.5 px-2 text-center">${d.toLocaleDateString('en-US', { weekday: 'narrow' })}</th>`;
       }
 
-      tbody.innerHTML = '';
-      state.habits.forEach(h => {
+      body.innerHTML = '';
+      CORE_HABITS.forEach(h => {
         let rowHtml = `<td class="py-2 px-3 font-medium text-zinc-300">${h.name}</td>`;
         days.forEach(d => {
-          const isDone = !!(state.logs[d.key] && state.logs[d.key][h.id]);
+          const isDone = !!(appState.habits[d.key] && appState.habits[d.key][h.id]);
           rowHtml += `
             <td class="py-2 px-2 text-center">
-              <button onclick="toggleMatrixDay('${d.key}', '${h.id}')" class="w-6 h-6 rounded flex items-center justify-center mx-auto transition-all ${
-                isDone ? 'bg-zinc-100 text-zinc-950 font-bold' : 'bg-zinc-900 border border-zinc-800 hover:border-zinc-700'
+              <button onclick="toggleMatrixCell('${d.key}', '${h.id}')" class="w-6 h-6 rounded flex items-center justify-center mx-auto transition-all ${
+                isDone ? 'bg-zinc-100 text-zinc-950 font-bold' : 'bg-zinc-900 border border-zinc-800'
               }">
                 ${isDone ? '✓' : ''}
               </button>
@@ -790,13 +1252,13 @@
         });
         const tr = document.createElement('tr');
         tr.innerHTML = rowHtml;
-        tbody.appendChild(tr);
+        body.appendChild(tr);
       });
     }
 
-    function toggleMatrixDay(dateKey, habitId) {
-      if (!state.logs[dateKey]) state.logs[dateKey] = {};
-      state.logs[dateKey][habitId] = !state.logs[dateKey][habitId];
+    function toggleMatrixCell(dKey, hId) {
+      if (!appState.habits[dKey]) appState.habits[dKey] = {};
+      appState.habits[dKey][hId] = !appState.habits[dKey][hId];
       saveState();
     }
 
@@ -825,9 +1287,9 @@
       document.getElementById('syncModal').classList.remove('flex');
     }
     function saveAndConnectSync() {
-      const key = document.getElementById('syncKeyInput').value.trim();
-      if (!key) return alert('Please enter a Sync Key.');
-      syncKey = key;
+      const val = document.getElementById('syncKeyInput').value.trim();
+      if (!val) return alert("Please enter your private sync key.");
+      syncKey = val;
       localStorage.setItem('kevin_sync_key', syncKey);
       connectToCloudSync(syncKey);
       closeSyncModal();
@@ -844,13 +1306,12 @@
     function saveWeightEntry() {
       const val = parseFloat(document.getElementById('newWeightInput').value);
       if (!isNaN(val) && val > 50) {
-        state.weightHistory.push({ date: getTodayKey(), weight: val });
+        appState.weightHistory.push({ date: getTodayKey(), weight: val });
         saveState();
       }
       closeWeightModal();
     }
 
-    // INITIAL BOOT
     window.addEventListener('DOMContentLoaded', () => {
       loadLocal();
       renderUI();
