@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kevin's Discipline Engine</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-
   <style>
     body { background-color: #09090b; color: #f4f4f5; font-family: ui-sans-serif, system-ui, sans-serif; }
     .glass-card { background: rgba(18, 18, 21, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); }
@@ -14,116 +13,156 @@
 </head>
 <body class="min-h-screen flex flex-col p-4 sm:p-8 space-y-6 max-w-6xl mx-auto">
 
-<header class="flex items-center justify-between pb-4 border-b border-gray-800">
-  <div class="flex items-center space-x-3">
-    <div class="w-9 h-9 bg-white text-black font-black rounded-lg flex items-center justify-center">K</div>
-    <h1 class="text-base font-bold font-mono">Kevin's Discipline Engine</h1>
-  </div>
-  <button type="button" onclick="promptSyncKey()" id="syncBtn" class="flex items-center space-x-2 px-2.5 py-1 rounded bg-gray-900 border border-gray-800 cursor-pointer">
-    <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-    <span id="syncText" class="text-xs font-mono text-gray-400">Local (Click to Sync)</span>
-  </button>
-</header>
-  <!-- KPI STRIP -->
-  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-    <div class="glass-card rounded-xl p-3">
-      <div class="text-xs font-mono text-gray-400">MORAL</div>
-      <div class="text-2xl font-bold font-mono text-white" id="kpiMoral">0%</div>
+  <!-- HEADER -->
+  <header class="flex items-center justify-between pb-4 border-b border-gray-800">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 bg-white text-black font-black rounded-lg flex items-center justify-center">K</div>
+      <h1 class="text-base font-bold font-mono">Kevin's Discipline Engine</h1>
     </div>
-    <div class="glass-card rounded-xl p-3">
-      <div class="text-xs font-mono text-gray-400">CAREER DIALS</div>
-      <div class="text-2xl font-bold font-mono text-emerald-400" id="kpiDials">0/20</div>
-    </div>
-    <div class="glass-card rounded-xl p-3">
-      <div class="text-xs font-mono text-gray-400">CONNECTS</div>
-      <div class="text-2xl font-bold font-mono text-emerald-400" id="kpiConnects">0/5</div>
-    </div>
-    <div class="glass-card rounded-xl p-3">
-      <div class="text-xs font-mono text-gray-400">DISCIPLINE</div>
-      <div class="text-2xl font-bold font-mono text-white" id="kpiDiscipline">0/4</div>
-    </div>
-  </div>
+    <button type="button" onclick="promptSyncKey()" id="syncBtn" class="flex items-center space-x-2 px-2.5 py-1 rounded bg-gray-900 border border-gray-800 cursor-pointer">
+      <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+      <span id="syncText" class="text-xs font-mono text-gray-400">Local (Click to Sync)</span>
+    </button>
+  </header>
 
-  <!-- 1. MORAL PILLAR -->
-  <section class="glass-card rounded-xl p-5 space-y-4">
-    <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-gray-400">1. Moral Pillar</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      <div id="card_morning_prayer" onclick="toggleHabitDirectly('morning_prayer')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
-        <div class="flex items-center space-x-3 pointer-events-none">
-          <input type="checkbox" id="chk_morning_prayer" class="engine-box">
-          <span class="text-xs font-semibold text-gray-200">Morning Prayer</span>
-        </div>
-        <span class="text-yellow-500">☀</span>
-      </div>
-      <div id="card_bedtime_prayer" onclick="toggleHabitDirectly('bedtime_prayer')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
-        <div class="flex items-center space-x-3 pointer-events-none">
-          <input type="checkbox" id="chk_bedtime_prayer" class="engine-box">
-          <span class="text-xs font-semibold text-gray-200">Bed Time Prayer</span>
-        </div>
-        <span class="text-gray-400">☽</span>
-      </div>
-      <div id="card_purity" onclick="toggleHabitDirectly('purity')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
-        <div class="flex items-center space-x-3 pointer-events-none">
-          <input type="checkbox" id="chk_purity" class="engine-box">
-          <span class="text-xs font-semibold text-gray-200">Kept My Purity</span>
-        </div>
-        <span class="text-red-500">🛡</span>
-      </div>
-    </div>
-  </section>
+  <!-- TAB NAVIGATION -->
+  <nav class="flex space-x-2 border-b border-gray-800 pb-2">
+    <button type="button" onclick="switchTab('daily')" id="tabBtn_daily" class="px-4 py-1.5 rounded-lg text-xs font-mono font-bold bg-white text-black transition-colors cursor-pointer">Daily Engine</button>
+    <button type="button" onclick="switchTab('finance')" id="tabBtn_finance" class="px-4 py-1.5 rounded-lg text-xs font-mono font-bold text-gray-400 hover:text-white transition-colors cursor-pointer">Finance</button>
+  </nav>
 
-  <!-- 2. CAREER PILLAR -->
-  <section class="glass-card rounded-xl p-5 space-y-4">
-    <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">2. Career Execution</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between">
-        <div>
-          <span class="text-xs font-mono text-gray-400 block">PHONE DIALS (20 TARGET)</span>
-          <span id="txtDials" class="text-2xl font-mono font-bold text-white">0</span>
-        </div>
-        <div class="flex space-x-2">
-          <button type="button" onclick="adjustDials(-1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
-          <button type="button" onclick="adjustDials(1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
-          <button type="button" onclick="adjustDials(5)" class="px-2 bg-emerald-900 text-emerald-300 rounded font-bold cursor-pointer">+5</button>
-        </div>
-      </div>
-      <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between">
-        <div>
-          <span class="text-xs font-mono text-gray-400 block">CONNECTS (5 TARGET)</span>
-          <span id="txtConnects" class="text-2xl font-mono font-bold text-white">0</span>
-        </div>
-        <div class="flex space-x-2">
-          <button type="button" onclick="adjustConnects(-1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
-          <button type="button" onclick="adjustConnects(1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
-        </div>
-      </div>
-    </div>
-<!-- 3. DISCIPLINE STANDARDS -->
-  <section class="glass-card rounded-xl p-5 space-y-4">
-    <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-gray-400">3. Core Standards</h2>
+  <!-- TAB 1: DAILY ENGINE -->
+  <div id="tab_daily" class="space-y-6">
+    <!-- KPI STRIP -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      <div id="card_nosnooze" onclick="toggleHabitDirectly('nosnooze')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-        <span class="text-xs font-semibold text-gray-200">No Snooze</span>
-        <input type="checkbox" id="chk_nosnooze" class="engine-box pointer-events-none">
+      <div class="glass-card rounded-xl p-3">
+        <div class="text-xs font-mono text-gray-400">MORAL</div>
+        <div class="text-2xl font-bold font-mono text-white" id="kpiMoral">0%</div>
       </div>
-      <div id="card_madebed" onclick="toggleHabitDirectly('madebed')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-        <span class="text-xs font-semibold text-gray-200">Made Bed</span>
-        <input type="checkbox" id="chk_madebed" class="engine-box pointer-events-none">
+      <div class="glass-card rounded-xl p-3">
+        <div class="text-xs font-mono text-gray-400">CAREER DIALS</div>
+        <div class="text-2xl font-bold font-mono text-emerald-400" id="kpiDials">0/20</div>
       </div>
-      <div id="card_shaved" onclick="toggleHabitDirectly('shaved')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-        <span class="text-xs font-semibold text-gray-200">Shaved</span>
-        <input type="checkbox" id="chk_shaved" class="engine-box pointer-events-none">
+      <div class="glass-card rounded-xl p-3">
+        <div class="text-xs font-mono text-gray-400">CONNECTS</div>
+        <div class="text-2xl font-bold font-mono text-emerald-400" id="kpiConnects">0/5</div>
       </div>
-      <div id="card_bedby1030" onclick="toggleHabitDirectly('bedby1030')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-        <span class="text-xs font-semibold text-gray-200">In Bed 10:30</span>
-        <input type="checkbox" id="chk_bedby1030" class="engine-box pointer-events-none">
+      <div class="glass-card rounded-xl p-3">
+        <div class="text-xs font-mono text-gray-400">DISCIPLINE</div>
+        <div class="text-2xl font-bold font-mono text-white" id="kpiDiscipline">0/4</div>
       </div>
     </div>
-  </section>
 
-<script>
+    <!-- 1. MORAL PILLAR -->
+    <section class="glass-card rounded-xl p-5 space-y-4">
+      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-gray-400">1. Moral Pillar</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div id="card_morning_prayer" onclick="toggleHabitDirectly('morning_prayer')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+          <div class="flex items-center space-x-3 pointer-events-none">
+            <input type="checkbox" id="chk_morning_prayer" class="engine-box">
+            <span class="text-xs font-semibold text-gray-200">Morning Prayer</span>
+          </div>
+          <span class="text-yellow-500">☀</span>
+        </div>
+        <div id="card_bedtime_prayer" onclick="toggleHabitDirectly('bedtime_prayer')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+          <div class="flex items-center space-x-3 pointer-events-none">
+            <input type="checkbox" id="chk_bedtime_prayer" class="engine-box">
+            <span class="text-xs font-semibold text-gray-200">Bed Time Prayer</span>
+          </div>
+          <span class="text-gray-400">☽</span>
+        </div>
+        <div id="card_purity" onclick="toggleHabitDirectly('purity')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+          <div class="flex items-center space-x-3 pointer-events-none">
+            <input type="checkbox" id="chk_purity" class="engine-box">
+            <span class="text-xs font-semibold text-gray-200">Kept My Purity</span>
+          </div>
+          <span class="text-red-500">🛡</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. CAREER PILLAR -->
+    <section class="glass-card rounded-xl p-5 space-y-4">
+      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">2. Career Execution</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between">
+          <div>
+            <span class="text-xs font-mono text-gray-400 block">PHONE DIALS (20 TARGET)</span>
+            <span id="txtDials" class="text-2xl font-mono font-bold text-white">0</span>
+          </div>
+          <div class="flex space-x-2">
+            <button type="button" onclick="adjustDials(-1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
+            <button type="button" onclick="adjustDials(1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
+            <button type="button" onclick="adjustDials(5)" class="px-2 bg-emerald-900 text-emerald-300 rounded font-bold cursor-pointer">+5</button>
+          </div>
+        </div>
+        <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between">
+          <div>
+            <span class="text-xs font-mono text-gray-400 block">CONNECTS (5 TARGET)</span>
+            <span id="txtConnects" class="text-2xl font-mono font-bold text-white">0</span>
+          </div>
+          <div class="flex space-x-2">
+            <button type="button" onclick="adjustConnects(-1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
+            <button type="button" onclick="adjustConnects(1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. DISCIPLINE STANDARDS -->
+    <section class="glass-card rounded-xl p-5 space-y-4">
+      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-gray-400">3. Core Standards</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div id="card_nosnooze" onclick="toggleHabitDirectly('nosnooze')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
+          <span class="text-xs font-semibold text-gray-200">No Snooze</span>
+          <input type="checkbox" id="chk_nosnooze" class="engine-box pointer-events-none">
+        </div>
+        <div id="card_madebed" onclick="toggleHabitDirectly('madebed')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
+          <span class="text-xs font-semibold text-gray-200">Made Bed</span>
+          <input type="checkbox" id="chk_madebed" class="engine-box pointer-events-none">
+        </div>
+        <div id="card_shaved" onclick="toggleHabitDirectly('shaved')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
+          <span class="text-xs font-semibold text-gray-200">Shaved</span>
+          <input type="checkbox" id="chk_shaved" class="engine-box pointer-events-none">
+        </div>
+        <div id="card_bedby1030" onclick="toggleHabitDirectly('bedby1030')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
+          <span class="text-xs font-semibold text-gray-200">In Bed 10:30</span>
+          <input type="checkbox" id="chk_bedby1030" class="engine-box pointer-events-none">
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TAB 2: FINANCE -->
+  <div id="tab_finance" class="space-y-6 hidden">
+    <section class="glass-card rounded-xl p-6 space-y-4 max-w-xl mx-auto">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-mono font-bold uppercase tracking-wider text-emerald-400">Financial Stewardship</h2>
+          <p class="text-xs text-gray-400 mt-1">Daily expense discipline</p>
+        </div>
+        <span class="text-2xl">💳</span>
+      </div>
+
+      <div id="card_unnecessary_spend" onclick="toggleFinanceSpend()" style="background: #18181b; border: 1px solid #27272a;" class="p-4 rounded-lg flex items-center justify-between cursor-pointer select-none">
+        <div>
+          <span class="text-sm font-semibold text-gray-200 block">Spent Unnecessary Money Today?</span>
+          <span id="txtFinanceStatus" class="text-xs text-emerald-400 font-mono">No (Clean Day)</span>
+        </div>
+        <input type="checkbox" id="chk_unnecessary_spend" class="engine-box pointer-events-none">
+      </div>
+
+      <div>
+        <label for="txtFinanceNote" class="block text-xs font-mono text-gray-400 mb-1">OPTIONAL NOTE</label>
+        <input type="text" id="txtFinanceNote" onchange="saveFinanceNote(this.value)" placeholder="e.g., Impulse coffee, takeout, unexpected bill..." class="w-full bg-gray-900 border border-gray-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+      </div>
+    </section>
+  </div>
+
+  <!-- SCRIPT ENGINE -->
+  <script>
     const HABIT_KEYS = ['morning_prayer', 'bedtime_prayer', 'purity', 'nosnooze', 'madebed', 'shaved', 'bedby1030'];
-    let state = { habits: {}, dials: 0, connects: 0 };
+    let state = { habits: {}, dials: 0, connects: 0, finance: {} };
 
     const PROJECT_ID = "disciplineengine-604e9";
     let syncKey = localStorage.getItem('kevin_sync_key') || '';
@@ -134,7 +173,27 @@
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     }
 
-    // Direct REST API Sync (Zero SDK, Zero eval, Strict CSP compliant)
+    // Tab switcher
+    window.switchTab = function(tabName) {
+      const dailyTab = document.getElementById('tab_daily');
+      const finTab = document.getElementById('tab_finance');
+      const btnDaily = document.getElementById('tabBtn_daily');
+      const btnFin = document.getElementById('tabBtn_finance');
+
+      if (tabName === 'daily') {
+        dailyTab.classList.remove('hidden');
+        finTab.classList.add('hidden');
+        btnDaily.className = 'px-4 py-1.5 rounded-lg text-xs font-mono font-bold bg-white text-black transition-colors cursor-pointer';
+        btnFin.className = 'px-4 py-1.5 rounded-lg text-xs font-mono font-bold text-gray-400 hover:text-white transition-colors cursor-pointer';
+      } else {
+        dailyTab.classList.add('hidden');
+        finTab.classList.remove('hidden');
+        btnDaily.className = 'px-4 py-1.5 rounded-lg text-xs font-mono font-bold text-gray-400 hover:text-white transition-colors cursor-pointer';
+        btnFin.className = 'px-4 py-1.5 rounded-lg text-xs font-mono font-bold bg-white text-black transition-colors cursor-pointer';
+      }
+    };
+
+    // Direct REST API Sync (CSP Compliant)
     async function pullFromCloud(key) {
       if (!key) return;
       const dot = document.getElementById('syncDot');
@@ -155,7 +214,6 @@
           if (dot) { dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500'; }
           if (text) { text.textContent = 'Live Cloud'; text.className = 'text-xs font-mono text-emerald-400'; }
         } else if (res.status === 404) {
-          // Document does not exist yet; push current state
           isCloudSyncActive = true;
           pushToCloud();
           if (dot) { dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500'; }
@@ -169,7 +227,7 @@
     async function pushToCloud() {
       if (!isCloudSyncActive || !syncKey) return;
       const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/engines/${encodeURIComponent(syncKey)}`;
-      
+
       const payload = {
         fields: {
           state: { stringValue: JSON.stringify(state) },
@@ -204,6 +262,7 @@
       } catch(e) {}
       if (!state.habits) state.habits = {};
       if (!state.habits[getToday()]) state.habits[getToday()] = {};
+      if (!state.finance) state.finance = {};
       renderUI();
     }
 
@@ -230,6 +289,24 @@
 
     window.adjustConnects = function(delta) {
       state.connects = Math.max(0, (state.connects || 0) + delta);
+      saveState();
+    };
+
+    window.toggleFinanceSpend = function() {
+      const today = getToday();
+      if (!state.finance) state.finance = {};
+      if (!state.finance[today]) state.finance[today] = { spentUnnecessary: false, note: '' };
+
+      state.finance[today].spentUnnecessary = !state.finance[today].spentUnnecessary;
+      saveState();
+    };
+
+    window.saveFinanceNote = function(text) {
+      const today = getToday();
+      if (!state.finance) state.finance = {};
+      if (!state.finance[today]) state.finance[today] = { spentUnnecessary: false, note: '' };
+
+      state.finance[today].note = text;
       saveState();
     };
 
@@ -266,13 +343,33 @@
       const discCount = (todayHabits['nosnooze']?1:0) + (todayHabits['madebed']?1:0) + (todayHabits['shaved']?1:0) + (todayHabits['bedby1030']?1:0);
       const kDisc = document.getElementById('kpiDiscipline');
       if (kDisc) kDisc.textContent = `${discCount}/4`;
+
+      // Finance UI
+      if (!state.finance) state.finance = {};
+      const todayFin = state.finance[today] || { spentUnnecessary: false, note: '' };
+      const chkFin = document.getElementById('chk_unnecessary_spend');
+      const cardFin = document.getElementById('card_unnecessary_spend');
+      const txtStatus = document.getElementById('txtFinanceStatus');
+      const txtNote = document.getElementById('txtFinanceNote');
+
+      if (chkFin) chkFin.checked = !!todayFin.spentUnnecessary;
+      if (cardFin) {
+        cardFin.style.borderColor = todayFin.spentUnnecessary ? '#ef4444' : '#27272a';
+        cardFin.style.background = todayFin.spentUnnecessary ? 'rgba(127, 29, 29, 0.25)' : '#18181b';
+      }
+      if (txtStatus) {
+        txtStatus.textContent = todayFin.spentUnnecessary ? 'Yes (Unnecessary Spend)' : 'No (Clean Day)';
+        txtStatus.className = todayFin.spentUnnecessary ? 'text-xs text-red-400 font-mono' : 'text-xs text-emerald-400 font-mono';
+      }
+      if (txtNote && document.activeElement !== txtNote) {
+        txtNote.value = todayFin.note || '';
+      }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
       loadState();
       if (syncKey) {
         pullFromCloud(syncKey);
-        // Poll every 30 seconds for background multi-device syncing
         setInterval(() => pullFromCloud(syncKey), 30000);
       }
     });
