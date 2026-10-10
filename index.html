@@ -9,400 +9,264 @@
     body { background-color: #09090b; color: #f4f4f5; font-family: ui-sans-serif, system-ui, sans-serif; }
     .glass-card { background: rgba(18, 18, 21, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); }
     .engine-box { width: 22px; height: 22px; cursor: pointer; accent-color: #10b981; flex-shrink: 0; }
-    .tab-btn-active { background-color: #ffffff !important; color: #000000 !important; }
-    .custom-scroll::-webkit-scrollbar { height: 4px; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+    .t-act { background-color: #fff !important; color: #000 !important; font-weight: bold; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col p-4 sm:p-8 space-y-6 max-w-6xl mx-auto">
-
-  <!-- HEADER -->
-  <header class="flex items-center justify-between pb-4 border-b border-gray-800">
+<body class="min-h-screen flex flex-col p-4 sm:p-8 space-y-5 max-w-5xl mx-auto">
+  <header class="flex items-center justify-between pb-3 border-b border-gray-800">
     <div class="flex items-center space-x-3">
-      <div class="w-9 h-9 bg-white text-black font-black rounded-lg flex items-center justify-center font-mono">K</div>
-      <h1 class="text-base font-bold font-mono">Kevin's Discipline Engine</h1>
+      <div class="w-8 h-8 bg-white text-black font-black rounded flex items-center justify-center font-mono">K</div>
+      <h1 class="text-sm font-bold font-mono">Kevin's Discipline Engine</h1>
     </div>
-    <button type="button" onclick="promptSyncKey()" id="syncBtn" class="flex items-center space-x-2 px-2.5 py-1 rounded bg-gray-900 border border-gray-800 cursor-pointer">
+    <button type="button" onclick="promptSyncKey()" class="flex items-center space-x-2 px-2.5 py-1 rounded bg-gray-900 border border-gray-800 cursor-pointer">
       <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
       <span id="syncText" class="text-xs font-mono text-gray-400">Local (Click to Sync)</span>
     </button>
   </header>
 
-  <!-- TAB NAVIGATION -->
-  <nav class="flex space-x-2 border-b border-gray-800 pb-2 overflow-x-auto custom-scroll">
-    <button type="button" onclick="switchTab('home')" id="tabBtn_home" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold tab-btn-active transition-colors cursor-pointer whitespace-nowrap">Home</button>
-    <button type="button" onclick="switchTab('today')" id="tabBtn_today" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-gray-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap">Today</button>
-    <button type="button" onclick="switchTab('moral')" id="tabBtn_moral" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-gray-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap">Moral</button>
-    <button type="button" onclick="switchTab('finance')" id="tabBtn_finance" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-gray-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap">Finance</button>
-    <button type="button" onclick="switchTab('health')" id="tabBtn_health" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-gray-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap">Health</button>
-    <button type="button" onclick="switchTab('career')" id="tabBtn_career" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-gray-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap">Career</button>
-    <button type="button" onclick="switchTab('community')" id="tabBtn_community" class="px-3 py-1.5 rounded-lg text-xs font-mono font-bold text-gray-400 hover:text-white transition-colors cursor-pointer whitespace-nowrap">Community</button>
+  <nav class="flex space-x-1.5 border-b border-gray-800 pb-2 overflow-x-auto">
+    <button type="button" onclick="switchTab('home')" id="btn_home" class="px-3 py-1 rounded text-xs font-mono t-act">Home</button>
+    <button type="button" onclick="switchTab('today')" id="btn_today" class="px-3 py-1 rounded text-xs font-mono text-gray-400 hover:text-white">Today</button>
+    <button type="button" onclick="switchTab('moral')" id="btn_moral" class="px-3 py-1 rounded text-xs font-mono text-gray-400 hover:text-white">Moral</button>
+    <button type="button" onclick="switchTab('finance')" id="btn_finance" class="px-3 py-1 rounded text-xs font-mono text-gray-400 hover:text-white">Finance</button>
+    <button type="button" onclick="switchTab('health')" id="btn_health" class="px-3 py-1 rounded text-xs font-mono text-gray-400 hover:text-white">Health</button>
+    <button type="button" onclick="switchTab('career')" id="btn_career" class="px-3 py-1 rounded text-xs font-mono text-gray-400 hover:text-white">Career</button>
+    <button type="button" onclick="switchTab('community')" id="btn_community" class="px-3 py-1 rounded text-xs font-mono text-gray-400 hover:text-white">Community</button>
   </nav>
 
-  <!-- ================= TAB: HOME ================= -->
-  <div id="tab_home" class="space-y-6">
-    <div class="flex items-center justify-between">
-      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-gray-400">Executive Dashboard</h2>
-      <span class="text-xs font-mono text-gray-500" id="currentDateLabel">Today</span>
-    </div>
-
-    <!-- OVERALL SCORE CARD -->
-    <div class="glass-card rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+  <!-- HOME TAB -->
+  <div id="tab_home" class="space-y-4">
+    <div class="glass-card rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
-        <span class="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider block">Daily Discipline Score</span>
-        <h3 class="text-3xl font-extrabold font-mono text-white mt-1" id="kpiOverallText">0% Completed</h3>
-        <p class="text-xs text-gray-400 mt-1">Weighted aggregation across all active discipline modules</p>
+        <span class="text-xs font-mono text-emerald-400 font-bold uppercase block">Daily Discipline Score</span>
+        <h3 class="text-2xl font-bold font-mono text-white mt-0.5" id="kpiOverallText">0% Completed</h3>
       </div>
-      <div class="w-full sm:w-64 bg-gray-900 h-4 rounded-full border border-gray-800 overflow-hidden">
-        <div id="kpiOverallBar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%;"></div>
+      <div class="w-full sm:w-56 bg-gray-900 h-3 rounded-full border border-gray-800 overflow-hidden">
+        <div id="kpiOverallBar" class="bg-emerald-500 h-full transition-all" style="width: 0%;"></div>
       </div>
     </div>
-
-    <!-- PERCENTAGES GRID FOR EVERY TAB -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-      <div onclick="switchTab('today')" class="glass-card rounded-xl p-4 cursor-pointer hover:border-gray-600 transition-all">
-        <div class="text-xs font-mono text-gray-400 mb-1">TODAY</div>
-        <div class="text-2xl font-bold font-mono text-white" id="homeScoreToday">0%</div>
-        <div class="text-[10px] font-mono text-gray-500 mt-1" id="homeSubToday">0/4 standards</div>
-      </div>
-
-      <div onclick="switchTab('moral')" class="glass-card rounded-xl p-4 cursor-pointer hover:border-gray-600 transition-all">
-        <div class="text-xs font-mono text-gray-400 mb-1">MORAL</div>
-        <div class="text-2xl font-bold font-mono text-white" id="homeScoreMoral">0%</div>
-        <div class="text-[10px] font-mono text-gray-500 mt-1" id="homeSubMoral">Purity & Word</div>
-      </div>
-
-      <div onclick="switchTab('finance')" class="glass-card rounded-xl p-4 cursor-pointer hover:border-gray-600 transition-all">
-        <div class="text-xs font-mono text-gray-400 mb-1">FINANCE</div>
-        <div class="text-2xl font-bold font-mono text-emerald-400" id="homeScoreFinance">100%</div>
-        <div class="text-[10px] font-mono text-gray-500 mt-1" id="homeSubFinance">Clean Day</div>
-      </div>
-
-      <div onclick="switchTab('health')" class="glass-card rounded-xl p-4 cursor-pointer hover:border-gray-600 transition-all">
-        <div class="text-xs font-mono text-gray-400 mb-1">HEALTH</div>
-        <div class="text-2xl font-bold font-mono text-white" id="homeScoreHealth">0%</div>
-        <div class="text-[10px] font-mono text-gray-500 mt-1" id="homeSubHealth">0/4 targets</div>
-      </div>
-
-      <div onclick="switchTab('career')" class="glass-card rounded-xl p-4 cursor-pointer hover:border-gray-600 transition-all">
-        <div class="text-xs font-mono text-gray-400 mb-1">CAREER</div>
-        <div class="text-2xl font-bold font-mono text-white" id="homeScoreCareer">0%</div>
-        <div class="text-[10px] font-mono text-gray-500 mt-1" id="homeSubCareer">0/20 Calls</div>
-      </div>
-
-      <div onclick="switchTab('community')" class="glass-card rounded-xl p-4 cursor-pointer hover:border-gray-600 transition-all">
-        <div class="text-xs font-mono text-gray-400 mb-1">COMMUNITY</div>
-        <div class="text-2xl font-bold font-mono text-white" id="homeScoreCommunity">0%</div>
-        <div class="text-[10px] font-mono text-gray-500 mt-1" id="homeSubCommunity">0/30 mins</div>
-      </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+      <div onclick="switchTab('today')" class="glass-card rounded-lg p-3 cursor-pointer"><div class="text-[10px] font-mono text-gray-400">TODAY</div><div class="text-xl font-bold font-mono text-white" id="sc_today">0%</div></div>
+      <div onclick="switchTab('moral')" class="glass-card rounded-lg p-3 cursor-pointer"><div class="text-[10px] font-mono text-gray-400">MORAL</div><div class="text-xl font-bold font-mono text-white" id="sc_moral">0%</div></div>
+      <div onclick="switchTab('finance')" class="glass-card rounded-lg p-3 cursor-pointer"><div class="text-[10px] font-mono text-gray-400">FINANCE</div><div class="text-xl font-bold font-mono text-emerald-400" id="sc_finance">100%</div></div>
+      <div onclick="switchTab('health')" class="glass-card rounded-lg p-3 cursor-pointer"><div class="text-[10px] font-mono text-gray-400">HEALTH</div><div class="text-xl font-bold font-mono text-white" id="sc_health">0%</div></div>
+      <div onclick="switchTab('career')" class="glass-card rounded-lg p-3 cursor-pointer"><div class="text-[10px] font-mono text-gray-400">CAREER</div><div class="text-xl font-bold font-mono text-white" id="sc_career">0%</div></div>
+      <div onclick="switchTab('community')" class="glass-card rounded-lg p-3 cursor-pointer"><div class="text-[10px] font-mono text-gray-400">COMMUNITY</div><div class="text-xl font-bold font-mono text-white" id="sc_community">0%</div></div>
     </div>
   </div>
 
-  <!-- ================= TAB: TODAY ================= -->
-  <div id="tab_today" class="space-y-6 hidden">
-    <!-- CORE DAILY STANDARDS -->
-    <section class="glass-card rounded-xl p-5 space-y-4">
-      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-gray-400">Core Execution Standards</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div id="card_nosnooze" onclick="toggleHabitDirectly('nosnooze')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-          <span class="text-xs font-semibold text-gray-200">No Snooze</span>
-          <input type="checkbox" id="chk_nosnooze" class="engine-box pointer-events-none">
-        </div>
-        <div id="card_shaved" onclick="toggleHabitDirectly('shaved')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-          <span class="text-xs font-semibold text-gray-200">Shaved</span>
-          <input type="checkbox" id="chk_shaved" class="engine-box pointer-events-none">
-        </div>
-        <div id="card_supper" onclick="toggleHabitDirectly('supper')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-          <span class="text-xs font-semibold text-gray-200">Home In Time For Supper</span>
-          <input type="checkbox" id="chk_supper" class="engine-box pointer-events-none">
-        </div>
-        <div id="card_bedby1030" onclick="toggleHabitDirectly('bedby1030')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-          <span class="text-xs font-semibold text-gray-200">Bed by 10:30</span>
-          <input type="checkbox" id="chk_bedby1030" class="engine-box pointer-events-none">
-        </div>
+  <!-- TODAY TAB -->
+  <div id="tab_today" class="space-y-4 hidden">
+    <div class="glass-card rounded-xl p-4 space-y-3">
+      <h2 class="text-xs font-mono font-bold text-gray-400">DAILY STANDARDS</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div id="c_nosnooze" onclick="toggleH('nosnooze')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">No Snooze</span><input type="checkbox" id="k_nosnooze" class="engine-box pointer-events-none"></div>
+        <div id="c_shaved" onclick="toggleH('shaved')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">Shaved</span><input type="checkbox" id="k_shaved" class="engine-box pointer-events-none"></div>
+        <div id="c_supper" onclick="toggleH('supper')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">Home for Supper</span><input type="checkbox" id="k_supper" class="engine-box pointer-events-none"></div>
+        <div id="c_bedby1030" onclick="toggleH('bedby1030')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">Bed 10:30</span><input type="checkbox" id="k_bedby1030" class="engine-box pointer-events-none"></div>
       </div>
-    </section>
-
-    <!-- AM GRATITUDE & PM REFLECTION -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <section class="glass-card rounded-xl p-5 space-y-3">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-yellow-400">AM Gratitude</h2>
-          <span>☀</span>
-        </div>
-        <textarea id="txtGratitudeAM" rows="3" onchange="saveTodayText('gratitudeAM', this.value)" placeholder="What are you grateful for this morning?" class="w-full bg-gray-900 border border-gray-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-yellow-500"></textarea>
-      </section>
-
-      <section class="glass-card rounded-xl p-5 space-y-3">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-indigo-400">End of Day Reflection & Rating</h2>
-          <div class="flex items-center space-x-1">
-            <span class="text-xs font-mono text-gray-400">Rating:</span>
-            <select id="selDayRating" onchange="saveTodayText('rating', this.value)" class="bg-gray-900 border border-gray-800 rounded p-1 text-xs text-white focus:outline-none">
-              <option value="10">10 / 10</option>
-              <option value="9">9 / 10</option>
-              <option value="8">8 / 10</option>
-              <option value="7">7 / 10</option>
-              <option value="6">6 / 10</option>
-              <option value="5">5 / 10</option>
-              <option value="4">4 / 10</option>
-              <option value="3">3 / 10</option>
-              <option value="2">2 / 10</option>
-              <option value="1">1 / 10</option>
-            </select>
-          </div>
-        </div>
-        <textarea id="txtReflectionPM" rows="3" onchange="saveTodayText('reflectionPM', this.value)" placeholder="Workday review, wins, and where discipline can tighten..." class="w-full bg-gray-900 border border-gray-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"></textarea>
-      </section>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="glass-card rounded-xl p-4"><label class="text-xs font-mono text-yellow-400 block mb-1">AM GRATITUDE</label><input type="text" id="t_grat" onchange="setVal('t_grat', this.value)" placeholder="Morning gratitude..." class="w-full bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white"></div>
+      <div class="glass-card rounded-xl p-4"><div class="flex justify-between items-center mb-1"><label class="text-xs font-mono text-indigo-400">REFLECTION & RATING</label><select id="s_rate" onchange="setVal('s_rate', this.value)" class="bg-gray-900 text-xs border border-gray-800 rounded text-white p-0.5"><option>10/10</option><option>9/10</option><option>8/10</option><option>7/10</option><option>6/10</option><option>5/10</option></select></div><input type="text" id="t_refl" onchange="setVal('t_refl', this.value)" placeholder="Workday review..." class="w-full bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white"></div>
     </div>
   </div>
 
-  <!-- ================= TAB: MORAL ================= -->
-  <div id="tab_moral" class="space-y-6 hidden">
-    <!-- PRAYER & PURITY -->
-    <section class="glass-card rounded-xl p-5 space-y-4">
-      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-gray-400">Foundation</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div id="card_morning_prayer" onclick="toggleHabitDirectly('morning_prayer')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
-          <div class="flex items-center space-x-3 pointer-events-none">
-            <input type="checkbox" id="chk_morning_prayer" class="engine-box">
-            <span class="text-xs font-semibold text-gray-200">Morning Prayer</span>
-          </div>
-          <span class="text-yellow-500">☀</span>
-        </div>
-        <div id="card_bedtime_prayer" onclick="toggleHabitDirectly('bedtime_prayer')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
-          <div class="flex items-center space-x-3 pointer-events-none">
-            <input type="checkbox" id="chk_bedtime_prayer" class="engine-box">
-            <span class="text-xs font-semibold text-gray-200">Bed Time Prayer</span>
-          </div>
-          <span class="text-gray-400">☽</span>
-        </div>
-        <div id="card_purity" onclick="toggleHabitDirectly('purity')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
-          <div class="flex items-center space-x-3 pointer-events-none">
-            <input type="checkbox" id="chk_purity" class="engine-box">
-            <span class="text-xs font-semibold text-gray-200">Kept My Purity</span>
-          </div>
-          <span class="text-red-500">🛡</span>
-        </div>
+  <!-- MORAL TAB -->
+  <div id="tab_moral" class="space-y-4 hidden">
+    <div class="glass-card rounded-xl p-4 space-y-3">
+      <h2 class="text-xs font-mono font-bold text-gray-400">FOUNDATION</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div id="c_morning_prayer" onclick="toggleH('morning_prayer')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">Morning Prayer</span><input type="checkbox" id="k_morning_prayer" class="engine-box pointer-events-none"></div>
+        <div id="c_bedtime_prayer" onclick="toggleH('bedtime_prayer')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">Bedtime Prayer</span><input type="checkbox" id="k_bedtime_prayer" class="engine-box pointer-events-none"></div>
+        <div id="c_purity" onclick="toggleH('purity')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">Kept My Purity</span><input type="checkbox" id="k_purity" class="engine-box pointer-events-none"></div>
       </div>
-    </section>
-
-    <!-- BIBLE TRACKER (10 Chapters Daily Target) -->
-    <section class="glass-card rounded-xl p-5 space-y-4">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-blue-400">Bible Tracker (10 Chapters Target)</h2>
-          <p class="text-xs text-gray-400 mt-1">Total Scripture Progress: 1,189 Chapters</p>
-        </div>
-        <div class="text-right">
-          <span class="text-base font-mono font-bold text-white" id="txtBibleProgress">0 / 1189</span>
-          <span class="text-xs font-mono text-gray-400 block" id="txtBiblePercent">0%</span>
-        </div>
+    </div>
+    <div class="glass-card rounded-xl p-4 space-y-2">
+      <div class="flex justify-between items-center"><span class="text-xs font-mono text-blue-400 font-bold">BIBLE TRACKER (10 CH TARGET)</span><span class="text-xs font-mono" id="b_tot">0/1189</span></div>
+      <div class="flex items-center justify-between bg-gray-900 border border-gray-800 p-2.5 rounded">
+        <span class="text-xs font-mono">Today: <b id="b_today" class="text-white">0</b> / 10 ch</span>
+        <div class="flex space-x-1"><button onclick="adjBible(-1)" class="w-7 h-7 bg-gray-800 rounded font-bold">-</button><button onclick="adjBible(1)" class="w-7 h-7 bg-gray-800 rounded font-bold">+1</button><button onclick="adjBible(5)" class="px-2 bg-blue-900 text-blue-300 rounded font-bold">+5</button></div>
       </div>
-      <div class="w-full bg-gray-900 h-2.5 rounded-full border border-gray-800 overflow-hidden">
-        <div id="barBible" class="bg-blue-500 h-full transition-all duration-300" style="width: 0%;"></div>
+    </div>
+    <div class="glass-card rounded-xl p-4 space-y-3">
+      <div class="flex justify-between items-center"><span class="text-xs font-mono text-purple-400 font-bold">MINISTRY TRACKER (10 PAGES TARGET)</span><span class="text-xs font-mono text-gray-400" id="m_status">0/10 Pages</span></div>
+      <div class="flex items-center justify-between bg-gray-900 border border-gray-800 p-2.5 rounded">
+        <span class="text-xs font-mono">Pages Read: <b id="m_today" class="text-white">0</b></span>
+        <div class="flex space-x-1"><button onclick="adjMinistry(-1)" class="w-7 h-7 bg-gray-800 rounded font-bold">-</button><button onclick="adjMinistry(1)" class="w-7 h-7 bg-gray-800 rounded font-bold">+1</button><button onclick="adjMinistry(5)" class="px-2 bg-purple-900 text-purple-300 rounded font-bold">+5</button></div>
       </div>
-      <div class="bg-gray-900 border border-gray-800 p-3.5 rounded-lg flex items-center justify-between">
-        <div>
-          <span class="text-xs font-mono text-gray-400 block">TODAY'S CHAPTERS (GOAL: 10)</span>
-          <span id="txtBibleToday" class="text-xl font-mono font-bold text-white">0</span>
-        </div>
-        <div class="flex space-x-2">
-          <button type="button" onclick="adjustBibleToday(-1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
-          <button type="button" onclick="adjustBibleToday(1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
-          <button type="button" onclick="adjustBibleToday(5)" class="px-2 bg-blue-900 text-blue-300 rounded font-bold cursor-pointer">+5</button>
-        </div>
+      <div class="space-y-1.5 pt-1">
+        <input type="text" id="m_tag1" onchange="setVal('m_tag1', this.value)" placeholder="Tag 1 & Takeaway..." class="w-full bg-gray-900 border border-gray-800 rounded p-1.5 text-xs text-white">
+        <input type="text" id="m_tag2" onchange="setVal('m_tag2', this.value)" placeholder="Tag 2 & Takeaway..." class="w-full bg-gray-900 border border-gray-800 rounded p-1.5 text-xs text-white">
+        <input type="text" id="m_tag3" onchange="setVal('m_tag3', this.value)" placeholder="Tag 3 & Takeaway..." class="w-full bg-gray-900 border border-gray-800 rounded p-1.5 text-xs text-white">
       </div>
-    </section>
-
-    <!-- MINISTRY TRACKER (10 Pages Target + Actual vs Expected Schedule Chart + 3 Tagged References) -->
-    <section class="glass-card rounded-xl p-5 space-y-4">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-purple-400">Ministry Tracker (10 Pages Target)</h2>
-          <p class="text-xs text-gray-400 mt-1">Schedule Pace & Key References</p>
-        </div>
-        <div class="text-right">
-          <span class="text-xs font-mono text-purple-400 font-bold" id="txtMinistryComparison">On Track</span>
-        </div>
-      </div>
-
-      <!-- Actual vs Target Comparison Progress Bar -->
-      <div class="space-y-1">
-        <div class="flex justify-between text-[11px] font-mono text-gray-400">
-          <span>Today: <strong class="text-white" id="txtMinistryPagesToday">0</strong> / 10 Pages</span>
-          <span id="txtMinistryPaceStats">Pace: 0% of Target</span>
-        </div>
-        <div class="w-full bg-gray-900 h-3 rounded-full border border-gray-800 overflow-hidden relative">
-          <!-- Target marker at 100% -->
-          <div id="barMinistryActual" class="bg-purple-600 h-full transition-all duration-300" style="width: 0%;"></div>
-        </div>
-      </div>
-
-      <div class="bg-gray-900 border border-gray-800 p-3.5 rounded-lg flex items-center justify-between">
-        <span class="text-xs font-mono text-gray-400">PAGES READ TODAY</span>
-        <div class="flex space-x-2">
-          <button type="button" onclick="adjustMinistryPages(-1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
-          <button type="button" onclick="adjustMinistryPages(1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
-          <button type="button" onclick="adjustMinistryPages(5)" class="px-2 bg-purple-900 text-purple-300 rounded font-bold cursor-pointer">+5</button>
-        </div>
-      </div>
-
-      <!-- 3 TAGGABLE MINISTRY REFERENCES -->
-      <div class="space-y-2 pt-2">
-        <h3 class="text-xs font-mono font-bold uppercase text-gray-400">3 Ministry References (Tagable)</h3>
-        <div class="grid grid-cols-1 gap-2">
-          <div class="flex gap-2">
-            <input type="text" id="tag_ref_1" onchange="saveMinistryTag(1, 'tag', this.value)" placeholder="Tag 1 (e.g. Prayer)" class="w-1/3 bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white">
-            <input type="text" id="note_ref_1" onchange="saveMinistryTag(1, 'ref', this.value)" placeholder="Volume / Page Reference & takeaway 1" class="w-2/3 bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white">
-          </div>
-          <div class="flex gap-2">
-            <input type="text" id="tag_ref_2" onchange="saveMinistryTag(2, 'tag', this.value)" placeholder="Tag 2 (e.g. Sanctification)" class="w-1/3 bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white">
-            <input type="text" id="note_ref_2" onchange="saveMinistryTag(2, 'ref', this.value)" placeholder="Volume / Page Reference & takeaway 2" class="w-2/3 bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white">
-          </div>
-          <div class="flex gap-2">
-            <input type="text" id="tag_ref_3" onchange="saveMinistryTag(3, 'tag', this.value)" placeholder="Tag 3 (e.g. Service)" class="w-1/3 bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white">
-            <input type="text" id="note_ref_3" onchange="saveMinistryTag(3, 'ref', this.value)" placeholder="Volume / Page Reference & takeaway 3" class="w-2/3 bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white">
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
   </div>
 
-  <!-- ================= TAB: FINANCE ================= -->
-  <div id="tab_finance" class="space-y-6 hidden">
-    <section class="glass-card rounded-xl p-6 space-y-4 max-w-xl mx-auto">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-sm font-mono font-bold uppercase tracking-wider text-emerald-400">Financial Stewardship</h2>
-          <p class="text-xs text-gray-400 mt-1">Daily unnecessary spending filter</p>
-        </div>
-        <span class="text-2xl">💳</span>
+  <!-- FINANCE TAB -->
+  <div id="tab_finance" class="space-y-4 hidden">
+    <div class="glass-card rounded-xl p-5 space-y-3 max-w-lg mx-auto">
+      <h2 class="text-xs font-mono font-bold text-emerald-400">FINANCIAL DISCIPLINE</h2>
+      <div id="c_fin" onclick="toggleFin()" class="p-4 bg-gray-900 border border-gray-800 rounded flex justify-between items-center cursor-pointer">
+        <div><span class="text-xs font-bold block">Spent Unnecessary Money Today?</span><span id="fin_stat" class="text-xs font-mono text-emerald-400">No (Clean Day)</span></div>
+        <input type="checkbox" id="k_fin" class="engine-box pointer-events-none">
       </div>
-
-      <div id="card_unnecessary_spend" onclick="toggleFinanceSpend()" style="background: #18181b; border: 1px solid #27272a;" class="p-4 rounded-lg flex items-center justify-between cursor-pointer select-none">
-        <div>
-          <span class="text-sm font-semibold text-gray-200 block">Spent Unnecessary Money Today?</span>
-          <span id="txtFinanceStatus" class="text-xs text-emerald-400 font-mono">No (Clean Day)</span>
-        </div>
-        <input type="checkbox" id="chk_unnecessary_spend" class="engine-box pointer-events-none">
-      </div>
-
-      <div>
-        <label for="txtFinanceNote" class="block text-xs font-mono text-gray-400 mb-1">OPTIONAL EXPENSE NOTE</label>
-        <input type="text" id="txtFinanceNote" onchange="saveFinanceNote(this.value)" placeholder="e.g. Impulse takeout, extra supplies..." class="w-full bg-gray-900 border border-gray-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-      </div>
-    </section>
+      <input type="text" id="t_fin" onchange="setVal('t_fin', this.value)" placeholder="Optional spend note..." class="w-full bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white">
+    </div>
   </div>
 
-  <!-- ================= TAB: HEALTH ================= -->
-  <div id="tab_health" class="space-y-6 hidden">
-    <section class="glass-card rounded-xl p-5 space-y-4 max-w-xl mx-auto">
-      <div class="flex items-center justify-between">
-        <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-blue-400">Health Protocol</h2>
-        <span class="text-xl">💧</span>
-      </div>
-      <div class="space-y-3">
-        <div id="card_health_calories" onclick="toggleHealthHabit('calories')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-          <span class="text-xs font-semibold text-gray-200">Tracked Calories / Kept to Target</span>
-          <input type="checkbox" id="chk_health_calories" class="engine-box pointer-events-none">
-        </div>
-        <div id="card_health_exercise" onclick="toggleHealthHabit('exercise')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-          <span class="text-xs font-semibold text-gray-200">45 Mins of Exercise</span>
-          <input type="checkbox" id="chk_health_exercise" class="engine-box pointer-events-none">
-        </div>
-        <div id="card_health_water" onclick="toggleHealthHabit('water')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-          <span class="text-xs font-semibold text-gray-200">2L Water Consumed</span>
-          <input type="checkbox" id="chk_health_water" class="engine-box pointer-events-none">
-        </div>
-        <div id="card_health_afd" onclick="toggleHealthHabit('afd')" style="background: #18181b; border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none">
-          <div>
-            <span class="text-xs font-semibold text-gray-200 block">AFD (Alcohol-Free Day)</span>
-            <span class="text-[10px] text-gray-500 font-mono">Weekdays Standard</span>
-          </div>
-          <input type="checkbox" id="chk_health_afd" class="engine-box pointer-events-none">
-        </div>
-      </div>
-    </section>
+  <!-- HEALTH TAB -->
+  <div id="tab_health" class="space-y-4 hidden">
+    <div class="glass-card rounded-xl p-4 space-y-2 max-w-lg mx-auto">
+      <h2 class="text-xs font-mono font-bold text-blue-400 mb-2">HEALTH PROTOCOL</h2>
+      <div id="c_h_cal" onclick="toggleH('cal')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">Tracked Calories / Kept to Target</span><input type="checkbox" id="k_cal" class="engine-box pointer-events-none"></div>
+      <div id="c_h_ex" onclick="toggleH('ex')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">45 Mins of Exercise</span><input type="checkbox" id="k_ex" class="engine-box pointer-events-none"></div>
+      <div id="c_h_wat" onclick="toggleH('wat')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">2L Water Consumed</span><input type="checkbox" id="k_wat" class="engine-box pointer-events-none"></div>
+      <div id="c_h_afd" onclick="toggleH('afd')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">AFD (Alcohol-Free Day)</span><input type="checkbox" id="k_afd" class="engine-box pointer-events-none"></div>
+    </div>
   </div>
 
-  <!-- ================= TAB: CAREER ================= -->
-  <div id="tab_career" class="space-y-6 hidden">
-    <!-- CAREER KPI METRICS -->
-    <section class="glass-card rounded-xl p-5 space-y-4">
-      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">Daily Production Counters</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <!-- Calls / Dials -->
-        <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between">
-          <div>
-            <span class="text-xs font-mono text-gray-400 block">CALLS (20 TARGET)</span>
-            <span id="txtCalls" class="text-2xl font-mono font-bold text-white">0</span>
-          </div>
-          <div class="flex space-x-2">
-            <button type="button" onclick="adjustCareerMetric('calls', -1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
-            <button type="button" onclick="adjustCareerMetric('calls', 1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
-            <button type="button" onclick="adjustCareerMetric('calls', 5)" class="px-2 bg-emerald-900 text-emerald-300 rounded font-bold cursor-pointer">+5</button>
-          </div>
-        </div>
-
-        <!-- Connects -->
-        <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between">
-          <div>
-            <span class="text-xs font-mono text-gray-400 block">CONNECTS (5 TARGET)</span>
-            <span id="txtConnects" class="text-2xl font-mono font-bold text-white">0</span>
-          </div>
-          <div class="flex space-x-2">
-            <button type="button" onclick="adjustCareerMetric('connects', -1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
-            <button type="button" onclick="adjustCareerMetric('connects', 1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
-          </div>
-        </div>
-
-        <!-- Intro Kits -->
-        <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between">
-          <div>
-            <span class="text-xs font-mono text-gray-400 block">INTRO KITS SENT</span>
-            <span id="txtIntroKits" class="text-2xl font-mono font-bold text-white">0</span>
-          </div>
-          <div class="flex space-x-2">
-            <button type="button" onclick="adjustCareerMetric('introKits', -1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
-            <button type="button" onclick="adjustCareerMetric('introKits', 1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
-          </div>
-        </div>
+  <!-- CAREER TAB -->
+  <div id="tab_career" class="space-y-4 hidden">
+    <div class="glass-card rounded-xl p-4 space-y-3">
+      <h2 class="text-xs font-mono font-bold text-emerald-400">CAREER PRODUCTION</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+        <div class="bg-gray-900 border border-gray-800 p-3 rounded flex justify-between items-center"><div><span class="text-[10px] font-mono text-gray-400 block">CALLS (20)</span><b id="c_calls" class="text-xl">0</b></div><div class="flex space-x-1"><button onclick="adjCar('calls',-1)" class="w-6 h-6 bg-gray-800 rounded text-xs">-</button><button onclick="adjCar('calls',1)" class="w-6 h-6 bg-gray-800 rounded text-xs">+</button></div></div>
+        <div class="bg-gray-900 border border-gray-800 p-3 rounded flex justify-between items-center"><div><span class="text-[10px] font-mono text-gray-400 block">CONNECTS (5)</span><b id="c_conn" class="text-xl">0</b></div><div class="flex space-x-1"><button onclick="adjCar('connects',-1)" class="w-6 h-6 bg-gray-800 rounded text-xs">-</button><button onclick="adjCar('connects',1)" class="w-6 h-6 bg-gray-800 rounded text-xs">+</button></div></div>
+        <div class="bg-gray-900 border border-gray-800 p-3 rounded flex justify-between items-center"><div><span class="text-[10px] font-mono text-gray-400 block">INTRO KITS</span><b id="c_kits" class="text-xl">0</b></div><div class="flex space-x-1"><button onclick="adjCar('introKits',-1)" class="w-6 h-6 bg-gray-800 rounded text-xs">-</button><button onclick="adjCar('introKits',1)" class="w-6 h-6 bg-gray-800 rounded text-xs">+</button></div></div>
+        <div class="bg-gray-900 border border-gray-800 p-3 rounded flex justify-between items-center"><div><span class="text-[10px] font-mono text-gray-400 block">CUSTOMERS</span><b id="c_cust" class="text-xl text-emerald-400">0</b></div><div class="flex space-x-1"><button onclick="adjCar('customers',-1)" class="w-6 h-6 bg-gray-800 rounded text-xs">-</button><button onclick="adjCar('customers',1)" class="w-6 h-6 bg-gray-800 rounded text-xs">+</button></div></div>
       </div>
-
-      <!-- New Customers -->
-      <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between mt-3">
-        <div>
-          <span class="text-xs font-mono text-gray-400 block">NEW CUSTOMERS ACQUIRED</span>
-          <span id="txtNewCustomers" class="text-2xl font-mono font-bold text-emerald-400">0</span>
-        </div>
-        <div class="flex space-x-2">
-          <button type="button" onclick="adjustCareerMetric('newCustomers', -1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
-          <button type="button" onclick="adjustCareerMetric('newCustomers', 1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
-        </div>
+      <div class="space-y-1.5 pt-2">
+        <span class="text-xs font-mono font-bold text-gray-400 block">3 DAILY PRIORITIES</span>
+        <div class="flex items-center space-x-2 bg-gray-900 p-2 rounded border border-gray-800"><input type="checkbox" id="k_p1" onchange="toggleP(1)" class="engine-box"><input type="text" id="t_p1" onchange="setVal('t_p1', this.value)" placeholder="Priority 1..." class="w-full bg-transparent text-xs text-white"></div>
+        <div class="flex items-center space-x-2 bg-gray-900 p-2 rounded border border-gray-800"><input type="checkbox" id="k_p2" onchange="toggleP(2)" class="engine-box"><input type="text" id="t_p2" onchange="setVal('t_p2', this.value)" placeholder="Priority 2..." class="w-full bg-transparent text-xs text-white"></div>
+        <div class="flex items-center space-x-2 bg-gray-900 p-2 rounded border border-gray-800"><input type="checkbox" id="k_p3" onchange="toggleP(3)" class="engine-box"><input type="text" id="t_p3" onchange="setVal('t_p3', this.value)" placeholder="Priority 3..." class="w-full bg-transparent text-xs text-white"></div>
       </div>
-    </section>
-
-    <!-- 3 DAILY PRIORITIES -->
-    <section class="glass-card rounded-xl p-5 space-y-3">
-      <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">3 Daily Priorities</h2>
-      <div class="space-y-2">
-        <div class="flex items-center space-x-3 bg-gray-900 border border-gray-800 p-3 rounded-lg">
-          <input type="checkbox" id="chk_priority_1" onchange="togglePriority(1)" class="engine-box">
-          <input type="text" id="txt_priority_1" onchange="savePriorityText(1, this.value)" placeholder="Priority 1 description..." class="w-full bg-transparent text-xs text-white focus:outline-none">
-        </div>
-        <div class="flex items-center space-x-3 bg-gray-900 border border-gray-800 p-3 rounded-lg">
-          <input type="checkbox" id="chk_priority_2" onchange="togglePriority(2)" class="engine-box">
-          <input type="text" id="txt_priority_2" onchange="savePriorityText(2, this.value)" placeholder="Priority 2 description..." class="w-full bg-transparent text-xs text-white focus:outline-none">
-        </div>
-        <div class="flex items-center space-x-3 bg-gray-900 border border-gray-800 p-3 rounded-lg">
-          <input type="checkbox" id="chk_priority_3" onchange="togglePriority(3)" class="engine-box">
-          <input type="text" id="txt_priority_3" onchange="savePriorityText(3, this.value)" placeholder="Priority 3 description..." class="w-full bg-transparent text-xs text-white focus:outline-none">
-        </div>
-      </div>
-    </section>
+    </div>
   </div>
 
-  <!-- ================= TAB: COMMUNITY ================= -->
-  <div id="tab_community" class="space-y-6 hidden">
-    <section class="glass-card
+  <!-- COMMUNITY TAB -->
+  <div id="tab_community" class="space-y-4 hidden">
+    <div class="glass-card rounded-xl p-4 space-y-3 max-w-lg mx-auto">
+      <h2 class="text-xs font-mono font-bold text-amber-400">COMMUNITY & CARE</h2>
+      <div id="c_reach" onclick="toggleH('reach')" class="p-3 bg-gray-900 border border-gray-800 rounded flex justify-between cursor-pointer"><span class="text-xs">Reach out to somebody once today</span><input type="checkbox" id="k_reach" class="engine-box pointer-events-none"></div>
+      <div class="bg-gray-900 border border-gray-800 p-3 rounded flex justify-between items-center">
+        <div><span class="text-[10px] font-mono text-gray-400 block">PBCC / WALDINE (30 MIN GOAL)</span><b id="c_comm_min" class="text-xl">0 min</b></div>
+        <div class="flex space-x-1"><button onclick="adjComm(-5)" class="px-2 py-1 bg-gray-800 rounded text-xs">-5</button><button onclick="adjComm(5)" class="px-2 py-1 bg-gray-800 rounded text-xs">+5</button><button onclick="adjComm(15)" class="px-2 py-1 bg-amber-900 text-amber-300 rounded text-xs">+15</button></div>
+      </div>
+      <input type="text" id="t_comm" onchange="setVal('t_comm', this.value)" placeholder="Who did you help/reach out to?" class="w-full bg-gray-900 border border-gray-800 rounded p-2 text-xs text-white">
+    </div>
+  </div>
+
+  <script>
+    const TABS = ['home', 'today', 'moral', 'finance', 'health', 'career', 'community'];
+    const PID = "disciplineengine-604e9";
+    let syncKey = localStorage.getItem('kevin_sync_key') || '';
+    let st = { h: {}, d: {}, car: { calls:0, connects:0, introKits:0, customers:0 }, bTot: 0, bToday: 0, mToday: 0, commMin: 0 };
+
+    function getD() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+
+    window.switchTab = function(t) {
+      TABS.forEach(tab => {
+        const el = document.getElementById(`tab_${tab}`), btn = document.getElementById(`btn_${tab}`);
+        if (el) el.classList.toggle('hidden', tab !== t);
+        if (btn) { btn.className = tab === t ? 'px-3 py-1 rounded text-xs font-mono t-act' : 'px-3 py-1 rounded text-xs font-mono text-gray-400 hover:text-white'; }
+      });
+    };
+
+    window.promptSyncKey = function() {
+      const k = prompt("Cloud Sync Key:", syncKey || "");
+      if (k && k.trim()) { syncKey = k.trim(); localStorage.setItem('kevin_sync_key', syncKey); pullCloud(syncKey); }
+    };
+
+    async function pullCloud(k) {
+      if (!k) return;
+      try {
+        const r = await fetch(`https://firestore.googleapis.com/v1/projects/${PID}/databases/(default)/documents/engines/${encodeURIComponent(k)}`);
+        if (r.ok) {
+          const doc = await r.json();
+          if (doc.fields?.state?.stringValue) { st = Object.assign(st, JSON.parse(doc.fields.state.stringValue)); localStorage.setItem('k_state', JSON.stringify(st)); render(); }
+          setSync(true);
+        } else if (r.status === 404) { setSync(true); pushCloud(); }
+      } catch(e) {}
+    }
+
+    async function pushCloud() {
+      if (!syncKey) return;
+      try {
+        await fetch(`https://firestore.googleapis.com/v1/projects/${PID}/databases/(default)/documents/engines/${encodeURIComponent(syncKey)}`, {
+          method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: { state: { stringValue: JSON.stringify(st) } } })
+        });
+      } catch(e) {}
+    }
+
+    function setSync(on) {
+      const d = document.getElementById('syncDot'), t = document.getElementById('syncText');
+      if (d) d.className = on ? 'w-2.5 h-2.5 rounded-full bg-emerald-500' : 'w-2.5 h-2.5 rounded-full bg-yellow-500';
+      if (t) { t.textContent = on ? 'Live Cloud' : 'Local'; t.className = on ? 'text-xs font-mono text-emerald-400' : 'text-xs font-mono text-gray-400'; }
+    }
+
+    function save() { try { localStorage.setItem('k_state', JSON.stringify(st)); } catch(e) {} render(); pushCloud(); }
+
+    window.toggleH = function(k) { const day = getD(); if (!st.h[day]) st.h[day] = {}; st.h[day][k] = !st.h[day][k]; save(); };
+    window.toggleFin = function() { const day = getD(); if (!st.h[day]) st.h[day] = {}; st.h[day].fin = !st.h[day].fin; save(); };
+    window.toggleP = function(n) { const day = getD(); if (!st.h[day]) st.h[day] = {}; st.h[day][`p${n}`] = !st.h[day][`p${n}`]; save(); };
+    window.setVal = function(id, val) { const day = getD(); if (!st.d[day]) st.d[day] = {}; st.d[day][id] = val; save(); };
+    window.adjBible = function(n) { st.bToday = Math.max(0, (st.bToday||0) + n); st.bTot = Math.max(0, (st.bTot||0) + n); save(); };
+    window.adjMinistry = function(n) { st.mToday = Math.max(0, (st.mToday||0) + n); save(); };
+    window.adjCar = function(k, n) { if (!st.car) st.car = {}; st.car[k] = Math.max(0, (st.car[k]||0) + n); save(); };
+    window.adjComm = function(n) { st.commMin = Math.max(0, (st.commMin||0) + n); save(); };
+
+    function render() {
+      const day = getD(), h = st.h[day] || {}, d = st.d[day] || {}, c = st.car || {};
+      ['nosnooze','shaved','supper','bedby1030','morning_prayer','bedtime_prayer','purity','cal','ex','wat','afd','reach'].forEach(k => {
+        const el = document.getElementById(`k_${k}`); if (el) el.checked = !!h[k];
+      });
+      const finEl = document.getElementById('k_fin'), finSt = document.getElementById('fin_stat');
+      if (finEl) finEl.checked = !!h.fin;
+      if (finSt) { finSt.textContent = h.fin ? 'Yes (Overspent)' : 'No (Clean Day)'; finSt.className = h.fin ? 'text-xs font-mono text-red-400' : 'text-xs font-mono text-emerald-400'; }
+      [1,2,3].forEach(n => { const el = document.getElementById(`k_p${n}`); if (el) el.checked = !!h[`p${n}`]; });
+
+      ['t_grat','t_refl','s_rate','t_fin','t_comm','t_p1','t_p2','t_p3','m_tag1','m_tag2','m_tag3'].forEach(id => {
+        const el = document.getElementById(id); if (el && document.activeElement !== el && d[id] !== undefined) el.value = d[id];
+      });
+
+      if (document.getElementById('b_today')) document.getElementById('b_today').textContent = st.bToday||0;
+      if (document.getElementById('b_tot')) document.getElementById('b_tot').textContent = `${st.bTot||0}/1189`;
+      if (document.getElementById('m_today')) document.getElementById('m_today').textContent = st.mToday||0;
+      if (document.getElementById('m_status')) document.getElementById('m_status').textContent = `${st.mToday||0}/10 Pages`;
+      if (document.getElementById('c_calls')) document.getElementById('c_calls').textContent = c.calls||0;
+      if (document.getElementById('c_conn')) document.getElementById('c_conn').textContent = c.connects||0;
+      if (document.getElementById('c_kits')) document.getElementById('c_kits').textContent = c.introKits||0;
+      if (document.getElementById('c_cust')) document.getElementById('c_cust').textContent = c.customers||0;
+      if (document.getElementById('c_comm_min')) document.getElementById('c_comm_min').textContent = `${st.commMin||0} min`;
+
+      // KPI scores
+      const sT = Math.round((((h.nosnooze?1:0)+(h.shaved?1:0)+(h.supper?1:0)+(h.bedby1030?1:0))/4)*100);
+      const sM = Math.round((((h.morning_prayer?1:0)+(h.bedtime_prayer?1:0)+(h.purity?1:0)+((st.bToday>=10)?1:(st.bToday||0)/10)+((st.mToday>=10)?1:(st.mToday||0)/10))/5)*100);
+      const sF = h.fin ? 0 : 100;
+      const sH = Math.round((((h.cal?1:0)+(h.ex?1:0)+(h.wat?1:0)+(h.afd?1:0))/4)*100);
+      const sC = Math.min(100, Math.round(((c.calls||0)/20)*100));
+      const sCm = Math.min(100, Math.round(((h.reach?50:0) + (((st.commMin||0)/30)*50))));
+
+      if (document.getElementById('sc_today')) document.getElementById('sc_today').textContent = `${sT}%`;
+      if (document.getElementById('sc_moral')) document.getElementById('sc_moral').textContent = `${sM}%`;
+      if (document.getElementById('sc_finance')) document.getElementById('sc_finance').textContent = `${sF}%`;
+      if (document.getElementById('sc_health')) document.getElementById('sc_health').textContent = `${sH}%`;
+      if (document.getElementById('sc_career')) document.getElementById('sc_career').textContent = `${sC}%`;
+      if (document.getElementById('sc_community')) document.getElementById('sc_community').textContent = `${sCm}%`;
+
+      const tot = Math.round((sT + sM + sF + sH + sC + sCm) / 6);
+      if (document.getElementById('kpiOverallText')) document.getElementById('kpiOverallText').textContent = `${tot}% Completed`;
+      if (document.getElementById('kpiOverallBar')) document.getElementById('kpiOverallBar').style.width = `${tot}%`;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      try { const s = localStorage.getItem('k_state'); if (s) st = Object.assign(st, JSON.parse(s)); } catch(e) {}
+      render();
+      if (syncKey) { pullCloud(syncKey); setInterval(() => pullCloud(syncKey), 30000); }
+    });
+  </script>
+</body>
+</html>
