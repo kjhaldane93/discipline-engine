@@ -2,238 +2,206 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kevin's Discipline Engine</title>
-  <meta name="theme-color" content="#09090b">
-
-  <!-- Production Tailwind CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-  
-  <!-- Firebase Compatibility SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
   <style>
-    body { background-color: #09090b; color: #f4f4f5; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    .hairline-border { border: 1px solid rgba(255, 255, 255, 0.08); }
-    .glass-card { background: rgba(18, 18, 21, 0.85); backdrop-filter: blur(16px); }
-    input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-    .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
-    .custom-scroll::-webkit-scrollbar-track { background: #09090b; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
-
-    /* Clean, reliable checkboxes with emerald accent */
-    .engine-box {
-      width: 22px;
-      height: 22px;
-      cursor: pointer;
-      accent-color: #10b981;
-      flex-shrink: 0;
-    }
+    body { background-color: #09090b; color: #f4f4f5; font-family: ui-sans-serif, system-ui, sans-serif; }
+    .glass-card { background: rgba(18, 18, 21, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .engine-box { width: 22px; height: 22px; cursor: pointer; accent-color: #10b981; flex-shrink: 0; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-12">
+<body class="min-h-screen flex flex-col p-4 sm:p-8 space-y-6 max-w-6xl mx-auto">
 
-  <!-- TOP HEADER -->
-  <header style="background: rgba(9, 9, 11, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.08);" class="sticky top-0 z-40 backdrop-filter px-4 sm:px-8 py-3.5 flex items-center justify-between">
+  <header class="flex items-center justify-between pb-4 border-b border-gray-800">
     <div class="flex items-center space-x-3">
-      <div style="background: #f4f4f5; color: #09090b;" class="w-9 h-9 rounded-lg flex items-center justify-center font-black text-base shadow-sm">
-        K
-      </div>
-      <div>
-        <h1 class="text-sm font-semibold tracking-tight text-white flex items-center gap-1.5 font-mono">
-          Kevin's Discipline Engine
-          <span style="background: #27272a; color: #d4d4d8; border: 1px solid #3f3f46;" class="inline-flex items-center px-1.5 py-0.2 text-xs font-mono uppercase rounded">Pro</span>
-        </h1>
-        <p style="color: #a1a1aa;" class="text-xs font-mono hidden sm:block">Moral · Career · Financial · Health · Community · Discipline</p>
-      </div>
+      <div class="w-9 h-9 bg-white text-black font-black rounded-lg flex items-center justify-center">K</div>
+      <h1 class="text-base font-bold font-mono">Kevin's Discipline Engine</h1>
     </div>
-
-    <!-- Controls -->
-    <div class="flex items-center space-x-2 sm:space-x-3">
-      <button onclick="openSyncModal()" id="syncBtn" style="background: #18181b; border: 1px solid #27272a; color: #a1a1aa;" class="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-md text-xs font-mono cursor-pointer">
-        <span id="syncDot" style="background: #f59e0b;" class="w-2 h-2 rounded-full"></span>
-        <span id="syncStatusText">Local</span>
-      </button>
-
-      <div style="background: #18181b; border: 1px solid #27272a;" class="p-0.5 rounded-lg flex text-xs font-medium">
-        <button onclick="switchView('today')" id="tabToday" style="background: #27272a; color: #ffffff;" class="px-3 py-1 rounded-md shadow-sm font-mono cursor-pointer">Today</button>
-        <button onclick="switchView('matrix')" id="tabMatrix" style="color: #a1a1aa;" class="px-3 py-1 rounded-md font-mono cursor-pointer">7-Day Matrix</button>
-      </div>
+    <div class="flex items-center space-x-2">
+      <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+      <span id="syncText" class="text-xs font-mono text-gray-400">Local</span>
     </div>
   </header>
 
-  <!-- MAIN APP CONTAINER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+  <!-- KPI STRIP -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div class="glass-card rounded-xl p-3">
+      <div class="text-xs font-mono text-gray-400">MORAL</div>
+      <div class="text-2xl font-bold font-mono text-white" id="kpiMoral">0%</div>
+    </div>
+    <div class="glass-card rounded-xl p-3">
+      <div class="text-xs font-mono text-gray-400">CAREER DIALS</div>
+      <div class="text-2xl font-bold font-mono text-emerald-400" id="kpiDials">0/20</div>
+    </div>
+    <div class="glass-card rounded-xl p-3">
+      <div class="text-xs font-mono text-gray-400">CONNECTS</div>
+      <div class="text-2xl font-bold font-mono text-emerald-400" id="kpiConnects">0/5</div>
+    </div>
+    <div class="glass-card rounded-xl p-3">
+      <div class="text-xs font-mono text-gray-400">DISCIPLINE</div>
+      <div class="text-2xl font-bold font-mono text-white" id="kpiDiscipline">0/4</div>
+    </div>
+  </div>
 
-    <!-- KPI STRIP -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-      <div class="glass-card rounded-xl p-3.5 hairline-border">
-        <div style="color: #a1a1aa;" class="flex items-center justify-between text-xs font-mono mb-1">MORAL</div>
-        <div class="text-xl font-bold font-mono text-white" id="kpiMoralScore">0%</div>
-        <div style="color: #71717a;" class="text-xs font-mono mt-1" id="kpiPrayerText">Prayer: 0/2</div>
+  <!-- 1. MORAL PILLAR -->
+  <section class="glass-card rounded-xl p-5 space-y-4">
+    <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-gray-400">1. Moral Pillar</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div id="card_morning_prayer" onclick="toggleHabitDirectly('morning_prayer')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+        <div class="flex items-center space-x-3 pointer-events-none">
+          <input type="checkbox" id="chk_morning_prayer" class="engine-box">
+          <span class="text-xs font-semibold text-gray-200">Morning Prayer</span>
+        </div>
+        <span class="text-yellow-500">☀</span>
       </div>
-
-      <div class="glass-card rounded-xl p-3.5 hairline-border">
-        <div style="color: #a1a1aa;" class="flex items-center justify-between text-xs font-mono mb-1">CAREER</div>
-        <div style="color: #10b981;" class="text-xl font-bold font-mono" id="kpiCareerScore">0%</div>
-        <div style="color: #71717a;" class="text-xs font-mono mt-1" id="kpiDialsText">0/20 Dials</div>
+      <div id="card_bedtime_prayer" onclick="toggleHabitDirectly('bedtime_prayer')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+        <div class="flex items-center space-x-3 pointer-events-none">
+          <input type="checkbox" id="chk_bedtime_prayer" class="engine-box">
+          <span class="text-xs font-semibold text-gray-200">Bed Time Prayer</span>
+        </div>
+        <span class="text-gray-400">☽</span>
       </div>
-
-      <div class="glass-card rounded-xl p-3.5 hairline-border">
-        <div style="color: #a1a1aa;" class="flex items-center justify-between text-xs font-mono mb-1">NET CASH</div>
-        <div class="text-xl font-bold font-mono text-white" id="kpiNetCash">$0.00</div>
-        <div style="color: #71717a;" class="text-xs font-mono mt-1" id="kpiCashSubtext">0 tx today</div>
-      </div>
-
-      <div class="glass-card rounded-xl p-3.5 hairline-border">
-        <div style="color: #a1a1aa;" class="flex items-center justify-between text-xs font-mono mb-1">WEIGHT TO 190</div>
-        <div style="color: #f59e0b;" class="text-xl font-bold font-mono" id="kpiWeightText">229.0</div>
-        <div style="color: #71717a;" class="text-xs font-mono mt-1" id="kpiWaterText">Water: 0.0/2.0L</div>
-      </div>
-
-      <div class="glass-card rounded-xl p-3.5 hairline-border">
-        <div style="color: #a1a1aa;" class="flex items-center justify-between text-xs font-mono mb-1">CARE / WK</div>
-        <div class="text-xl font-bold font-mono text-white" id="kpiCareTotal">0m</div>
-        <div style="color: #71717a;" class="text-xs font-mono mt-1" id="kpiCareRemaining">120m left</div>
-      </div>
-
-      <div class="glass-card rounded-xl p-3.5 hairline-border">
-        <div style="color: #a1a1aa;" class="flex items-center justify-between text-xs font-mono mb-1">DISCIPLINE</div>
-        <div class="text-xl font-bold font-mono text-white" id="kpiDisciplineScore">0/4</div>
-        <div style="color: #71717a;" class="text-xs font-mono mt-1">Core Standards</div>
+      <div id="card_purity" onclick="toggleHabitDirectly('purity')" class="p-3.5 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+        <div class="flex items-center space-x-3 pointer-events-none">
+          <input type="checkbox" id="chk_purity" class="engine-box">
+          <span class="text-xs font-semibold text-gray-200">Kept My Purity</span>
+        </div>
+        <span class="text-red-500">🛡</span>
       </div>
     </div>
+  </section>
 
-    <!-- TODAY ARENA VIEW -->
-    <div id="todayView" class="space-y-6">
-
-      <!-- 1. MORAL PILLAR -->
-      <section class="glass-card rounded-xl p-5 hairline-border space-y-4">
-        <div style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);" class="flex items-center justify-between pb-3">
-          <div class="flex items-center space-x-2">
-            <span style="background: #f4f4f5;" class="w-2.5 h-2.5 rounded-full inline-block"></span>
-            <h2 class="text-sm font-semibold tracking-tight text-white font-mono uppercase">1. Moral Pillar</h2>
-          </div>
-          <span style="color: #71717a;" class="text-xs font-mono">Spiritual Foundation</span>
+  <!-- 2. CAREER PILLAR -->
+  <section class="glass-card rounded-xl p-5 space-y-4">
+    <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">2. Career Execution</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between">
+        <div>
+          <span class="text-xs font-mono text-gray-400 block">PHONE DIALS (20 TARGET)</span>
+          <span id="txtDials" class="text-2xl font-mono font-bold text-white">0</span>
         </div>
-
-        <!-- Direct-Click Habit Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div style="background: rgba(18, 18, 21, 0.6); border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none" id="card_morning_prayer" onclick="toggleHabitDirectly('morning_prayer')">
-            <div class="flex items-center space-x-3 pointer-events-none">
-              <input type="checkbox" id="chk_morning_prayer" class="engine-box">
-              <span class="text-xs font-semibold text-gray-200">Morning Prayer</span>
-            </div>
-            <span style="color: #f59e0b;">☀</span>
-          </div>
-
-          <div style="background: rgba(18, 18, 21, 0.6); border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none" id="card_bedtime_prayer" onclick="toggleHabitDirectly('bedtime_prayer')">
-            <div class="flex items-center space-x-3 pointer-events-none">
-              <input type="checkbox" id="chk_bedtime_prayer" class="engine-box">
-              <span class="text-xs font-semibold text-gray-200">Bed Time Prayer</span>
-            </div>
-            <span style="color: #a1a1aa;">☽</span>
-          </div>
-
-          <div style="background: rgba(18, 18, 21, 0.6); border: 1px solid #27272a;" class="p-3.5 rounded-lg flex items-center justify-between cursor-pointer select-none" id="card_purity" onclick="toggleHabitDirectly('purity')">
-            <div class="flex items-center space-x-3 pointer-events-none">
-              <input type="checkbox" id="chk_purity" class="engine-box">
-              <div>
-                <span class="text-xs font-semibold text-gray-200 block">Kept My Purity</span>
-                <span style="color: #71717a;" class="text-xs font-mono">Streak: <span id="purityStreakNum" style="color: #ef4444;" class="font-bold">0</span> d</span>
-              </div>
-            </div>
-            <span style="color: #ef4444;">🛡</span>
-          </div>
+        <div class="flex space-x-2">
+          <button type="button" onclick="adjustDials(-1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
+          <button type="button" onclick="adjustDials(1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
+          <button type="button" onclick="adjustDials(5)" class="px-2 bg-emerald-900 text-emerald-300 rounded font-bold cursor-pointer">+5</button>
         </div>
-
-        <!-- Bible Goal Engine -->
-        <div style="background: rgba(24, 24, 27, 0.5); border: 1px solid rgba(255, 255, 255, 0.08);" class="rounded-lg p-4 space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <span class="text-xs font-semibold text-white uppercase font-mono">Scripture Mastery · 1,189 Chapters</span>
-              <span style="color: #a1a1aa;" class="text-xs font-mono block sm:inline sm:ml-2">Target Dec 31, 2026</span>
-            </div>
-            <div class="flex items-center space-x-1 flex-wrap">
-              <button type="button" onclick="adjustBible(-10)" style="background: #18181b; border: 1px solid #27272a; color: #a1a1aa;" class="px-2 py-1 text-xs font-mono rounded cursor-pointer">-10</button>
-              <button type="button" onclick="adjustBible(-5)" style="background: #18181b; border: 1px solid #27272a; color: #a1a1aa;" class="px-2 py-1 text-xs font-mono rounded cursor-pointer">-5</button>
-              <button type="button" onclick="adjustBible(-1)" style="background: #18181b; border: 1px solid #27272a; color: #a1a1aa;" class="px-2 py-1 text-xs font-mono rounded cursor-pointer">-1</button>
-              <span style="color: #3f3f46;" class="px-1 font-mono">|</span>
-              <button type="button" onclick="adjustBible(1)" style="background: #27272a; color: #f4f4f5;" class="px-2.5 py-1 text-xs font-mono rounded cursor-pointer">+1</button>
-              <button type="button" onclick="adjustBible(5)" style="background: #27272a; color: #f4f4f5;" class="px-2.5 py-1 text-xs font-mono rounded cursor-pointer">+5</button>
-              <button type="button" onclick="adjustBible(10)" style="background: #f4f4f5; color: #09090b;" class="px-2.5 py-1 text-xs font-mono font-bold rounded cursor-pointer">+10</button>
-            </div>
-          </div>
-          <div style="background: #27272a; height: 6px;" class="w-full rounded-full overflow-hidden">
-            <div id="bibleProgressBar" style="background: #f4f4f5; width: 25.3%; height: 100%; transition: width 0.3s;"></div>
-          </div>
-          <div style="color: #a1a1aa;" class="flex justify-between text-xs font-mono">
-            <span id="bibleStatusText">301 / 1189 read (25.3%)</span>
-            <span id="biblePaceText">~9.5 ch/day pace</span>
-          </div>
-          <textarea id="bibleJournalInput" oninput="saveBibleJournal(this.value)" placeholder="What I read in Scripture today..." style="background: #09090b; border: 1px solid #27272a; color: #f4f4f5;" class="w-full rounded p-2 text-xs focus:outline-none h-16"></textarea>
+      </div>
+      <div class="bg-gray-900 border border-gray-800 p-4 rounded-lg flex items-center justify-between">
+        <div>
+          <span class="text-xs font-mono text-gray-400 block">CONNECTS (5 TARGET)</span>
+          <span id="txtConnects" class="text-2xl font-mono font-bold text-white">0</span>
         </div>
+        <div class="flex space-x-2">
+          <button type="button" onclick="adjustConnects(-1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">-</button>
+          <button type="button" onclick="adjustConnects(1)" class="w-8 h-8 bg-gray-800 rounded font-bold cursor-pointer">+1</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <!-- Read 10 Pages of Ministry -->
-        <div style="background: rgba(24, 24, 27, 0.5); border: 1px solid rgba(255, 255, 255, 0.08);" class="rounded-lg p-4 space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-white uppercase font-mono">Read 10 Pages of Ministry</span>
-            <div style="background: rgba(18, 18, 21, 0.6); border: 1px solid #27272a;" class="px-3 py-1.5 rounded flex items-center space-x-2 cursor-pointer select-none" id="card_ministry_done" onclick="toggleHabitDirectly('ministry_done')">
-              <input type="checkbox" id="chk_ministry_done" class="engine-box pointer-events-none">
-              <span style="color: #a1a1aa;" class="text-xs font-mono">10 Pages Done</span>
-            </div>
-          </div>
-          <input type="text" id="ministrySummaryInput" oninput="saveMinistrySummary(this.value)" placeholder="Overall summary of what I read today in Ministry..." style="background: #09090b; border: 1px solid #27272a; color: #f4f4f5;" class="w-full rounded px-3 py-1.5 text-xs focus:outline-none">
+  <!-- 3. DISCIPLINE STANDARDS -->
+  <section class="glass-card rounded-xl p-5 space-y-4">
+    <h2 class="text-xs font-mono font-bold uppercase tracking-wider text-gray-400">3. Core Standards</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div id="card_nosnooze" onclick="toggleHabitDirectly('nosnooze')" class="p-3 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+        <span class="text-xs font-semibold">No Snooze</span>
+        <input type="checkbox" id="chk_nosnooze" class="engine-box pointer-events-none">
+      </div>
+      <div id="card_madebed" onclick="toggleHabitDirectly('madebed')" class="p-3 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+        <span class="text-xs font-semibold">Made Bed</span>
+        <input type="checkbox" id="chk_madebed" class="engine-box pointer-events-none">
+      </div>
+      <div id="card_shaved" onclick="toggleHabitDirectly('shaved')" class="p-3 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+        <span class="text-xs font-semibold">Shaved</span>
+        <input type="checkbox" id="chk_shaved" class="engine-box pointer-events-none">
+      </div>
+      <div id="card_bedby1030" onclick="toggleHabitDirectly('bedby1030')" class="p-3 bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-between cursor-pointer">
+        <span class="text-xs font-semibold">In Bed 10:30</span>
+        <input type="checkbox" id="chk_bedby1030" class="engine-box pointer-events-none">
+      </div>
+    </div>
+  </section>
 
-          <!-- 3 Structured Takeaways -->
-          <div class="space-y-4 pt-1">
-            <div style="background: rgba(9, 9, 11, 0.7); border: 1px solid #27272a;" class="p-3.5 rounded-lg space-y-2.5">
-              <span style="color: #f59e0b;" class="text-xs font-mono font-semibold uppercase">Takeaway 1 Citation & Revelation</span>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="t1_author" oninput="saveTakeawayField(1, 'author', this.value)" placeholder="Author" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none">
-                <input type="text" id="t1_book" oninput="saveTakeawayField(1, 'book', this.value)" placeholder="Book Title" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none">
-                <input type="text" id="t1_page" oninput="saveTakeawayField(1, 'page', this.value)" placeholder="Page" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none">
-              </div>
-              <textarea id="t1_notes" oninput="saveTakeawayField(1, 'notes', this.value)" placeholder="Notes on Takeaway 1..." style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="w-full rounded p-2 text-xs focus:outline-none h-14"></textarea>
+  <script>
+    const HABIT_KEYS = ['morning_prayer', 'bedtime_prayer', 'purity', 'nosnooze', 'madebed', 'shaved', 'bedby1030'];
+    let state = { habits: {}, dials: 0, connects: 0 };
 
-              <div style="border-top: 1px solid #18181b;" class="space-y-2 pt-2">
-                <div class="flex items-center space-x-2">
-                  <input type="text" id="t1_new_tag" placeholder="Add custom subject tag..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomTag(1);}" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none flex-1 font-mono">
-                  <button type="button" onclick="addCustomTag(1)" style="background: #27272a; border: 1px solid #3f3f46; color: #f59e0b;" class="px-3 py-1 text-xs font-mono rounded cursor-pointer">+ Add</button>
-                </div>
-                <div class="flex flex-wrap items-center gap-1.5" id="t1_tags_container"></div>
-                <div style="color: #71717a;" class="text-xs font-mono flex flex-wrap items-center gap-1.5 pt-0.5" id="t1_library_container"></div>
-              </div>
-            </div>
+    function getToday() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
 
-            <div style="background: rgba(9, 9, 11, 0.7); border: 1px solid #27272a;" class="p-3.5 rounded-lg space-y-2.5">
-              <span style="color: #f59e0b;" class="text-xs font-mono font-semibold uppercase">Takeaway 2 Citation & Revelation</span>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="t2_author" oninput="saveTakeawayField(2, 'author', this.value)" placeholder="Author" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none">
-                <input type="text" id="t2_book" oninput="saveTakeawayField(2, 'book', this.value)" placeholder="Book Title" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none">
-                <input type="text" id="t2_page" oninput="saveTakeawayField(2, 'page', this.value)" placeholder="Page" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none">
-              </div>
-              <textarea id="t2_notes" oninput="saveTakeawayField(2, 'notes', this.value)" placeholder="Notes on Takeaway 2..." style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="w-full rounded p-2 text-xs focus:outline-none h-14"></textarea>
+    function loadState() {
+      try {
+        const saved = localStorage.getItem('kevin_discipline_state');
+        if (saved) state = Object.assign(state, JSON.parse(saved));
+      } catch(e) {}
+      if (!state.habits[getToday()]) state.habits[getToday()] = {};
+      renderUI();
+    }
 
-              <div style="border-top: 1px solid #18181b;" class="space-y-2 pt-2">
-                <div class="flex items-center space-x-2">
-                  <input type="text" id="t2_new_tag" placeholder="Add custom subject tag..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addCustomTag(2);}" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none flex-1 font-mono">
-                  <button type="button" onclick="addCustomTag(2)" style="background: #27272a; border: 1px solid #3f3f46; color: #f59e0b;" class="px-3 py-1 text-xs font-mono rounded cursor-pointer">+ Add</button>
-                </div>
-                <div class="flex flex-wrap items-center gap-1.5" id="t2_tags_container"></div>
-                <div style="color: #71717a;" class="text-xs font-mono flex flex-wrap items-center gap-1.5 pt-0.5" id="t2_library_container"></div>
-              </div>
-            </div>
+    function saveState() {
+      try {
+        localStorage.setItem('kevin_discipline_state', JSON.stringify(state));
+      } catch(e) {}
+      renderUI();
+    }
 
-            <div style="background: rgba(9, 9, 11, 0.7); border: 1px solid #27272a;" class="p-3.5 rounded-lg space-y-2.5">
-              <span style="color: #f59e0b;" class="text-xs font-mono font-semibold uppercase">Takeaway 3 Citation & Revelation</span>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="t3_author" oninput="saveTakeawayField(3, 'author', this.value)" placeholder="Author" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none">
-                <input type="text" id="t3_book" oninput="saveTakeawayField(3, 'book', this.value)" placeholder="Book Title" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none">
-                <input type="text" id="t3_page" oninput="saveTakeawayField(3, 'page', this.value)" placeholder="Page" style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="rounded px-2.5 py-1 text-xs focus:outline-none">
-              </div>
-              <textarea id="t3_notes" oninput="saveTakeawayField(3, 'notes', this.value)" placeholder="Notes on Takeaway 3..." style="background: #18181b; border: 1px solid #27272a; color: #f4f4f5;" class="w-full rounded p-2 text-xs focus:outline-none h-14"></textarea>
+    window.toggleHabitDirectly = function(habitId) {
+      const today = getToday();
+      if (!state.habits[today]) state.habits[today] = {};
+      state.habits[today][habitId] = !state.habits[today][habitId];
+      saveState();
+    };
 
-              <div style="border-top: 1px solid #18181b;" class="space-y-2 pt-2">
-                <div class="flex items-center space-
+    window.adjustDials = function(delta) {
+      state.dials = Math.max(0, (state.dials || 0) + delta);
+      saveState();
+    };
+
+    window.adjustConnects = function(delta) {
+      state.connects = Math.max(0, (state.connects || 0) + delta);
+      saveState();
+    };
+
+    function renderUI() {
+      const today = getToday();
+      const todayHabits = state.habits[today] || {};
+
+      HABIT_KEYS.forEach(k => {
+        const chk = document.getElementById(`chk_${k}`);
+        const card = document.getElementById(`card_${k}`);
+        const isDone = !!todayHabits[k];
+        if (chk) chk.checked = isDone;
+        if (card) {
+          card.style.borderColor = isDone ? '#52525b' : '#27272a';
+          card.style.background = isDone ? '#18181b' : 'rgba(18, 18, 21, 0.9)';
+        }
+      });
+
+      const txtD = document.getElementById('txtDials');
+      const txtC = document.getElementById('txtConnects');
+      if (txtD) txtD.textContent = state.dials || 0;
+      if (txtC) txtC.textContent = state.connects || 0;
+
+      const kD = document.getElementById('kpiDials');
+      const kC = document.getElementById('kpiConnects');
+      if (kD) kD.textContent = `${state.dials || 0}/20`;
+      if (kC) kC.textContent = `${state.connects || 0}/5`;
+
+      const moralCount = (todayHabits['morning_prayer']?1:0) + (todayHabits['bedtime_prayer']?1:0) + (todayHabits['purity']?1:0);
+      const kMoral = document.getElementById('kpiMoral');
+      if (kMoral) kMoral.textContent = `${Math.round((moralCount / 3) * 100)}%`;
+
+      const discCount = (todayHabits['nosnooze']?1:0) + (todayHabits['madebed']?1:0) + (todayHabits['shaved']?1:0) + (todayHabits['bedby1030']?1:0);
+      const kDisc = document.getElementById('kpiDiscipline');
+      if (kDisc) kDisc.textContent = `${discCount}/4`;
+    }
+
+    window.addEventListener('DOMContentLoaded', loadState);
+  </script>
+</body>
+</html>
