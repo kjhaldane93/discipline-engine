@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kevin's Discipline Engine</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
   <style>
     body { background-color: #09090b; color: #f4f4f5; font-family: ui-sans-serif, system-ui, sans-serif; }
     .glass-card { background: rgba(18, 18, 21, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); }
@@ -126,16 +125,7 @@
     const HABIT_KEYS = ['morning_prayer', 'bedtime_prayer', 'purity', 'nosnooze', 'madebed', 'shaved', 'bedby1030'];
     let state = { habits: {}, dials: 0, connects: 0 };
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDg-xrWvfRQc4i02lSkwLHXOhQaEUG2WDE",
-      authDomain: "disciplineengine-604e9.firebaseapp.com",
-      projectId: "disciplineengine-604e9",
-      storageBucket: "disciplineengine-604e9.firebasestorage.app",
-      messagingSenderId: "58306677761",
-      appId: "1:58306677761:web:aa9feda5d9594498a84110"
-    };
-
-    let db = null;
+    const PROJECT_ID = "disciplineengine-604e9";
     let syncKey = localStorage.getItem('kevin_sync_key') || '';
     let isCloudSyncActive = false;
 
@@ -144,15 +134,57 @@
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     }
 
-    function initFirebase() {
+    // Direct REST API Sync (Zero SDK, Zero eval, Strict CSP compliant)
+    async function pullFromCloud(key) {
+      if (!key) return;
+      const dot = document.getElementById('syncDot');
+      const text = document.getElementById('syncText');
+      const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/engines/${encodeURIComponent(key)}`;
+
       try {
-        if (typeof firebase !== 'undefined') {
-          if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-          db = firebase.firestore();
-          if (syncKey) connectToCloudSync(syncKey);
+        const res = await fetch(url);
+        if (res.ok) {
+          const doc = await res.json();
+          if (doc.fields && doc.fields.state && doc.fields.state.stringValue) {
+            const cloudState = JSON.parse(doc.fields.state.stringValue);
+            state = Object.assign(state, cloudState);
+            localStorage.setItem('kevin_discipline_state', JSON.stringify(state));
+            renderUI();
+          }
+          isCloudSyncActive = true;
+          if (dot) { dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500'; }
+          if (text) { text.textContent = 'Live Cloud'; text.className = 'text-xs font-mono text-emerald-400'; }
+        } else if (res.status === 404) {
+          // Document does not exist yet; push current state
+          isCloudSyncActive = true;
+          pushToCloud();
+          if (dot) { dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500'; }
+          if (text) { text.textContent = 'Live Cloud'; text.className = 'text-xs font-mono text-emerald-400'; }
         }
       } catch (err) {
-        console.error("Firebase init failed:", err);
+        console.warn('REST pull fallback to local:', err);
+      }
+    }
+
+    async function pushToCloud() {
+      if (!isCloudSyncActive || !syncKey) return;
+      const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/engines/${encodeURIComponent(syncKey)}`;
+      
+      const payload = {
+        fields: {
+          state: { stringValue: JSON.stringify(state) },
+          updatedAt: { timestampValue: new Date().toISOString() }
+        }
+      };
+
+      try {
+        await fetch(url, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn('REST push failed:', err);
       }
     }
 
@@ -161,52 +193,16 @@
       if (key && key.trim()) {
         syncKey = key.trim();
         localStorage.setItem('kevin_sync_key', syncKey);
-        connectToCloudSync(syncKey);
+        pullFromCloud(syncKey);
       }
     };
-
-    function connectToCloudSync(key) {
-      if (!db || !key) return;
-      const dot = document.getElementById('syncDot');
-      const text = document.getElementById('syncText');
-
-      db.collection('engines').doc(key).onSnapshot(doc => {
-        isCloudSyncActive = true;
-        if (dot) { dot.classList.remove('bg-yellow-500', 'bg-red-500'); dot.classList.add('bg-emerald-500'); }
-        if (text) { text.textContent = 'Live Cloud'; text.classList.remove('text-gray-400'); text.classList.add('text-emerald-400'); }
-
-        if (doc.exists) {
-          const data = doc.data();
-          if (data && data.state) {
-            try {
-              state = Object.assign(state, JSON.parse(data.state));
-              localStorage.setItem('kevin_discipline_state', JSON.stringify(state));
-              renderUI();
-            } catch(e) {}
-          }
-        } else {
-          pushToCloud();
-        }
-      }, err => {
-        if (dot) { dot.classList.remove('bg-emerald-500'); dot.classList.add('bg-red-500'); }
-        if (text) { text.textContent = 'Sync Offline'; }
-      });
-    }
-
-    function pushToCloud() {
-      if (isCloudSyncActive && db && syncKey) {
-        db.collection('engines').doc(syncKey).set({
-          state: JSON.stringify(state),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).catch(err => console.error("Cloud push failed:", err));
-      }
-    }
 
     function loadState() {
       try {
         const saved = localStorage.getItem('kevin_discipline_state');
         if (saved) state = Object.assign(state, JSON.parse(saved));
       } catch(e) {}
+      if (!state.habits) state.habits = {};
       if (!state.habits[getToday()]) state.habits[getToday()] = {};
       renderUI();
     }
@@ -221,6 +217,7 @@
 
     window.toggleHabitDirectly = function(habitId) {
       const today = getToday();
+      if (!state.habits) state.habits = {};
       if (!state.habits[today]) state.habits[today] = {};
       state.habits[today][habitId] = !state.habits[today][habitId];
       saveState();
@@ -238,6 +235,7 @@
 
     function renderUI() {
       const today = getToday();
+      if (!state.habits) state.habits = {};
       const todayHabits = state.habits[today] || {};
 
       HABIT_KEYS.forEach(k => {
@@ -272,7 +270,11 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       loadState();
-      initFirebase();
+      if (syncKey) {
+        pullFromCloud(syncKey);
+        // Poll every 30 seconds for background multi-device syncing
+        setInterval(() => pullFromCloud(syncKey), 30000);
+      }
     });
   </script>
 </body>
